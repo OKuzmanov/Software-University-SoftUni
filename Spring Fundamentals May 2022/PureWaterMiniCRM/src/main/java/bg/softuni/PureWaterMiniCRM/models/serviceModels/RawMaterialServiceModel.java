@@ -1,31 +1,25 @@
-package bg.softuni.PureWaterMiniCRM.models.entities;
+package bg.softuni.PureWaterMiniCRM.models.serviceModels;
 
+import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
+import bg.softuni.PureWaterMiniCRM.models.entities.User;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="raw_materials")
-public class RawMaterial extends BaseEntity{
+public class RawMaterialServiceModel extends BaseServiceModel{
 
-    @Column(nullable = false)
     private int quantity;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, unique = true)
     private RawMaterialType type;
 
-    @Column(name = "delivered_at", nullable = false)
     private LocalDateTime deliveredAt;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private Supplier supplier;
+    private SupplierServiceModel supplier;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
+    private User user;
+
+    public RawMaterialServiceModel() {
+    }
 
     public int getQuantity() {
         return quantity;
@@ -51,19 +45,19 @@ public class RawMaterial extends BaseEntity{
         this.deliveredAt = deliveredAt;
     }
 
-    public Supplier getSupplier() {
+    public SupplierServiceModel getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(SupplierServiceModel supplier) {
         this.supplier = supplier;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

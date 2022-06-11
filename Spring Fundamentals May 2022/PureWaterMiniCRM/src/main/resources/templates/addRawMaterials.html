@@ -67,63 +67,49 @@
 </div>
 
 <div class="container">
-    <h2 class="text-center text-white">Register User</h2>
+    <h2 class="text-center text-white">Add Raw Materials</h2>
 
-    <p th:if="${isExists} == true" class="errors alert alert-danger">
-        User with the provided username or email already exists.
-    </p>
-
-    <form th:action="@{/users/register}" th:method="post" th:object="${userRegisterBindingModel}"
+    <form th:action="@{/materials/add}" th:method="post" th:object="${rawMaterialAddBindingModel}"
           class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
         <div class="row">
             <div class="form-group col-md-6 mb-3">
-                <label for="firstName" class="text-white font-weight-bold">First Name</label>
-                <input th:field="*{firstName}" th:errorclass="is-invalid" id="firstName" name="firstName" type="text" min="2" max="20" class="form-control"
-                       placeholder="First name"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    First name is required. Should be between 2 and 20 chars long.
-                </p>
+                <label for="type" class="text-white font-weight-bold">Type</label>
+                <select th:field="*{type}" id="type" name="type" class="custom-select">
+                    <option value="" selected>Select Type</option>
+                    <option th:each="raw : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType).values()}" th:value="${raw}" th:text="${raw.name().substring(0, 1) + raw.name().substring(1).toLowerCase()}">Select Type</option>
+                </select>
             </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="lastName" class="text-white font-weight-bold">Last Name</label>
-                <input th:field="*{lastName}" th:errorclass="is-invalid" id="lastName" name="lastName" type="text" min="2" max="20" class="form-control"
-                       placeholder="Last name"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    Last name is required. Should be between 2 and 20 chars long.
+            <div class="form-group">
+                <label class="text-center text-white font-weight-bold" for="quantity">Quantity</label>
+                <input th:field="*{quantity}" th:errorclass="is-invalid" id="quantity" name="quantity" type="number" required min="0" class="form-control"
+                       placeholder="Quantity"/>
+                <p class="invalid-feedback  errors alert alert-danger">
+                    Quantity should be a positive number.
                 </p>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6 mb-3">
-                <label for="username" class="text-white font-weight-bold">Username</label>
-                <input th:field="*{username}" th:errorclass="is-invalid" id="username" name="username" type="text" min="2" max="20" class="form-control"
-                       placeholder="Username"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    Username is required. Should be between 2 and 20 chars long.
-                </p>
+                <label for="deliveredAt" class="text-white font-weight-bold">Delivered On</label>
+                    <input th:field="*{deliveredAt}" th:errorclass="is-invalid" type="datetime-local" class="form-control" id="deliveredAt" name="deliveredAt"
+                           aria-describedby="orderTimeHelpInline">
+                    <small id="orderTimeHelpInline" class="invalid-feedback bg-danger text-light rounded">
+                        Delivery time cannot be in the future.
+                    </small>
             </div>
             <div class="form-group col-md-6 mb-3">
-                <label for="password" class="text-white font-weight-bold">Password</label>
-                <input th:field="*{password}" th:errorclass="is-invalid" id="password" name="password" type="password" min="5" class="form-control"
-                       placeholder="Password"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    Password is required. Should be at least 5 chars long.
-                </p>
+                <label for="supplierName" class="text-white font-weight-bold">Supplier</label>
+                <select th:field="*{supplierName}" id="supplierName" name="supplierName" class="custom-select">
+                    <option value="" selected>Select Supplier</option>
+                    <option th:each="s : ${suppliers}" th:value="${s.getCompanyName()}" th:text="${s.getCompanyName()}">Select Supplier</option>
+                </select>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="text-center text-white font-weight-bold" for="email">Email</label>
-            <input th:field="*{email}" th:errorclass="is-invalid" id="email" name="email" type="email" required class="form-control"
-                   placeholder="Email"/>
-            <p class="invalid-feedback  errors alert alert-danger">
-                A valid email address is required.
-            </p>
         </div>
 
         <div class="row">
             <div class="col col-md-4">
                 <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" value="Register"/>
+                    <input type="submit" class="btn btn-info btn-lg" value="Add Materials"/>
                 </div>
             </div>
         </div>

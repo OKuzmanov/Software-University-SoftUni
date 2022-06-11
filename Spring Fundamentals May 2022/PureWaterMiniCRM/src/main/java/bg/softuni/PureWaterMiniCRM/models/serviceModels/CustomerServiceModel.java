@@ -1,29 +1,23 @@
-package bg.softuni.PureWaterMiniCRM.models.entities;
+package bg.softuni.PureWaterMiniCRM.models.serviceModels;
 
-import javax.persistence.*;
-import java.util.Collections;
-import java.util.List;
+import bg.softuni.PureWaterMiniCRM.models.entities.BaseEntity;
+import bg.softuni.PureWaterMiniCRM.models.entities.User;
 
-@Entity
-@Table(name="suppliers")
-public class Supplier extends BaseEntity{
-
-    @Column(name = "company_name", unique = true, nullable = false)
+public class CustomerServiceModel extends BaseServiceModel {
     private String companyName;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(nullable = false)
     private String address;
 
     private String description;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
-    private List<RawMaterial> rawMaterials;
+    private UserServiceModel user;
+
+    public CustomerServiceModel() {
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -65,11 +59,11 @@ public class Supplier extends BaseEntity{
         this.description = description;
     }
 
-    public List<RawMaterial> getRawMaterials() {
-        return rawMaterials;
+    public UserServiceModel getUser() {
+        return user;
     }
 
-    public void setRawMaterials(List<RawMaterial> rawMaterials) {
-        this.rawMaterials = rawMaterials;
+    public void setUser(UserServiceModel user) {
+        this.user = user;
     }
 }

@@ -33,14 +33,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @ModelAttribute
-    public void addInModel(Model model) {
-        model.addAttribute("userLoginBindingModel", new UserLoginBindingModel());
-        model.addAttribute("userRegisterBindingModel", new UserRegisterBindingModel());
-        model.addAttribute("wrongCredentials", false);
-        model.addAttribute("isExists", false);
-    }
-
     @GetMapping("/login")
     public String getLogin() {
 
@@ -114,5 +106,25 @@ public class UserController {
         UserServiceModel registeredUsm = this.userService.register(usm);
 
         return "redirect:login";
+    }
+
+    @ModelAttribute("userLoginBindingModel")
+    public UserLoginBindingModel userLoginBindingModel() {
+        return new UserLoginBindingModel();
+    }
+
+    @ModelAttribute("wrongCredentials")
+    public boolean addUserLoginCredentialsAtt() {
+        return false;
+    }
+
+    @ModelAttribute("userRegisterBindingModel")
+    public UserRegisterBindingModel userRegisterBindingModel() {
+        return new UserRegisterBindingModel();
+    }
+
+    @ModelAttribute("isExists")
+    public boolean addExistingUserAtt() {
+        return false;
     }
 }

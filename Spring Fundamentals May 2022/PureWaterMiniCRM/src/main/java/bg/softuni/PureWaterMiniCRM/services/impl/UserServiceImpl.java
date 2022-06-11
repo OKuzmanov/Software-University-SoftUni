@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -73,5 +75,12 @@ public class UserServiceImpl implements UserService {
         //TODO Add Roles
 
         return this.modelMapper.map(this.userRepo.save(entityToPersist), UserServiceModel.class);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Optional<User> optUser = this.userRepo.findByUsername(this.currentUser.getUsername());
+
+        return optUser.get();
     }
 }

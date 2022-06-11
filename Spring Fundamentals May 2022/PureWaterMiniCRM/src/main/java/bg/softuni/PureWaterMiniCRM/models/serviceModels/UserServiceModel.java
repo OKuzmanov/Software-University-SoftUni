@@ -4,7 +4,7 @@ import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 
 import java.util.Set;
 
-public class UserServiceModel {
+public class UserServiceModel extends BaseServiceModel{
 
     private String username;
 

@@ -1,29 +1,33 @@
-package bg.softuni.PureWaterMiniCRM.models.entities;
+package bg.softuni.PureWaterMiniCRM.models.bindingModels;
 
-import javax.persistence.*;
-import java.util.Collections;
-import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-@Entity
-@Table(name="suppliers")
-public class Supplier extends BaseEntity{
-
-    @Column(name = "company_name", unique = true, nullable = false)
+public class CustomerAddBindingModel {
+    @NotBlank
+    @Size(min=3, max=25)
     private String companyName;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Email
     private String email;
 
-    @Column(name = "phone_number")
+    @NotBlank
+    @Size(min=7, max=15)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Size(min=3, max=25)
     private String address;
 
+    @NotBlank
+    @Size(min=3, max=25)
     private String description;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
-    private List<RawMaterial> rawMaterials;
+    public CustomerAddBindingModel() {
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -63,13 +67,5 @@ public class Supplier extends BaseEntity{
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<RawMaterial> getRawMaterials() {
-        return rawMaterials;
-    }
-
-    public void setRawMaterials(List<RawMaterial> rawMaterials) {
-        this.rawMaterials = rawMaterials;
     }
 }

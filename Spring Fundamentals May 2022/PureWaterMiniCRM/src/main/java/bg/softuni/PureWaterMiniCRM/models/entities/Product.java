@@ -12,15 +12,16 @@ public class Product extends BaseEntity{
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
     private ProductCategoryEnum type;
 
     @Column(name = "produced_at")
     private LocalDateTime producedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    private User user;
 
     public int getQuantity() {
         return quantity;
@@ -46,11 +47,11 @@ public class Product extends BaseEntity{
         this.producedAt = producedAt;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 }

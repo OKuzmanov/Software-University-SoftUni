@@ -16,8 +16,8 @@ public class Order extends BaseEntity{
     @Column(name="total_price", nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "quantity_pallet", nullable = false)
-    private int quantityPallet;
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 
     @Column(name = "product_category", nullable = false)
     private ProductCategoryEnum prodCategory;
@@ -69,12 +69,12 @@ public class Order extends BaseEntity{
         this.totalPrice = totalPrice;
     }
 
-    public int getQuantityPallet() {
-        return quantityPallet;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQuantityPallet(int quantityPallet) {
-        this.quantityPallet = quantityPallet;
+    public void setQuantity(int quantityPallet) {
+        this.quantity = quantityPallet;
     }
 
     public ProductCategoryEnum getProdCategory() {

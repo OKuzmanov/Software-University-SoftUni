@@ -31,14 +31,17 @@ public class User extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> role;
 
-    @OneToMany(mappedBy = "user")
-    private List<RawMaterial> rawMaterials;
+//    @OneToMany(mappedBy = "user")
+//    private List<RawMaterial> rawMaterials;
 
-    @OneToMany(mappedBy = "user")
-    private List<Product> products;
+//    @OneToMany(mappedBy = "user")
+//    private List<Product> products;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Customer> customers;
 
     public String getUsername() {
         return username;
@@ -91,22 +94,22 @@ public class User extends BaseEntity{
     public void setRole(Set<Role> role) {
         this.role = role;
     }
-
-    public List<RawMaterial> getRawMaterials() {
-        return Collections.unmodifiableList(rawMaterials);
-    }
-
-    public void setRawMaterials(List<RawMaterial> rawMaterials) {
-        this.rawMaterials = rawMaterials;
-    }
-
-    public List<Product> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+//
+//    public List<RawMaterial> getRawMaterials() {
+//        return Collections.unmodifiableList(rawMaterials);
+//    }
+//
+//    public void setRawMaterials(List<RawMaterial> rawMaterials) {
+//        this.rawMaterials = rawMaterials;
+//    }
+//
+//    public List<Product> getProducts() {
+//        return Collections.unmodifiableList(products);
+//    }
+//
+//    public void setProducts(List<Product> products) {
+//        this.products = products;
+//    }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
