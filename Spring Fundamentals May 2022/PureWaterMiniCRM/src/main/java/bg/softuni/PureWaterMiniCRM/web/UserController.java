@@ -62,6 +62,7 @@ public class UserController {
         }
 
         userService.login(existingUser);
+
         return "redirect:/home";
     }
 

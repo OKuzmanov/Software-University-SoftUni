@@ -20,4 +20,11 @@ public class HomeController {
 
         return modelAndView;
     }
+
+    @GetMapping("/about")
+    public ModelAndView getAbout() {
+        ModelAndView modelAndView = new ModelAndView("about");
+
+        return modelAndView;
+    }
 }

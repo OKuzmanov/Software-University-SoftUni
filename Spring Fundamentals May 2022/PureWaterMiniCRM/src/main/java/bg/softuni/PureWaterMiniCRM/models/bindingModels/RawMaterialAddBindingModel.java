@@ -7,13 +7,14 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class RawMaterialAddBindingModel {
-
+    @NotNull
     @Positive
     private int quantity;
 
     @NotNull
     private RawMaterialType type;
 
+    @NotNull
     @PastOrPresent
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deliveredAt;

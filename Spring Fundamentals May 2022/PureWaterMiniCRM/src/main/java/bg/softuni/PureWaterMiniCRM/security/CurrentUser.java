@@ -6,11 +6,13 @@ import org.springframework.web.context.annotation.SessionScope;
 @Component
 @SessionScope
 public class CurrentUser {
-
     private String username;
     private String firstName;
     private String lastName;
     private boolean isLoggedIn;
+
+    public CurrentUser() {
+    }
 
     public String getUsername() {
         return username;
@@ -18,14 +20,6 @@ public class CurrentUser {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public boolean isLoggedIn() {
-        return isLoggedIn;
-    }
-
-    public void setLoggedIn(boolean loggedIn) {
-        isLoggedIn = loggedIn;
     }
 
     public String getFirstName() {
@@ -44,10 +38,18 @@ public class CurrentUser {
         this.lastName = lastName;
     }
 
+    public boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+    }
+
     public void clear() {
-        this.username = null;
-        this.firstName = null;
-        this.lastName = null;
-        this.isLoggedIn = false;
+        this.setUsername(null);
+        this.setFirstName(null);
+        this.setLastName(null);
+        this.setLoggedIn(false);
     }
 }

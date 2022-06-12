@@ -16,11 +16,6 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public CurrentUser currUser() {
-        return new CurrentUser();
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new Pbkdf2PasswordEncoder();
     }

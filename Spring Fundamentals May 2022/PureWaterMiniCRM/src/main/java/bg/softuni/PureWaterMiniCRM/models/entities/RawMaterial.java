@@ -27,6 +27,16 @@ public class RawMaterial extends BaseEntity{
 //    @JoinColumn(name = "user_id", referencedColumnName = "id")
 //    private User user;
 
+
+    public RawMaterial() {
+    }
+
+    public RawMaterial(int quantity, RawMaterialType type, LocalDateTime deliveredAt) {
+        this.quantity = quantity;
+        this.type = type;
+        this.deliveredAt = deliveredAt;
+    }
+
     public int getQuantity() {
         return quantity;
     }

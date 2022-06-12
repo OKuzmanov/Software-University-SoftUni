@@ -38,7 +38,7 @@ public class RawMaterialsController {
     @GetMapping("/add")
     public String getAddRawMaterials(Model model) {
         model.addAttribute("suppliers", this.supplierService.findAllSuppliers());
-        return "addRawMaterials";
+        return "addRawMaterial";
     }
 
     @PostMapping("/add")

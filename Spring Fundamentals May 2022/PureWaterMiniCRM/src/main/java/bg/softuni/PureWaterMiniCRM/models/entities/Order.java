@@ -19,6 +19,7 @@ public class Order extends BaseEntity{
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "product_category", nullable = false)
     private ProductCategoryEnum prodCategory;
 
