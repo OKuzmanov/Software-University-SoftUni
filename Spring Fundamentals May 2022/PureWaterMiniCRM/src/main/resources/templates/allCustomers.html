@@ -1,38 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Coffee Shop Application</title>
-    <link rel="stylesheet" href="/css/reset-css.css"/>
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <title>All Customers</title>
+    <th:block th:include="fragments/head::myHead"></th:block>
 </head>
+
 <body class="bg-secondary">
-<header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-info rounded">
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Add Order</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Logout</a>
-                </li>
-            </ul>
-            <img width="50px" src="/images/coffee.png" alt="Coffee image">
-        </div>
-    </nav>
-</header>
+<div>
+    <nav th:replace="fragments/navigation::myNav"></nav>
+</div>
 <main role="main" class="bg-secondary">
 
     <div class="jumbotron text-center">
@@ -90,8 +66,8 @@
         </div>
     </div>
 </main>
-<footer class="container">
-    <p>&copy;SoftUni Spring Team 2021. All rights reserved.</p>
-</footer>
+<div>
+    <footer th:replace="fragments/footer::myFooter"> </footer>
+</div>
 </body>
 </html>

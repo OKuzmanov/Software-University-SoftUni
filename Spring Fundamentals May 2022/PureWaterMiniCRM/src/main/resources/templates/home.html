@@ -2,12 +2,12 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Coffee Shop Application</title>
-    <th:block th:include="fragments/commons::myHead"></th:block>
+    <title>Home</title>
+    <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 <body class="bg-secondary">
 <header>
-    <nav th:replace="fragments/commons::myNav"></nav>
+    <nav th:replace="fragments/navigation::myNav"></nav>
 </header>
 <main role="main" class="bg-secondary">
 
@@ -66,8 +66,8 @@
         </div>
     </div>
 </main>
-<footer class="container">
-    <p>&copy;SoftUni Spring Team 2021. All rights reserved.</p>
-</footer>
+<div>
+    <footer th:replace="fragments/footer::myFooter"> </footer>
+</div>
 </body>
 </html>

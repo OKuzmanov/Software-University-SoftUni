@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shopping list App</title>
+    <th:block th:replace="fragments/Head::MyHead"></th:block>
+</head>
+<body>
+<header>
+    <nav th:replace="fragments/Navigation::MyNav"></nav>
+</header>
+<main>
+    <h1 class="text-center mt-2"><span class="badge badge-pill badge-dark">Add product</span></h1>
+    <hr class="hr-3 w-25 bg-white"/>
+    <form class="mx-auto w-25 bg-blur rounded" th:method="POST" th:action="@{/products/add}" th:object="${addProductBindingModel}">
+        <div class="form-group">
+            <small th:if="${isNameTaken == true}" class="text-danger"> Name already occupied.</small>
+            <div class="label-holder textCol d-flex justify-content-center">
+                <label for="name" class="h4 mb-2 text-white">Name</label>
+            </div>
+            <input th:field="*{name}" th:errorclass="'is-invalid bg-danger'" type="text" class="form-control" id="name" name="name"/>
+            <small class="invalid-feedback text-danger"> Name must be between 3 and 20 chars.</small>
+        </div>
+        <div class="form-group">
+            <div class="label-holder text-white textCol d-flex justify-content-center">
+                <label for="description" class="h4 mb-2">Description</label>
+            </div>
+            <textarea th:field="*{description}" th:errorclass="'is-invalid bg-danger'"  type="text" class="form-control" id="description" name="description"></textarea>
+            <small class="invalid-feedback text-danger">Description must be more that 5 chars.</small>
+        </div>
+        <div class="form-group">
+            <div class="label-holder text-white textCol d-flex justify-content-center">
+                <label for="neededBefore" class="h4 mb-2">Before</label>
+            </div>
+            <input th:field="*{neededBefore}" th:errorclass="'is-invalid bg-danger'"  type="datetime-local" class="form-control" id="neededBefore" name="neededBefore"/>
+            <small class="invalid-feedback text-danger">Needed before date must be in the future.</small>
+        </div>
+        <div class="form-group">
+            <div class="label-holder text-white textCol d-flex justify-content-center">
+                <label for="price" class="h4 mb-2">Price</label>
+            </div>
+            <input th:field="*{price}" th:errorclass="'is-invalid bg-danger'"  type="number" step="0.1" class="form-control" id="price" name="price"/>
+            <small class="invalid-feedback text-danger">Price must be a positive number.</small>
+        </div>
+        <div class="form-group">
+            <div class="text-white label-holder d-flex justify-content-center">
+                <label for="category" class="h4 mb-2">Category</label>
+            </div>
+            <select th:field="*{category}" th:errorclass="'is-invalid bg-danger'"  class="browser-default custom-select" id="category" name="category">
+                <option value="" selected>Select category</option>
+				<option th:each="c : ${T(bg.softuni.examprepshoppinglist.models.enums.CategoryEnum).values()}" th:value="${c}" th:text="${c.name()}">Custom Option</option>
+            </select>
+            <small class="invalid-feedback text-danger">Category must be selected.</small>
+        </div>
+
+        <div class="button-holder d-flex justify-content-center">
+            <button type="submit" class="btn btn-warning  mb-3" value="Register">Add product</button>
+        </div>
+    </form>
+</main>
+
+<footer class="footer bg-transparent  py-2">
+    <div class="container-fluid text-center">
+		<div class="footer-background h5 text-white">
+           &copy; Spring team 2021. All rights reserved.
+		</div>
+	</div>
+</footer>
+</body>
+</html>

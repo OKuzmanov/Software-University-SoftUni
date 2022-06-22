@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="MyNav">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top  rounded">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+
+                <th:block th:if="${@currentUser.username} == null">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/users/login}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/users/register}">Register</a>
+                </li>
+                </th:block>
+
+                <th:block th:if="${@currentUser.username} != null">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/home}">Home</a>
+                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/ships/add}">Add Ship</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/users/logout}">Logout</a>
+                </li>
+                </th:block>
+            </ul>
+            <img width="50px" src="/images/ufo.png" alt="Ufo image">
+        </div>
+    </nav>
+</th:block>
+</html>

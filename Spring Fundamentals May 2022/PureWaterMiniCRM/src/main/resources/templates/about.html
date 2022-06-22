@@ -3,14 +3,14 @@
 
 <head>
     <title>About</title>
-    <th:block th:include="fragments/commons::myHead"></th:block>
+    <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 
 <body>
 <div class="wrapper">
     <!-- Navigation -->
     <div>
-        <nav th:replace="fragments/commons::myNav"></nav>
+        <nav th:replace="fragments/navigation::myNav"></nav>
     </div>
 
     <div class="info">
@@ -43,5 +43,5 @@
 </div>
 <!-- Wrapper Ends -->
 </body>
-<!--<footer class="footer bg-blur rounded" th:replace="fragments/commons::myFooter"></footer>-->
+<footer th:replace="fragments/footer::myFooter"></footer>
 </html>

@@ -1,30 +1,39 @@
 package bg.softuni.PureWaterMiniCRM.models.bindingModels;
 
+import bg.softuni.PureWaterMiniCRM.util.validation.FieldMatch;
+import bg.softuni.PureWaterMiniCRM.util.validation.UniqueEmail;
+import bg.softuni.PureWaterMiniCRM.util.validation.UniqueUsername;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+@FieldMatch(first = "password", second = "confirmPassword", message = "Passwords do not match.")
 public class UserRegisterBindingModel {
 
-    @NotBlank
-    @Size(min=2, max=20)
+    @NotEmpty(message = "Username must not be empty.")
+    @Size(min=2, max=20, message = "Username should be between 2 and 20 symbols long.")
+    @UniqueUsername(message = "This username is already occupied.")
     private String username;
 
-    @NotBlank
+    @NotEmpty
     @Size(min=2, max=20)
     private String firstName;
 
-    @NotBlank
+    @NotEmpty
     @Size(min=2, max=20)
     private String lastName;
 
-    @NotBlank
-    @Size(min=5)
+    @NotEmpty(message = "Password must not be empty.")
+    @Size(min=5, message = "Password mus be at least 5 symbols long.")
     private String password;
 
-    @NotBlank
-    @Email
+    private String confirmPassword;
+
+    @NotEmpty(message = "Email must not be empty.")
+    @Email(message = "Email should be a valid email address.")
+    @UniqueEmail(message = "This email is already occupied.")
     private String email;
 
     public UserRegisterBindingModel() {
@@ -68,5 +77,13 @@ public class UserRegisterBindingModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

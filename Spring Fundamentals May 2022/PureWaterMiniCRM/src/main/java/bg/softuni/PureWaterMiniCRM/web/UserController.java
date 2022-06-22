@@ -93,17 +93,6 @@ public class UserController {
 
         UserServiceModel usm = this.modelMapper.map(userRegisterBindingModel, UserServiceModel.class);
 
-        UserServiceModel usmEmailCheck = this.userService.findUserByEmail(usm);
-        UserServiceModel usmUsernameCheck = this.userService.findUserByUsername(usm);
-
-        if (usmUsernameCheck != null || usmEmailCheck != null) {
-            redirectAttributes.addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegisterBindingModel", bindingResult);
-            redirectAttributes.addFlashAttribute("isExists", true);
-
-            return "redirect:/users/register";
-        }
-
         UserServiceModel registeredUsm = this.userService.register(usm);
 
         return "redirect:login";

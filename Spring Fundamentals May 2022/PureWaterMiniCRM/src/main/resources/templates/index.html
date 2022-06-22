@@ -3,13 +3,13 @@
 
 <head>
     <title>PureWater Mini CRM</title>
-    <th:block th:include="fragments/commons::myHead"></th:block>
+    <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 
 <body>
 
 <div>
-        <nav th:replace="fragments/commons::myNav"></nav>
+        <nav th:replace="fragments/navigation::myNav"></nav>
 </div>
 
 
@@ -18,7 +18,7 @@
 </div>
 
 <div>
-    <footer> </footer>
+    <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
 
 </body>
