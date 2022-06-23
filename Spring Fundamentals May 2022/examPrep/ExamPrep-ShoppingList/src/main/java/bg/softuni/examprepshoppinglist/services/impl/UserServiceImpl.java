@@ -55,4 +55,9 @@ public class UserServiceImpl implements UserService {
     public void logout() {
         this.currentUser.setUsername(null);
     }
+
+    @Override
+    public CurrentUser getCurrentUser() {
+        return this.currentUser;
+    }
 }

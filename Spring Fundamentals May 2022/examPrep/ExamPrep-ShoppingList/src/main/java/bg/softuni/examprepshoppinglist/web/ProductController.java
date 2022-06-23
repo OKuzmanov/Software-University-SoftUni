@@ -3,6 +3,7 @@ package bg.softuni.examprepshoppinglist.web;
 import bg.softuni.examprepshoppinglist.models.bindingModels.AddProductBindingModel;
 import bg.softuni.examprepshoppinglist.models.services.ProductServiceModel;
 import bg.softuni.examprepshoppinglist.services.ProductService;
+import bg.softuni.examprepshoppinglist.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final ModelMapper modelMapper;
+    private final UserService userService;
 
     @Autowired
-    public ProductController(ProductService productService, ModelMapper modelMapper) {
+    public ProductController(ProductService productService, ModelMapper modelMapper, UserService userService) {
         this.productService = productService;
         this.modelMapper = modelMapper;
+        this.userService = userService;
     }
 
     @ModelAttribute("isNameTaken")
@@ -40,6 +43,9 @@ public class ProductController {
 
     @GetMapping("/add")
     public String getAddProduct() {
+        if (this.userService.getCurrentUser().getUsername() == null) {
+            return "redirect:/users/login";
+        }
         return "product-add";
     }
 
