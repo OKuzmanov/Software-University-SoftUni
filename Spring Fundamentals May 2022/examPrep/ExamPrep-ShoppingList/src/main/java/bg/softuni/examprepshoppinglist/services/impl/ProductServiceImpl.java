@@ -1,6 +1,8 @@
 package bg.softuni.examprepshoppinglist.services.impl;
 
+import bg.softuni.examprepshoppinglist.models.entities.Category;
 import bg.softuni.examprepshoppinglist.models.entities.Product;
+import bg.softuni.examprepshoppinglist.models.enums.CategoryEnum;
 import bg.softuni.examprepshoppinglist.models.services.ProductServiceModel;
 import bg.softuni.examprepshoppinglist.repositories.ProductRepository;
 import bg.softuni.examprepshoppinglist.services.CategoryService;
@@ -9,7 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -39,5 +44,33 @@ public class ProductServiceImpl implements ProductService {
         entityToSave.setCategory(this.categoryService.findByName(productServiceModel.getCategory()));
         this.productRepo.save(entityToSave);
         return entityToSave.getId() != null;
+    }
+
+    @Override
+    public List<ProductServiceModel> fetchAllByCategory(CategoryEnum category) {
+        Category categ = this.categoryService.findByName(category);
+        List<Product> allByCategory = this.productRepo.findAllByCategory(categ);
+        return allByCategory.isEmpty()
+                ? null
+                : allByCategory
+                    .stream()
+                    .map( p -> this.modelMapper.map(p, ProductServiceModel.class))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeProductById(Long id) {
+        this.productRepo.deleteById(id);
+    }
+
+    @Override
+    public Double fetchTotalProductsPrice() {
+        List<Product> all = this.productRepo.findAll();
+        return all.stream().map(p -> p.getPrice()).mapToDouble(BigDecimal -> BigDecimal.doubleValue()).sum();
+    }
+
+    @Override
+    public void removeAll() {
+        this.productRepo.deleteAll();
     }
 }
