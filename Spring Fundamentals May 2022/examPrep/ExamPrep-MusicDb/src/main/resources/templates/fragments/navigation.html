@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<nav class="navbar navbar-expand-lg bg-nav rounded" th:fragment="MyNav">
+    <a class="nav-link" th:href="@{/home}">
+        <img src="/img/headphones.png" width="40px" alt="HeadPhones picture">
+    </a>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+        <ul class="navbar-nav row">
+            <li class="nav-item col-md-4">
+                <a class="nav-link text-white active h5" th:href="@{/users/login}">Login</a>
+            </li>
+            <li class="nav-item col-md-4">
+                <a class="nav-link text-white active h5" th:href="@{/users/register}">Register</a>
+            </li>
+            <li class="nav-item col-md-4">
+                <a class="nav-link text-white active h5" th:href="@{/albums/add}">Add Album</a>
+            </li>
+            <li class="nav-item col-md-4">
+                <a class="nav-link text-white active h5" th:href="@{/users/logout}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+</html>
