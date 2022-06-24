@@ -26,6 +26,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String getIndex() {
+
+        if(this.userService.getCurrentUser() != null) {
+            return "redirect:/home";
+        }
+
         return "index";
     }
 
