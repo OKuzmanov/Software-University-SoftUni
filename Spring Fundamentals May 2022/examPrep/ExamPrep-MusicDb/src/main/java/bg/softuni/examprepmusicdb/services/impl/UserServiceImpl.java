@@ -70,6 +70,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isCurrentUserLoggedIn() {
-        return this.currentUser.getUsername() == null;
+        return this.currentUser.getUsername() != null;
     }
 }

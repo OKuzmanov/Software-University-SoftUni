@@ -41,6 +41,11 @@ public class UserController {
 
     @GetMapping("/login")
     public String getLogin() {
+
+        if (this.userService.getCurrentUser().getUsername() != null) {
+            return "redirect:/home";
+        }
+
         return "login";
     }
 

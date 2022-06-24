@@ -42,7 +42,7 @@ public class AlbumController {
     public String postAddAlbum(@Valid AddAlbumBindingModel addAlbumBindingModel, BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) {
 
-        if (this.userService.isCurrentUserLoggedIn()) {
+        if (!this.userService.isCurrentUserLoggedIn()) {
             return "redirect:/users/login";
         }
 

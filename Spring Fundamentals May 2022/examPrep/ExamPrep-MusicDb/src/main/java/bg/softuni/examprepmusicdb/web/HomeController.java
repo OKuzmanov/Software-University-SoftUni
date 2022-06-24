@@ -30,7 +30,7 @@ public class HomeController {
     @GetMapping("/home")
     public String getHome(Model model) {
 
-        if (this.userService.isCurrentUserLoggedIn()) {
+        if (!this.userService.isCurrentUserLoggedIn()) {
             return "redirect:/users/login";
         }
 

@@ -71,4 +71,9 @@ public class UserServiceImpl implements UserService {
         this.currentUser.setUsername(null);
         this.currentUser.setFullName(null);
     }
+
+    @Override
+    public boolean isCurrentUserLoggedIn() {
+        return this.currentUser.getUsername() != null;
+    }
 }

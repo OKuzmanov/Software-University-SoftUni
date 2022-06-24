@@ -37,6 +37,11 @@ public class UserLoginController {
 
     @GetMapping("/login")
     public String getLogin() {
+
+        if (this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/home";
+        }
+
         return "login";
     }
 
@@ -67,7 +72,7 @@ public class UserLoginController {
     @GetMapping("/logout")
     public String logout() {
 
-        if (this.userService.isCurrentUserLoggedIn()) {
+        if (!this.userService.isCurrentUserLoggedIn()) {
             return "redirect:/users/login";
         }
 
