@@ -50,6 +50,10 @@ public class HomeController {
     @PostMapping("/home")
     public String postHome(@RequestParam Long attackerShip, @RequestParam Long defenderShip){
 
+        if(this.userService.getCurrentUser() == null) {
+            return "redirect:/home";
+        }
+
         this.shipService.fireServiceLogic(attackerShip, defenderShip);
 
         return "redirect:/home";
