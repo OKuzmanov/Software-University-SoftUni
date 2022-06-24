@@ -18,7 +18,7 @@
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
-                        <input th:field="*{name}" th:errorclass="is-invalid" type="text" class="form-control" id="name"
+                        <input th:field="*{name}" th:errorclass="'is-invalid bg-danger'" type="text" class="form-control" id="name"
                                aria-describedby="nameHelpInline" placeholder="Name">
                         <small id="nameHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             Name must be between 3 and 20 characters.
@@ -28,7 +28,7 @@
                 <div class="form-group row">
                     <label for="price" class="col-sm-2 col-form-label">Price</label>
                     <div class="col-sm-10">
-                        <input th:field="*{price}" th:errorclass="is-invalid" type="number" step="any" min="0" class="form-control" id="price"
+                        <input th:field="*{price}" th:errorclass="'is-invalid bg-danger'" type="number" step="any" min="0" class="form-control" id="price"
                                aria-describedby="priceHelpInline">
                         <small id="priceHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             Price must be positive.
@@ -38,7 +38,7 @@
                 <div class="form-group row">
                     <label for="orderTime" class="col-sm-2 col-form-label">Order time</label>
                     <div class="col-sm-10">
-                        <input th:field="*{orderTime}" th:errorclass="is-invalid" type="datetime-local" class="form-control" id="orderTime"
+                        <input th:field="*{orderTime}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="orderTime"
                                aria-describedby="orderTimeHelpInline">
                         <small id="orderTimeHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             Order time cannot be in the future.
@@ -48,7 +48,7 @@
                 <div class="form-group row">
                     <label for="category" class="col-sm-2 col-form-label">Category</label>
                     <div class="col-sm-10">
-                        <select th:field="*{category}" th:errorclass="is-invalid" id="category" name="category" class="custom-select"
+                        <select th:field="*{category}" th:errorclass="'is-invalid bg-danger'" id="category" name="category" class="custom-select"
                                 aria-describedby="categoryHelpInline">
                             <option value="" selected>Category</option>
                             <option th:each="c : ${T(bg.softuni.examprep_springfund.model.enums.CategoryEnum).values()}" th:value="${c}" th:text="${c.name().substring(0,1) + c.name().substring(1).toLowerCase()}">Coffee</option>
@@ -61,7 +61,7 @@
                 <div class="form-group row">
                     <label for="description" class="col-sm-2 col-form-label">Description</label>
                     <div class="col-sm-10">
-                    <textarea th:field="*{description}" th:errorclass="is-invalid" class="form-control" id="description"
+                    <textarea th:field="*{description}" th:errorclass="'is-invalid bg-danger'" class="form-control" id="description"
                               aria-describedby="descriptionHelpInline" placeholder="Description">
                     </textarea>
                         <small id="descriptionHelpInline" class="invalid-feedback bg-danger text-light rounded">

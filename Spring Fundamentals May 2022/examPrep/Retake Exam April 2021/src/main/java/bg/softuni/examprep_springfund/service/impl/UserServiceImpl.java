@@ -74,4 +74,9 @@ public class UserServiceImpl implements UserService {
 
         return optUser.isPresent();
     }
+
+    @Override
+    public boolean isCurrUserLoggedIn() {
+        return this.currentUser.getUsername() != null;
+    }
 }

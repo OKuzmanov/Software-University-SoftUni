@@ -33,6 +33,11 @@ public class UserController {
 
     @GetMapping("/register")
     private String getRegister(Model model) {
+
+        if(this.userService.isCurrUserLoggedIn()) {
+            return "redirect:/home";
+        }
+
         if (!model.containsAttribute("isAlreadyRegistered")) {
             model.addAttribute("isAlreadyRegistered", false);
         }
@@ -68,6 +73,11 @@ public class UserController {
 
     @GetMapping("/login")
     private String getLogin(Model model) {
+
+        if(this.userService.isCurrUserLoggedIn()) {
+            return "redirect:/home";
+        }
+
         if (!model.containsAttribute("isFound")) {
             model.addAttribute("isFound", true);
         }
@@ -101,6 +111,11 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession httpSession) {
         httpSession.invalidate();
+
+        if(!this.userService.isCurrUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
+
         return "redirect:/";
     }
 

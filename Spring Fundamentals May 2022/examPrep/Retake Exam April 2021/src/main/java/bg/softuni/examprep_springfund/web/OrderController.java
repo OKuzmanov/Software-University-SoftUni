@@ -3,6 +3,7 @@ package bg.softuni.examprep_springfund.web;
 import bg.softuni.examprep_springfund.model.binding.OrderAddBindingModel;
 import bg.softuni.examprep_springfund.model.service.OrderServiceModel;
 import bg.softuni.examprep_springfund.service.OrderService;
+import bg.softuni.examprep_springfund.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ public class OrderController {
 
     private OrderService orderService;
     private ModelMapper modelMapper;
+    private UserService userService;
 
     @Autowired
     public OrderController(OrderService orderService, ModelMapper modelMapper) {
@@ -27,6 +29,11 @@ public class OrderController {
 
     @GetMapping("/add")
     private String getAddOrder(){
+
+        if(!this.userService.isCurrUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
+
         return "order-add";
     }
 

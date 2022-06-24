@@ -25,7 +25,7 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/home")
     private String getIndex(Model model){
 
         if(currentUser.getId() == null) {

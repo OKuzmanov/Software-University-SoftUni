@@ -20,4 +20,6 @@ public interface UserService {
     List<UserViewModel> findAllUsersOrderedByNumberOfOrdersDesc();
 
     boolean checkUserAlreadyRegistered(UserRegisterBindingModel userRegisterBindingModel);
+
+    boolean isCurrUserLoggedIn();
 }
