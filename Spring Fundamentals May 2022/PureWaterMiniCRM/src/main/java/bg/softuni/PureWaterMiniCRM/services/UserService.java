@@ -4,6 +4,8 @@ import bg.softuni.PureWaterMiniCRM.models.entities.User;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.security.CurrentUser;
 
+import java.util.List;
+
 public interface UserService {
 
     public UserServiceModel findUserByUsername(UserServiceModel userServiceModel);
@@ -17,4 +19,10 @@ public interface UserService {
     UserServiceModel register(UserServiceModel usm);
 
     User getCurrentUser();
+
+    boolean isRepoEmpty();
+
+    void saveAll(List<User> users);
+
+    boolean isCurrentUserLoggedIn();
 }

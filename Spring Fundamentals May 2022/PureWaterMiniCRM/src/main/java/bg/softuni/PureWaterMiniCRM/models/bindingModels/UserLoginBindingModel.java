@@ -6,12 +6,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserLoginBindingModel {
-    @NotEmpty(message = "Username must not be empty.")
-    @Size(min = 2, max = 20, message = "Username must be between 2 and 20 symbols long.")
+    @NotBlank(message = "Username should not be blank!")
+    @Size(min = 2, max = 20, message = "Username should be between 2 and 20 symbols long!")
     private String username;
 
-    @NotEmpty(message = "Password must not be empty.")
-    @Size(min = 5, message = "Password must be at least 5 symbols long.")
+    @NotBlank(message = "Password should not be blank!")
+    @Size(min = 5, message = "Password should be at least 5 symbols long!")
     private String password;
 
     public String getUsername() {

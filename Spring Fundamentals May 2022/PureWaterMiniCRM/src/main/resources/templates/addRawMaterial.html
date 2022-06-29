@@ -21,40 +21,40 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="type" class="text-white font-weight-bold">Type</label>
-                <select th:field="*{type}" th:errorclass="is-invalid" id="type" name="type" class="custom-select">
+                <select th:field="*{type}" th:errorclass="'is-invalid bg-danger'" id="type" name="type" class="custom-select">
                     <option value="" selected>Select Type</option>
                     <option th:each="raw : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType).values()}" th:value="${raw}" th:text="${raw.name().substring(0, 1) + raw.name().substring(1).toLowerCase()}">Select Type</option>
                 </select>
-                <p class="invalid-feedback  errors alert alert-danger">
-                    Raw materials type should be selected.
+                <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label class="text-center text-white font-weight-bold" for="quantity">Quantity</label>
-                <input th:field="*{quantity}" th:errorclass="is-invalid" id="quantity" name="quantity" type="number" required min="0" class="form-control"
+                <input th:field="*{quantity}" th:errorclass="'is-invalid bg-danger'" id="quantity" name="quantity" type="number" required min="0" class="form-control"
                        placeholder="Quantity"/>
-                <p class="invalid-feedback  errors alert alert-danger">
-                    Quantity should be a positive number.
+                <p th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="deliveredAt" class="text-white font-weight-bold">Delivered On</label>
-                    <input th:field="*{deliveredAt}" th:errorclass="is-invalid" type="datetime-local" class="form-control" id="deliveredAt" name="deliveredAt"
+                    <input th:field="*{deliveredAt}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="deliveredAt" name="deliveredAt"
                            aria-describedby="orderTimeHelpInline">
-                    <p class="invalid-feedback  errors alert alert-danger">
-                        Delivery time should be selected and cannot be in the future.
-                    </p>
+                <p th:if="${#fields.hasErrors('deliveredAt')}" th:errors="*{deliveredAt}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label for="supplierName" class="text-white font-weight-bold">Supplier</label>
-                <select th:field="*{supplierName}" th:errorclass="is-invalid" id="supplierName" name="supplierName" class="custom-select">
+                <select th:field="*{supplierName}" th:errorclass="'is-invalid bg-danger'" id="supplierName" name="supplierName" class="custom-select">
                     <option value="" selected>Select Supplier</option>
                     <option th:each="s : ${suppliers}" th:value="${s.getCompanyName()}" th:text="${s.getCompanyName()}">Select Supplier</option>
                 </select>
-                <p class="invalid-feedback  errors alert alert-danger">
-                    A supplier should be selected.
+                <p th:if="${#fields.hasErrors('supplierName')}" th:errors="*{supplierName}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
         </div>

@@ -3,6 +3,7 @@ package bg.softuni.PureWaterMiniCRM.web;
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.CustomerAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
 import bg.softuni.PureWaterMiniCRM.services.CustomerService;
+import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,23 +21,40 @@ import javax.validation.Valid;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CustomerController(CustomerService customerService, ModelMapper modelMapper) {
+    public CustomerController(CustomerService customerService, UserService userService, ModelMapper modelMapper) {
         this.customerService = customerService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
+    }
+
+    @ModelAttribute("customerAddBindingModel")
+    public CustomerAddBindingModel customerAddBindingModel() {
+        return new CustomerAddBindingModel();
+    }
+
+    @ModelAttribute("isExist")
+    public boolean addIsExist() {
+        return false;
     }
 
     @GetMapping("/add")
     public String getAddCustomer() {
-
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
       return "addCustomer";
     }
 
     @PostMapping("/add")
     public String postAddCustomer(@Valid CustomerAddBindingModel customerAddBindingModel, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes){
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("customerAddBindingModel", customerAddBindingModel);
@@ -57,22 +75,14 @@ public class CustomerController {
 
         this.customerService.addCustomer(this.modelMapper.map(customerAddBindingModel, CustomerServiceModel.class));
 
-        return "allCustomers";
+        return "redirect:/customers/all";
     }
 
     @GetMapping("/all")
     public String getAllCustomers() {
-
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
         return "allCustomers";
-    }
-
-    @ModelAttribute("customerAddBindingModel")
-    public CustomerAddBindingModel customerAddBindingModel() {
-        return new CustomerAddBindingModel();
-    }
-
-    @ModelAttribute("isExist")
-    public boolean addIsExist() {
-        return false;
     }
 }

@@ -3,6 +3,7 @@ package bg.softuni.PureWaterMiniCRM.web;
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.ProductAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
 import bg.softuni.PureWaterMiniCRM.services.ProductService;
+import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,22 +21,36 @@ import javax.validation.Valid;
 public class ProductController {
 
     private final ProductService productService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductController(ProductService productService, ModelMapper modelMapper) {
+    public ProductController(ProductService productService, UserService userService, ModelMapper modelMapper) {
         this.productService = productService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
+    }
+
+    @ModelAttribute("productAddBindingModel")
+    public ProductAddBindingModel addBindingModel() {
+        return new ProductAddBindingModel();
     }
 
     @GetMapping("/add")
     public String getAddProducts(){
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
+
         return "addProduct";
     }
 
     @PostMapping("/add")
     public String postAddProducts(@Valid ProductAddBindingModel productAddBindingModel, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
 
         if (bindingResult.hasErrors()) {
            redirectAttributes.addFlashAttribute("productAddBindingModel", productAddBindingModel);
@@ -46,11 +61,14 @@ public class ProductController {
 
         this.productService.addProducts(this.modelMapper.map(productAddBindingModel, ProductServiceModel.class));
 
-        return "allProducts";
+        return "return:/products/all";
     }
 
-    @ModelAttribute("productAddBindingModel")
-    public ProductAddBindingModel addBindingModel() {
-        return new ProductAddBindingModel();
+    @GetMapping("/all")
+    public String getAllSupps() {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
+        return "allProducts";
     }
 }

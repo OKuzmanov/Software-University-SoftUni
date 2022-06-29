@@ -61,4 +61,14 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(e -> this.modelMapper.map(e, CustomerServiceModel.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isRepoEmpty() {
+        return this.customerRepo.count() == 0;
+    }
+
+    @Override
+    public void saveAll(List<Customer> customers) {
+        this.customerRepo.saveAll(customers);
+    }
 }

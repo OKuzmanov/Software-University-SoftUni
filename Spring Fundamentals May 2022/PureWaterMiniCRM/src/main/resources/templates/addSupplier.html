@@ -25,45 +25,45 @@
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="companyName" class="text-white font-weight-bold">Company Name</label>
-                <input th:field="*{companyName}" th:errorclass="is-invalid" id="companyName" name="companyName" type="text" min="3" max="25" class="form-control"
+                <input th:field="*{companyName}" th:errorclass="'is-invalid bg-danger'" id="companyName" name="companyName" type="text" min="3" max="25" class="form-control"
                        placeholder="Company Name"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    Company name is required. Should be between 3 and 25 chars long.
+                <p th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
             <div class="form-group">
                 <label class="text-center text-white font-weight-bold" for="email">Email</label>
-                <input th:field="*{email}" th:errorclass="is-invalid" id="email" name="email" type="email" required class="form-control"
+                <input th:field="*{email}" th:errorclass="'is-invalid bg-danger'" id="email" name="email" type="email" required class="form-control"
                        placeholder="Email"/>
-                <p class="invalid-feedback  errors alert alert-danger">
-                    A valid email address is required.
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6 mb-3">
                 <label for="address" class="text-white font-weight-bold">Address</label>
-                <input th:field="*{address}" th:errorclass="is-invalid" id="address" name="address" type="text" min="3" max="25" class="form-control"
+                <input th:field="*{address}" th:errorclass="'is-invalid bg-danger'" id="address" name="address" type="text" min="3" max="25" class="form-control"
                        placeholder="Address"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    Address is required. Should be between 3 and 25 chars long.
+                <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label for="phoneNumber" class="text-white font-weight-bold">Phone Number</label>
-                <input th:field="*{phoneNumber}" th:errorclass="is-invalid" id="phoneNumber" name="phoneNumber" type="tel" min="7" max="15" class="form-control"
+                <input th:field="*{phoneNumber}" th:errorclass="'is-invalid bg-danger'" id="phoneNumber" name="phoneNumber" type="tel" min="7" max="15" class="form-control"
                        placeholder="Phone Number"/>
-                <p class="invalid-feedback errors alert alert-danger">
-                    Phone number is required. Should be between 7 and 15 digits long.
+                <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
         </div>
         <div class="form-group col-md-6 mb-3">
             <label for="description" class="text-white font-weight-bold">Description</label>
-            <input th:field="*{description}" th:errorclass="is-invalid" id="description" name="description" type="text" min="3" max="25" class="form-control"
+            <input th:field="*{description}" th:errorclass="'is-invalid bg-danger'" id="description" name="description" type="text" min="3" max="25" class="form-control"
                    placeholder="Description"/>
-            <p class="invalid-feedback errors alert alert-danger">
-                Description is required. Should be between 3 and 25 chars long.
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="errors alert alert-danger">
+                Custom Err Msg.
             </p>
         </div>
 

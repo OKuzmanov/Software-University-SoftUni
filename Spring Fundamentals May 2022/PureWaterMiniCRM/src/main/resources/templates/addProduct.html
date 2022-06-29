@@ -21,31 +21,31 @@
 <!--        <div class="row">-->
             <div class="form-group col-md-6 mb-3">
                 <label for="type" class="text-white font-weight-bold">Type</label>
-                <select th:field="*{type}" th:errorclass="is-invalid" id="type" name="type" class="custom-select">
+                <select th:field="*{type}" th:errorclass="'is-invalid bg-danger'" id="type" name="type" class="custom-select">
                     <option value="" selected>Select Type</option>
                     <option th:each="p : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum).values()}" th:value="${p}" th:text="${p.name().substring(0, 1) + p.name().substring(1).toLowerCase()}">Select Type</option>
                 </select>
-                <p class="invalid-feedback  errors alert alert-danger">
-                    Raw materials type should be selected.
+                <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label class="text-center text-white font-weight-bold" for="quantity">Quantity</label>
-                <input th:field="*{quantity}" th:errorclass="is-invalid" id="quantity" name="quantity" type="number" required min="0" class="form-control"
+                <input th:field="*{quantity}" th:errorclass="'is-invalid bg-danger'" id="quantity" name="quantity" type="number" required min="0" class="form-control"
                        placeholder="Quantity"/>
-                <p class="invalid-feedback  errors alert alert-danger">
-                    Quantity should be a positive number.
+                <p th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="errors alert alert-danger">
+                    Custom Err Msg.
                 </p>
             </div>
 <!--        </div>-->
 <!--        <div class="row">-->
             <div class="form-group col-md-6 mb-3">
                 <label for="productionDate" class="text-white font-weight-bold">Production Date</label>
-                    <input th:field="*{productionDate}" th:errorclass="is-invalid" type="datetime-local" class="form-control" id="productionDate" name="productionDate"
+                    <input th:field="*{productionDate}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="productionDate" name="productionDate"
                            aria-describedby="orderTimeHelpInline">
-                    <p class="invalid-feedback  errors alert alert-danger">
-                        Production date should be selected and cannot be in the future.
-                    </p>
+                <p th:if="${#fields.hasErrors('productionDate')}" th:errors="*{productionDate}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
             </div>
 <!--        </div>-->
 

@@ -3,6 +3,7 @@ package bg.softuni.PureWaterMiniCRM.web;
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.SupplierAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
 import bg.softuni.PureWaterMiniCRM.services.SupplierService;
+import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,22 +20,39 @@ import javax.validation.Valid;
 public class SuppliersController {
 
     private final SupplierService supplierService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public SuppliersController(SupplierService supplierService, ModelMapper modelMapper) {
+    public SuppliersController(SupplierService supplierService, UserService userService, ModelMapper modelMapper) {
         this.supplierService = supplierService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
+    }
+
+    @ModelAttribute("supplierAddBindingModel")
+    public SupplierAddBindingModel addBindingModel() {
+        return new SupplierAddBindingModel();
+    }
+
+    @ModelAttribute("isExist")
+    public boolean addIsExist() {
+        return false;
     }
 
     @GetMapping("/add")
     public String getAddSupplier() {
-
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
         return "addSupplier";
     }
 
     @PostMapping("/add")
     public String postAddSupplier(@Valid SupplierAddBindingModel supplierAddBindingModel, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("supplierAddBindingModel", supplierAddBindingModel);
@@ -56,16 +74,14 @@ public class SuppliersController {
 
         this.supplierService.addSupplier(ssm);
 
+        return "redirect:/suppliers/all";
+    }
+
+    @GetMapping("/all")
+    public String getAllSupps() {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
         return "allSuppliers";
-    }
-
-    @ModelAttribute("supplierAddBindingModel")
-    public SupplierAddBindingModel addBindingModel() {
-        return new SupplierAddBindingModel();
-    }
-
-    @ModelAttribute("isExist")
-    public boolean addIsExist() {
-        return false;
     }
 }

@@ -25,6 +25,17 @@ public class Supplier extends BaseEntity{
     @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     private List<RawMaterial> rawMaterials;
 
+    public Supplier() {
+    }
+
+    public Supplier(String companyName, String email, String phoneNumber, String address, String description) {
+        this.companyName = companyName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.description = description;
+    }
+
     public String getCompanyName() {
         return companyName;
     }

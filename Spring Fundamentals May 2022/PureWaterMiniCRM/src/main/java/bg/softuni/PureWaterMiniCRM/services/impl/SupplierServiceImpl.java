@@ -49,4 +49,14 @@ public class SupplierServiceImpl implements SupplierService {
                 .map(s -> this.modelMapper.map(s, SupplierServiceModel.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isRepoEmpty() {
+        return this.supplierRepo.count() == 0;
+    }
+
+    @Override
+    public void saveAll(List<Supplier> suppliers) {
+        this.supplierRepo.saveAll(suppliers);
+    }
 }

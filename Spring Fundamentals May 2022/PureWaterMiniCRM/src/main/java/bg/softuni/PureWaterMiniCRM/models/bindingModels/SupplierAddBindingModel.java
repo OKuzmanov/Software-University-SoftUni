@@ -9,24 +9,25 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 public class SupplierAddBindingModel {
-    @NotBlank
-    @Size(min=3, max=25)
+    @NotBlank(message = "Company name should not be blank!")
+    @Size(min=3, max=25, message = "Company name should be between 3 and 25 characters long!")
     private String companyName;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "Email should not be blank!")
+    @Email(message = "Email Should be a valid email address!")
     private String email;
 
-    @NotBlank
-    @Size(min=7, max=15)
+    @NotBlank(message = "Phone should not be blank!")
+    @Size(min=7, max=15, message = "Phone should be between 7 and 15 characters long!")
     private String phoneNumber;
 
-    @NotBlank
-    @Size(min=3, max=25)
+
+    @NotBlank(message = "Address should not be blank!")
+    @Size(min=3, max=25, message = "Address should be between 3 and 25 characters long!")
     private String address;
 
-    @NotBlank
-    @Size(min=3, max=25)
+    @NotBlank(message = "Description should not be blank!")
+    @Size(min=3, max=25, message = "Description should be between 3 and 25 characters long!")
     private String description;
 
     public SupplierAddBindingModel() {

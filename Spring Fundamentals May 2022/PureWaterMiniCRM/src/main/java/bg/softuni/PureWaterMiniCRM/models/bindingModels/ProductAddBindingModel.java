@@ -7,15 +7,16 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class ProductAddBindingModel {
-    @NotNull
-    @Positive
+
+    @Positive(message = "Quantity Should be a positive number!")
     private int quantity;
 
-    @NotNull
+
+    @NotNull(message = "Product category should be selected!")
     private ProductCategoryEnum type;
 
-    @NotNull
-    @PastOrPresent
+    @NotNull(message = "Date should be selected!")
+    @PastOrPresent(message = "Production date should not be in the future!")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime productionDate;
 

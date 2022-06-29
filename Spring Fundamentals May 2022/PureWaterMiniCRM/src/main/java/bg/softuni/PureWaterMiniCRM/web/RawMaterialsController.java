@@ -35,8 +35,17 @@ public class RawMaterialsController {
         this.supplierService = supplierService;
     }
 
+    @ModelAttribute("rawMaterialAddBindingModel")
+    public RawMaterialAddBindingModel addBindingModel() {
+        return new RawMaterialAddBindingModel();
+    }
+
     @GetMapping("/add")
     public String getAddRawMaterials(Model model) {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
+
         model.addAttribute("suppliers", this.supplierService.findAllSuppliers());
         return "addRawMaterial";
     }
@@ -44,6 +53,9 @@ public class RawMaterialsController {
     @PostMapping("/add")
     public String postAddRawMaterials(@Valid RawMaterialAddBindingModel rawMaterialAddBindingModel, BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("rawMaterialAddBindingModel", rawMaterialAddBindingModel);
@@ -58,11 +70,14 @@ public class RawMaterialsController {
 
         this.rawMaterialService.addRawMaterials(rmsm);
 
-        return "allRawMaterials";
+        return "redirect:/materials/all";
     }
 
-    @ModelAttribute("rawMaterialAddBindingModel")
-    public RawMaterialAddBindingModel addBindingModel() {
-        return new RawMaterialAddBindingModel();
+    @GetMapping("/all")
+    public String getAllSupps() {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/users/login";
+        }
+        return "allRawMaterials";
     }
 }

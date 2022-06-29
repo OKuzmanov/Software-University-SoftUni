@@ -31,7 +31,7 @@ public class User extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> role;
 
-//    @OneToMany(mappedBy = "user")
+    //    @OneToMany(mappedBy = "user")
 //    private List<RawMaterial> rawMaterials;
 
 //    @OneToMany(mappedBy = "user")
@@ -42,6 +42,17 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "user")
     private Set<Customer> customers;
+
+    public User() {
+    }
+
+    public User(String username, String firstName, String lastName, String password, String email) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+    }
 
     public String getUsername() {
         return username;

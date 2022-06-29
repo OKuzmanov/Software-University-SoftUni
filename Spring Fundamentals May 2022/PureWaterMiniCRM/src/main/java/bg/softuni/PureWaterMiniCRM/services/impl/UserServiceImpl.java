@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +84,20 @@ public class UserServiceImpl implements UserService {
         Optional<User> optUser = this.userRepo.findByUsername(this.currentUser.getUsername());
 
         return optUser.get();
+    }
+
+    @Override
+    public boolean isRepoEmpty() {
+        return this.userRepo.count() == 0;
+    }
+
+    @Override
+    public void saveAll(List<User> users) {
+        this.userRepo.saveAll(users);
+    }
+
+    @Override
+    public boolean isCurrentUserLoggedIn() {
+        return this.currentUser.getIsLoggedIn();
     }
 }

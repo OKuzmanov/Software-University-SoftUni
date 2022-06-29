@@ -1,5 +1,7 @@
 package bg.softuni.PureWaterMiniCRM.web;
 
+import bg.softuni.PureWaterMiniCRM.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -7,24 +9,36 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
-    public ModelAndView getIndex() {
-        ModelAndView modelAndView = new ModelAndView("index");
+    private final UserService userService;
 
-        return modelAndView;
+    @Autowired
+    public HomeController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/")
+    public String getIndex() {
+        if(this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/home";
+        }
+
+        return "index";
     }
 
     @GetMapping("/home")
-    public ModelAndView getHome() {
-        ModelAndView modelAndView = new ModelAndView("home");
+    public String getHome() {
+        if(!this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/";
+        }
 
-        return modelAndView;
+        return "home";
     }
 
     @GetMapping("/about")
-    public ModelAndView getAbout() {
-        ModelAndView modelAndView = new ModelAndView("about");
-
-        return modelAndView;
+    public String getAbout() {
+        if(this.userService.isCurrentUserLoggedIn()) {
+            return "redirect:/home";
+        }
+        return "about";
     }
 }

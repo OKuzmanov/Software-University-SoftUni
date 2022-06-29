@@ -13,26 +13,26 @@ import java.time.LocalDateTime;
 
 public class OrderAddBindingModel {
 
-    @NotBlank
-    @Size(min=2, max=20)
+    @NotBlank(message = "Name should not be blank!")
+    @Size(min=2, max=20, message = "Name should be between 2 to 25 characters long!")
     private String name;
 
-    @NotNull
-    @Positive
+    @Positive(message = "Quantity Should be a positive number!")
     private int quantity;
 
-    @NotNull
+    @NotNull(message = "Product category should be selected!")
     private ProductCategoryEnum prodCategory;
 
-    @NotBlank
-    @Size(min=2, max=20)
+    @NotBlank(message = "Description should not be blank!")
+    @Size(min=2, max=20, message = "Description should be between 2 to 20 characters long!")
     private String description;
 
-    @PastOrPresent
+    @NotNull(message = "Date should be selected!")
+    @PastOrPresent(message = "Created At date should not be in the future!")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createdAt;
 
-    @NotBlank
+    @NotBlank(message = "Customer name should be selected!")
     private String customer;
 
     public OrderAddBindingModel() {

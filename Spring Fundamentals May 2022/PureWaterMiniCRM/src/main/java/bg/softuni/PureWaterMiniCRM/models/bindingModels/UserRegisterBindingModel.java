@@ -12,28 +12,30 @@ import javax.validation.constraints.Size;
 @FieldMatch(first = "password", second = "confirmPassword", message = "Passwords do not match.")
 public class UserRegisterBindingModel {
 
-    @NotEmpty(message = "Username must not be empty.")
-    @Size(min=2, max=20, message = "Username should be between 2 and 20 symbols long.")
-    @UniqueUsername(message = "This username is already occupied.")
+    @NotBlank(message = "Username must not be blank!")
+    @Size(min=2, max=20, message = "Username should be between 2 and 20 symbols long!")
+    @UniqueUsername(message = "This username is already occupied!")
     private String username;
 
-    @NotEmpty
-    @Size(min=2, max=20)
+    @NotBlank(message = "First name should not be blank!")
+    @Size(min=2, max=20, message = "First name should be between 2 and 20 characters long!")
     private String firstName;
 
-    @NotEmpty
-    @Size(min=2, max=20)
+    @NotBlank(message = "Last name should not be blank!")
+    @Size(min=2, max=20, message = "Last name should be between 2 and 20 characters long!")
     private String lastName;
 
-    @NotEmpty(message = "Password must not be empty.")
-    @Size(min=5, message = "Password mus be at least 5 symbols long.")
+    @NotBlank(message = "Password should not be blank!")
+    @Size(min=5, message = "Password should be at least 5 characters long!")
     private String password;
 
+    @NotBlank(message = "Confirm password should not be blank!")
+    @Size(min=5, message = "Confirm password should be at least 5 characters long!")
     private String confirmPassword;
 
-    @NotEmpty(message = "Email must not be empty.")
-    @Email(message = "Email should be a valid email address.")
-    @UniqueEmail(message = "This email is already occupied.")
+    @NotBlank(message = "Email should not be blank!")
+    @Email(message = "Email should be a valid email address!")
+    @UniqueEmail(message = "This email is already occupied!")
     private String email;
 
     public UserRegisterBindingModel() {

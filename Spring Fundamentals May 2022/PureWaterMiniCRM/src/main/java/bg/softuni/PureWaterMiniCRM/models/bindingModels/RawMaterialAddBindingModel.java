@@ -7,19 +7,19 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class RawMaterialAddBindingModel {
-    @NotNull
-    @Positive
+
+    @Positive(message = "Quantity Should be a positive number!")
     private int quantity;
 
-    @NotNull
+    @NotNull(message = "Raw material type should be selected!")
     private RawMaterialType type;
 
-    @NotNull
-    @PastOrPresent
+    @NotNull(message = "Date should be selected!")
+    @PastOrPresent(message = "Delivery date should not be in the future!")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deliveredAt;
 
-    @NotBlank
+    @NotBlank(message = "Supplier name should be selected!")
     private String supplierName;
 
     public RawMaterialAddBindingModel() {
