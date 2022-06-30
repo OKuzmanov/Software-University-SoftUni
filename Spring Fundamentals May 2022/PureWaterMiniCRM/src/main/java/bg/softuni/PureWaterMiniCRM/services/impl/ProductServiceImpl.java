@@ -25,10 +25,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductServiceModel addProducts(ProductServiceModel productServiceModel) {
 
-        if (this.productRepo.findAll().size() == 0) {
-            this.dataBaseInit();
-        }
-
         Product pEntity = this.productRepo.findByType(productServiceModel.getType()).get();
 
         pEntity.setQuantity(pEntity.getQuantity() + productServiceModel.getQuantity());
@@ -39,12 +35,13 @@ public class ProductServiceImpl implements ProductService {
         return this.modelMapper.map(pEntity, ProductServiceModel.class);
     }
 
-    private void dataBaseInit() {
-        Product p1 = new Product(0, ProductCategoryEnum.HALF_LITRE, LocalDateTime.now());
-        Product p2 = new Product(0, ProductCategoryEnum.LITRE_AND_HALF, LocalDateTime.now());
-        Product p3 = new Product(0, ProductCategoryEnum.TEN_LITRES, LocalDateTime.now());
-        Product p4 = new Product(0, ProductCategoryEnum.NINETEEN_LITRES, LocalDateTime.now());
+    @Override
+    public boolean isRepoEmpty() {
+        return this.productRepo.count() == 0;
+    }
 
-        this.productRepo.saveAll(List.of(p1,p2,p3,p4));
+    @Override
+    public void saveAll(List<Product> products) {
+        this.productRepo.saveAll(products);
     }
 }

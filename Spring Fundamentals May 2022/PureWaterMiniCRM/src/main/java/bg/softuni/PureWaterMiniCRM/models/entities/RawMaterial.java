@@ -16,7 +16,7 @@ public class RawMaterial extends BaseEntity{
     @Column(nullable = false, unique = true)
     private RawMaterialType type;
 
-    @Column(name = "delivered_at", nullable = false)
+    @Column(name = "delivered_at")
     private LocalDateTime deliveredAt;
 
     @ManyToOne
@@ -31,10 +31,10 @@ public class RawMaterial extends BaseEntity{
     public RawMaterial() {
     }
 
-    public RawMaterial(int quantity, RawMaterialType type, LocalDateTime deliveredAt) {
+    public RawMaterial(int quantity, RawMaterialType type, Supplier supplier) {
         this.quantity = quantity;
         this.type = type;
-        this.deliveredAt = deliveredAt;
+        this.supplier = supplier;
     }
 
     public int getQuantity() {

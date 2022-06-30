@@ -26,10 +26,9 @@ public class Product extends BaseEntity{
     public Product() {
     }
 
-    public Product(int quantity, ProductCategoryEnum type, LocalDateTime productionDate) {
+    public Product(int quantity, ProductCategoryEnum type) {
         this.quantity = quantity;
         this.type = type;
-        this.productionDate = productionDate;
     }
 
     public int getQuantity() {

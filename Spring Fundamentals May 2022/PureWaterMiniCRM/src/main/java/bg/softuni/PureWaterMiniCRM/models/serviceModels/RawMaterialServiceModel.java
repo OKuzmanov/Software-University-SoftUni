@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 public class RawMaterialServiceModel extends BaseServiceModel{
 
+    private Long id;
+
     private int quantity;
 
     private RawMaterialType type;
@@ -59,5 +61,15 @@ public class RawMaterialServiceModel extends BaseServiceModel{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 }

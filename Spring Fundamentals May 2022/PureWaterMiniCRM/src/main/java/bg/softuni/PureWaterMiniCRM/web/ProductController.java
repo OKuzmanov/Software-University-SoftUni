@@ -61,11 +61,11 @@ public class ProductController {
 
         this.productService.addProducts(this.modelMapper.map(productAddBindingModel, ProductServiceModel.class));
 
-        return "return:/products/all";
+        return "redirect:/products/all";
     }
 
     @GetMapping("/all")
-    public String getAllSupps() {
+    public String getAllProducts() {
         if(!this.userService.isCurrentUserLoggedIn()) {
             return "redirect:/users/login";
         }

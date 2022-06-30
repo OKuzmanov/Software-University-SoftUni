@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,5 +59,11 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public void saveAll(List<Supplier> suppliers) {
         this.supplierRepo.saveAll(suppliers);
+    }
+
+    @Override
+    public Supplier getRandomSupplier() {
+        long randId = new Random().nextLong(1, 5);
+        return this.supplierRepo.findById(randId).get();
     }
 }

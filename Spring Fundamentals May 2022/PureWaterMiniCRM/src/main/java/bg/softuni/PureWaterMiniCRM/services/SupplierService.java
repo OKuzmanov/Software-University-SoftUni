@@ -15,4 +15,6 @@ public interface SupplierService {
     boolean isRepoEmpty();
 
     void saveAll(List<Supplier> suppliers);
+
+    Supplier getRandomSupplier();
 }

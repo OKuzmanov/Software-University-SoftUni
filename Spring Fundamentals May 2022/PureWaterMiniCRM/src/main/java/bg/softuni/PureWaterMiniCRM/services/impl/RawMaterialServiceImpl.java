@@ -29,10 +29,6 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     @Override
     public RawMaterialServiceModel addRawMaterials(RawMaterialServiceModel rawMaterialServiceModel) {
 
-        if (this.rawMaterialRepo.findAll().size() == 0) {
-            this.databaseInit();
-        }
-
         RawMaterial rawMaterialEntity = this.rawMaterialRepo.findByType(rawMaterialServiceModel.getType()).get();
 
         rawMaterialEntity.setQuantity(rawMaterialEntity.getQuantity() + rawMaterialServiceModel.getQuantity());
@@ -44,20 +40,13 @@ public class RawMaterialServiceImpl implements RawMaterialService {
         return this.modelMapper.map(rawMaterialEntity, RawMaterialServiceModel.class);
     }
 
-    private void databaseInit() {
-        RawMaterial r1 = new RawMaterial(0, RawMaterialType.BOTTLE_HALF_LITRE, LocalDateTime.now());
-        RawMaterial r2 = new RawMaterial(0, RawMaterialType.BOTTLE_LITRE_AND_HALF, LocalDateTime.now());
-        RawMaterial r3 = new RawMaterial(0, RawMaterialType.BOTTLE_TEN_LITRE, LocalDateTime.now());
-        RawMaterial r4 = new RawMaterial(0, RawMaterialType.BOTTLE_NINETEEN_LITRE, LocalDateTime.now());
-        RawMaterial r5 = new RawMaterial(0, RawMaterialType.BOTTLENECK, LocalDateTime.now());
-        RawMaterial r6 = new RawMaterial(0, RawMaterialType.CAP_HALF_LITRE, LocalDateTime.now());
-        RawMaterial r7 = new RawMaterial(0, RawMaterialType.CAP_LITRE_AND_HALF, LocalDateTime.now());
-        RawMaterial r8 = new RawMaterial(0, RawMaterialType.CAP_NINETEEN_LITRE, LocalDateTime.now());
-        RawMaterial r9 = new RawMaterial(0, RawMaterialType.CAP_TEN_LITRE, LocalDateTime.now());
-        RawMaterial r10 = new RawMaterial(0, RawMaterialType.GLUE, LocalDateTime.now());
-        RawMaterial r11 = new RawMaterial(0, RawMaterialType.HANDLE_TEN_LITRES, LocalDateTime.now());
-        RawMaterial r12 = new RawMaterial(0, RawMaterialType.LABEL, LocalDateTime.now());
+    @Override
+    public boolean isRepoEmpty() {
+        return this.rawMaterialRepo.count() == 0;
+    }
 
-        this.rawMaterialRepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12));
+    @Override
+    public void saveAll(List<RawMaterial> rawMaterials) {
+        this.rawMaterialRepo.saveAll(rawMaterials);
     }
 }
