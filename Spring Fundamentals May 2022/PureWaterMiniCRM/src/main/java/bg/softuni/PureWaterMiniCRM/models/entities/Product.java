@@ -19,10 +19,6 @@ public class Product extends BaseEntity{
     @Column(name = "production_date")
     private LocalDateTime productionDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
-
     public Product() {
     }
 

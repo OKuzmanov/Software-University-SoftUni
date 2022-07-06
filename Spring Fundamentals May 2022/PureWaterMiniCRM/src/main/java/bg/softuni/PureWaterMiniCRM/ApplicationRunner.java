@@ -4,13 +4,14 @@ import bg.softuni.PureWaterMiniCRM.models.entities.*;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
+import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.services.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -23,16 +24,18 @@ public class ApplicationRunner implements CommandLineRunner {
     private final CustomerService customerService;
     private final RawMaterialService rawMaterialService;
     private final ProductService productService;
+    private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ApplicationRunner(RoleService roleService, UserService userService, SupplierService supplierService, CustomerService customerService, RawMaterialService rawMaterialService, ProductService productService, PasswordEncoder passwordEncoder) {
+    public ApplicationRunner(RoleService roleService, UserService userService, SupplierService supplierService, CustomerService customerService, RawMaterialService rawMaterialService, ProductService productService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.roleService = roleService;
         this.userService = userService;
         this.supplierService = supplierService;
         this.customerService = customerService;
         this.rawMaterialService = rawMaterialService;
         this.productService = productService;
+        this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -55,31 +58,42 @@ public class ApplicationRunner implements CommandLineRunner {
             Role moderator = this.roleService.findByName(RoleEnum.MODERATOR).get();
             Role user = this.roleService.findByName(RoleEnum.USER).get();
 
-            User u1 = new User("oleg4o", "Oleg", "Kuzmanov", passwordEncoder.encode("12345"),"ok@c.com");
+            UserEntity u1 = new UserEntity("oleg4o", "Oleg", "Kuzmanov", passwordEncoder.encode("12345"),"ok@c.com");
             u1.setRole(Set.of(user, admin));
 
-            User u2 = new User("bentai", "Albena", "Yazovska", passwordEncoder.encode("12345"),"ay@c.com");
+            UserEntity u2 = new UserEntity("benati", "Albena", "Yazovska", passwordEncoder.encode("12345"),"ay@c.com");
             u2.setRole(Set.of(user, moderator));
 
-            User u3 = new User("pesh", "Pesho", "Peshev", passwordEncoder.encode("12345"),"pp@c.com");
+            UserEntity u3 = new UserEntity("pesh", "Pesho", "Peshev", passwordEncoder.encode("12345"),"pp@c.com");
             u3.setRole(Set.of(user));
 
             this.userService.saveAll(List.of(u1, u2, u3));
         }
 
         if(supplierService.isRepoEmpty()) {
-            Supplier s1 = new Supplier("Brothers Co.", "brothers.co@gmail.com", "0878456811", "London str.80", "The ultimate company for supply of raw materials.");
-            Supplier s2 = new Supplier("Fast Supply Ltd.", "fs.ltd@gmail.com", "0972845720", "Mastricht str.22", "Company for super fast supply of raw materials.");
-            Supplier s3 = new Supplier("Euro Supply ltd.", "eusro.supp@gmail.com", "0874562192", "Veliko Turnovo str.12", "Company for supply of raw materials in Europe.");
-            Supplier s4 = new Supplier("Sea supply ltd.", "sea.supp@gmail.com", "0878296617", "Burgas str.51", "Company for supply of raw materials from overseas.");
+            UserServiceModel usm = this.userService.findById(2);
+            UserEntity userEntity = null;
+            if(usm != null) {
+                userEntity = this.modelMapper.map(usm, UserEntity.class);
+            }
+
+            Supplier s1 = new Supplier("Brothers Co.", "brothers.co@gmail.com", "0878456811", "London str.80", "The ultimate company for supply of raw materials.", userEntity);
+            Supplier s2 = new Supplier("Fast Supply Ltd.", "fs.ltd@gmail.com", "0972845720", "Mastricht str.22", "Company for super fast supply of raw materials.", userEntity);
+            Supplier s3 = new Supplier("Euro Supply ltd.", "eusro.supp@gmail.com", "0874562192", "Veliko Turnovo str.12", "Company for supply of raw materials in Europe.", userEntity);
+            Supplier s4 = new Supplier("Sea supply ltd.", "sea.supp@gmail.com", "0878296617", "Burgas str.51", "Company for supply of raw materials from overseas.", userEntity);
 
             this.supplierService.saveAll(List.of(s1, s2, s3, s4));
         }
 
         if(customerService.isRepoEmpty()) {
-            Customer c1 = new Customer("Ganchev and Brothers ltd.", "gandb@gmail.com", "0878632074", "Sofia str.Vasil Levski", "A leading distributor of water and other non-alcoholic beverages in Sofia region.");
-            Customer c2 = new Customer("Tsare and Co.", "tsare@gmail.com", "0878456627", "Veliko Turnovo str.15", "A leading distributor of water and other non-alcoholic beverages in Veliko Turnovo region.");
-            Customer c3 = new Customer("Seagull Distributors ltd.", "seagull.distribute@gmail.com", "0878421275", "Varna str.Morska Gradina", "A leading distributor of water and other non-alcoholic beverages in Varna region.");
+            UserServiceModel usm = this.userService.findById(1);
+            UserEntity userEntity = null;
+            if(usm != null) {
+                userEntity = this.modelMapper.map(usm, UserEntity.class);
+            }
+            Customer c1 = new Customer("Ganchev and Brothers ltd.", "gandb@gmail.com", "0878632074", "Sofia str.Vasil Levski", "A leading distributor of water and other non-alcoholic beverages in Sofia region.", userEntity);
+            Customer c2 = new Customer("Tsare and Co.", "tsare@gmail.com", "0878456627", "Veliko Turnovo str.15", "A leading distributor of water and other non-alcoholic beverages in Veliko Turnovo region.", userEntity);
+            Customer c3 = new Customer("Seagull Distributors ltd.", "seagull.distribute@gmail.com", "0878421275", "Varna str.Morska Gradina", "A leading distributor of water and other non-alcoholic beverages in Varna region.", userEntity);
 
             this.customerService.saveAll(List.of(c1, c2, c3));
         }

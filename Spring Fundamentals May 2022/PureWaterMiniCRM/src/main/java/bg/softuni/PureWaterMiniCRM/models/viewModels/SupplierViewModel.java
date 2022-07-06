@@ -1,6 +1,13 @@
-package bg.softuni.PureWaterMiniCRM.models.serviceModels;
+package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
-public class CustomerServiceModel extends BaseServiceModel {
+import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
+
+import java.util.List;
+
+public class SupplierViewModel {
+
+    private Long id;
+
     private String companyName;
 
     private String email;
@@ -11,9 +18,17 @@ public class CustomerServiceModel extends BaseServiceModel {
 
     private String description;
 
-    private UserServiceModel user;
+    private List<RawMaterialViewModel> rawMaterials;
 
-    public CustomerServiceModel() {
+    public SupplierViewModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCompanyName() {
@@ -56,11 +71,11 @@ public class CustomerServiceModel extends BaseServiceModel {
         this.description = description;
     }
 
-    public UserServiceModel getUser() {
-        return user;
+    public List<RawMaterialViewModel> getRawMaterials() {
+        return rawMaterials;
     }
 
-    public void setUser(UserServiceModel user) {
-        this.user = user;
+    public void setRawMaterials(List<RawMaterialViewModel> rawMaterials) {
+        this.rawMaterials = rawMaterials;
     }
 }

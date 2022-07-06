@@ -1,11 +1,12 @@
-package bg.softuni.PureWaterMiniCRM.models.serviceModels;
+package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 
 import java.time.LocalDateTime;
 
-public class RawMaterialServiceModel extends BaseServiceModel{
+public class RawMaterialViewModel {
+
+    private Long id;
 
     private int quantity;
 
@@ -13,11 +14,15 @@ public class RawMaterialServiceModel extends BaseServiceModel{
 
     private LocalDateTime deliveredAt;
 
-    private SupplierServiceModel supplier;
+    public RawMaterialViewModel() {
+    }
 
-    private UserEntity userEntity;
+    public Long getId() {
+        return id;
+    }
 
-    public RawMaterialServiceModel() {
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getQuantity() {
@@ -42,21 +47,5 @@ public class RawMaterialServiceModel extends BaseServiceModel{
 
     public void setDeliveredAt(LocalDateTime deliveredAt) {
         this.deliveredAt = deliveredAt;
-    }
-
-    public SupplierServiceModel getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(SupplierServiceModel supplier) {
-        this.supplier = supplier;
-    }
-
-    public UserEntity getUser() {
-        return userEntity;
-    }
-
-    public void setUser(UserEntity userEntity) {
-        this.userEntity = userEntity;
     }
 }

@@ -1,17 +1,25 @@
-package bg.softuni.PureWaterMiniCRM.security;
+package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 
-@Component
-@SessionScope
-public class CurrentUser {
+import java.util.Set;
+
+public class UserViewModel {
     private String username;
-    private String firstName;
-    private String lastName;
-    private boolean isLoggedIn;
 
-    public CurrentUser() {
+
+    private String firstName;
+
+
+    private String lastName;
+
+
+    private String password;
+
+
+    private String email;
+
+    public UserViewModel() {
     }
 
     public String getUsername() {
@@ -38,18 +46,19 @@ public class CurrentUser {
         this.lastName = lastName;
     }
 
-    public boolean getIsLoggedIn() {
-        return isLoggedIn;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        isLoggedIn = loggedIn;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void clear() {
-        this.setUsername(null);
-        this.setFirstName(null);
-        this.setLastName(null);
-        this.setLoggedIn(false);
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

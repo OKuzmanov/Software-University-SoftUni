@@ -2,9 +2,11 @@ package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.SupplierAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.SupplierService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,18 +43,12 @@ public class SuppliersController {
 
     @GetMapping("/add")
     public String getAddSupplier() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
         return "addSupplier";
     }
 
     @PostMapping("/add")
     public String postAddSupplier(@Valid SupplierAddBindingModel supplierAddBindingModel, BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes) {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
+                                  RedirectAttributes redirectAttributes, @AuthenticationPrincipal PureWaterUserDetails userDetails) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("supplierAddBindingModel", supplierAddBindingModel);
@@ -72,16 +68,13 @@ public class SuppliersController {
 
         SupplierServiceModel ssm = this.modelMapper.map(supplierAddBindingModel, SupplierServiceModel.class);
 
-        this.supplierService.addSupplier(ssm);
+        this.supplierService.addSupplier(ssm, userDetails);
 
         return "redirect:/suppliers/all";
     }
 
     @GetMapping("/all")
     public String getAllSupps() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
         return "allSuppliers";
     }
 }

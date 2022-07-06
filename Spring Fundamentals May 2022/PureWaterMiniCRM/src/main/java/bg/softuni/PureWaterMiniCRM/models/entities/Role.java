@@ -16,7 +16,7 @@ public class Role extends BaseEntity{
     private RoleEnum name;
 
     @ManyToMany(mappedBy = "role")
-    private Set<User> users;
+    private Set<UserEntity> userEntities;
 
     public Role() {
     }
@@ -33,8 +33,8 @@ public class Role extends BaseEntity{
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return Collections.unmodifiableSet(users);
+    public Set<UserEntity> getUsers() {
+        return Collections.unmodifiableSet(userEntities);
     }
 
     @Override

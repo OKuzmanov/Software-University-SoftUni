@@ -1,7 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.models.entities;
 
 import javax.persistence.*;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +24,7 @@ public class Customer extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private UserEntity userEntity;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
@@ -33,12 +32,13 @@ public class Customer extends BaseEntity{
     public Customer() {
     }
 
-    public Customer(String companyName, String email, String phoneNumber, String address, String description) {
+    public Customer(String companyName, String email, String phoneNumber, String address, String description, UserEntity userEntity) {
         this.companyName = companyName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.description = description;
+        this.userEntity = userEntity;
     }
 
     public String getCompanyName() {
@@ -85,12 +85,12 @@ public class Customer extends BaseEntity{
         return orders;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public void setOrders(List<Order> orders) {

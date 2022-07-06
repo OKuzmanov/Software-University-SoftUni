@@ -2,11 +2,13 @@ package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.SupplierViewModel;
 
 import java.util.List;
 
 public interface SupplierService {
-    SupplierServiceModel addSupplier(SupplierServiceModel supplierServiceModel);
+    SupplierServiceModel addSupplier(SupplierServiceModel supplierServiceModel, PureWaterUserDetails userDetails);
 
     SupplierServiceModel findByCompanyName(String companyName);
 
@@ -17,4 +19,8 @@ public interface SupplierService {
     void saveAll(List<Supplier> suppliers);
 
     Supplier getRandomSupplier();
+
+    List<SupplierViewModel> fetchAll();
+
+    SupplierViewModel fetchById(Long id);
 }

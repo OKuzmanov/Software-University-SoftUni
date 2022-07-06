@@ -29,15 +29,15 @@ public class Order extends BaseEntity{
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity userEntity;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     public Order() {
-        //TODO Replace '1' with the actual quantity in a pallet
+        //TODO: Replace '1' with the actual quantity in a pallet
 //        switch(prodCategory.name()){
 //            case "HALF_LITRE":
 //                this.totalPrice = prodCategory.getPrice().multiply(BigDecimal.valueOf(1));
@@ -102,12 +102,12 @@ public class Order extends BaseEntity{
         this.createdAt = createdAt;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public Customer getCustomer() {

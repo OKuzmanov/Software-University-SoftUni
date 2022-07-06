@@ -1,16 +1,17 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
-import bg.softuni.PureWaterMiniCRM.models.entities.User;
+import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.CustomerViewModel;
 import bg.softuni.PureWaterMiniCRM.repositories.CustomerRepository;
 import bg.softuni.PureWaterMiniCRM.services.CustomerService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,10 +30,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerServiceModel addCustomer(CustomerServiceModel customerServiceModel) {
+    public CustomerServiceModel addCustomer(CustomerServiceModel customerServiceModel, PureWaterUserDetails userDetails) {
 
         Customer customerToSave = this.modelMapper.map(customerServiceModel, Customer.class);
-        customerToSave.setUser(this.userService.getCurrentUser());
+
+        customerToSave.setUser(this.modelMapper.map(this.userService.findUserByUsername(userDetails.getUsername()), UserEntity.class));
 
         this.customerRepo.save(customerToSave);
 
@@ -40,7 +42,6 @@ public class CustomerServiceImpl implements CustomerService {
         csm.setUser(this.modelMapper.map(customerToSave.getUser(), UserServiceModel.class));
 
         return csm;
-
     }
 
     @Override
@@ -70,5 +71,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void saveAll(List<Customer> customers) {
         this.customerRepo.saveAll(customers);
+    }
+
+    @Override
+    public List<CustomerViewModel> fetchAll() {
+        List<Customer> all = this.customerRepo.findAll();
+        return all
+                .stream()
+                .map(c -> this.modelMapper.map(c, CustomerViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CustomerViewModel fetchById(Long id) {
+        Optional<Customer> customerOpt = this.customerRepo.findById(id);
+        return customerOpt.isEmpty()
+                ? null
+                : this.modelMapper.map(customerOpt.get(), CustomerViewModel.class);
     }
 }

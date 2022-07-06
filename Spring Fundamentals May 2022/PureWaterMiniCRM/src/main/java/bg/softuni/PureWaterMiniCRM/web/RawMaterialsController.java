@@ -42,9 +42,6 @@ public class RawMaterialsController {
 
     @GetMapping("/add")
     public String getAddRawMaterials(Model model) {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
 
         model.addAttribute("suppliers", this.supplierService.findAllSuppliers());
         return "addRawMaterial";
@@ -53,9 +50,6 @@ public class RawMaterialsController {
     @PostMapping("/add")
     public String postAddRawMaterials(@Valid RawMaterialAddBindingModel rawMaterialAddBindingModel, BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("rawMaterialAddBindingModel", rawMaterialAddBindingModel);
@@ -66,7 +60,8 @@ public class RawMaterialsController {
 
         RawMaterialServiceModel rmsm = this.modelMapper.map(rawMaterialAddBindingModel, RawMaterialServiceModel.class);
         rmsm.setSupplier(this.supplierService.findByCompanyName(rawMaterialAddBindingModel.getSupplierName()));
-        rmsm.setUser(this.userService.getCurrentUser());
+        //TODO
+//        rmsm.setUser(this.userService.getCurrentUser());
 
         this.rawMaterialService.addRawMaterials(rmsm);
 
@@ -75,9 +70,6 @@ public class RawMaterialsController {
 
     @GetMapping("/all")
     public String getAllSupps() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
         return "allRawMaterials";
     }
 }

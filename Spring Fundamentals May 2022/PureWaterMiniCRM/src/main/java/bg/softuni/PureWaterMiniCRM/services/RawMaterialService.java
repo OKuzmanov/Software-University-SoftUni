@@ -2,6 +2,7 @@ package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.RawMaterialServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.RawMaterialViewModel;
 
 import java.util.List;
 
@@ -12,4 +13,7 @@ public interface RawMaterialService {
 
     void saveAll(List<RawMaterial> rawMaterials);
 
+    List<RawMaterialViewModel> fetchAll();
+
+    RawMaterialViewModel fetchById(Long id);
 }

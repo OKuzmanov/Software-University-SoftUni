@@ -2,11 +2,13 @@ package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.OrderAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.OrderServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.CustomerService;
 import bg.softuni.PureWaterMiniCRM.services.OrderService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,9 +45,6 @@ public class OrderController {
 
     @GetMapping("/add")
     public String getAddOrder(Model model) {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
 
         model.addAttribute("customers",this.customerService.getAllCustomers());
 
@@ -54,10 +53,7 @@ public class OrderController {
 
     @PostMapping("/add")
     public String postAddOrder(@Valid OrderAddBindingModel orderAddBindingModel, BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes) {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
+                               RedirectAttributes redirectAttributes, @AuthenticationPrincipal PureWaterUserDetails userDetails) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("orderAddBindingModel",orderAddBindingModel);
@@ -71,16 +67,13 @@ public class OrderController {
         osm.setTotalPrice(osm.getProdCategory().getPrice().multiply(BigDecimal.valueOf(osm.getQuantity())));
         osm.setCustomer(this.customerService.findCustomerByCompanyName(orderAddBindingModel.getCustomer()));
 
-        this.orderService.addOrder(osm);
+        this.orderService.addOrder(osm, userDetails);
 
         return "redirect:/orders/all";
     }
 
     @GetMapping("/all")
     public String getAllSupps() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
         return "allOrders";
     }
 }

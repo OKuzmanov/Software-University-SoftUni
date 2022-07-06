@@ -23,11 +23,6 @@ public class RawMaterial extends BaseEntity{
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
-
-
     public RawMaterial() {
     }
 

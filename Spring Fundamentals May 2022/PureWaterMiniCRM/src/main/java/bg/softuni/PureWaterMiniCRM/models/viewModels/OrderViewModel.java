@@ -1,36 +1,30 @@
-package bg.softuni.PureWaterMiniCRM.models.bindingModels;
+package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class OrderAddBindingModel {
+public class OrderViewModel {
 
-    @NotBlank(message = "Name should not be blank!")
-    @Size(min=2, max=20, message = "Name should be between 2 to 25 characters long!")
+    private Long id;
     private String name;
 
-    @Positive(message = "Quantity Should be a positive number!")
+    private BigDecimal totalPrice;
+
     private int quantity;
 
-    @NotNull(message = "Product category should be selected!")
     private ProductCategoryEnum prodCategory;
 
-    @NotBlank(message = "Description should not be blank!")
-    @Size(min=2, max=20, message = "Description should be between 2 to 20 characters long!")
     private String description;
 
-    @NotNull(message = "Date should be selected!")
-    @PastOrPresent(message = "Created At date should not be in the future!")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createdAt;
 
-    @NotBlank(message = "Customer name should be selected!")
-    private String customer;
+    private UserViewModel user;
 
-    public OrderAddBindingModel() {
+    private CustomerViewModel customer;
+
+    public OrderViewModel() {
     }
 
     public String getName() {
@@ -39,6 +33,14 @@ public class OrderAddBindingModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public int getQuantity() {
@@ -73,11 +75,27 @@ public class OrderAddBindingModel {
         this.createdAt = createdAt;
     }
 
-    public String getCustomer() {
+    public UserViewModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserViewModel user) {
+        this.user = user;
+    }
+
+    public CustomerViewModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(CustomerViewModel customer) {
         this.customer = customer;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

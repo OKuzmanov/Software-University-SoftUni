@@ -1,16 +1,27 @@
-package bg.softuni.PureWaterMiniCRM.models.serviceModels;
+package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+
 import java.time.LocalDateTime;
 
-public class ProductServiceModel extends BaseServiceModel{
+public class ProductViewModel {
+    private Long id;
+
     private int quantity;
 
     private ProductCategoryEnum type;
 
     private LocalDateTime productionDate;
 
-    public ProductServiceModel() {
+    public ProductViewModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getQuantity() {
@@ -36,5 +47,4 @@ public class ProductServiceModel extends BaseServiceModel{
     public void setProductionDate(LocalDateTime productionDate) {
         this.productionDate = productionDate;
     }
-
 }

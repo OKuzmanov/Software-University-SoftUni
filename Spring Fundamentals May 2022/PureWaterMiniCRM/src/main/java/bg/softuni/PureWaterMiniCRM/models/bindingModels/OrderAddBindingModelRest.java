@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
-public class OrderAddBindingModel {
+public class OrderAddBindingModelRest {
 
     @NotBlank(message = "Name should not be blank!")
     @Size(min=2, max=20, message = "Name should be between 2 to 25 characters long!")
@@ -27,10 +27,7 @@ public class OrderAddBindingModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createdAt;
 
-    @NotBlank(message = "Customer name should be selected!")
-    private String customer;
-
-    public OrderAddBindingModel() {
+    public OrderAddBindingModelRest() {
     }
 
     public String getName() {
@@ -71,13 +68,5 @@ public class OrderAddBindingModel {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public String getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
     }
 }

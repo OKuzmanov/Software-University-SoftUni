@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+public class UserEntity extends BaseEntity{
 
     @Column(unique = true,nullable = false)
     private String username;
@@ -37,16 +37,16 @@ public class User extends BaseEntity{
 //    @OneToMany(mappedBy = "user")
 //    private List<Product> products;
 
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+    private Set<Order> orders;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userEntity")
     private Set<Customer> customers;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String username, String firstName, String lastName, String password, String email) {
+    public UserEntity(String username, String firstName, String lastName, String password, String email) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -98,14 +98,18 @@ public class User extends BaseEntity{
         return role;
     }
 
-    public List<Order> getOrders() {
-        return Collections.unmodifiableList(orders);
-    }
-
     public void setRole(Set<Role> role) {
         this.role = role;
     }
-//
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+    //
 //    public List<RawMaterial> getRawMaterials() {
 //        return Collections.unmodifiableList(rawMaterials);
 //    }
@@ -122,16 +126,12 @@ public class User extends BaseEntity{
 //        this.products = products;
 //    }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return username.equals(user.username) && email.equals(user.email);
+        UserEntity userEntity = (UserEntity) o;
+        return username.equals(userEntity.username) && email.equals(userEntity.email);
     }
 
     @Override

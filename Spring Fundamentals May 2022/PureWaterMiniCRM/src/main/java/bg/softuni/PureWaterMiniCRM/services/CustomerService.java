@@ -2,11 +2,13 @@ package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.CustomerViewModel;
 
 import java.util.List;
 
 public interface CustomerService {
-    CustomerServiceModel addCustomer(CustomerServiceModel customerServiceModel);
+    CustomerServiceModel addCustomer(CustomerServiceModel customerServiceModel, PureWaterUserDetails userDetails);
 
     CustomerServiceModel findCustomerByCompanyName(String companyName);
 
@@ -15,4 +17,8 @@ public interface CustomerService {
     boolean isRepoEmpty();
 
     void saveAll(List<Customer> customers);
+
+    List<CustomerViewModel> fetchAll();
+
+    CustomerViewModel fetchById(Long id);
 }

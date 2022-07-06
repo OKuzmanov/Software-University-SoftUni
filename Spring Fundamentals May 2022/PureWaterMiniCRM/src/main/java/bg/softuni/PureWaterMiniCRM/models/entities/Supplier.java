@@ -22,18 +22,23 @@ public class Supplier extends BaseEntity{
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity userEntity;
+
     @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     private List<RawMaterial> rawMaterials;
 
     public Supplier() {
     }
 
-    public Supplier(String companyName, String email, String phoneNumber, String address, String description) {
+    public Supplier(String companyName, String email, String phoneNumber, String address, String description, UserEntity userEntity) {
         this.companyName = companyName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.description = description;
+        this.userEntity = userEntity;
     }
 
     public String getCompanyName() {
@@ -82,5 +87,13 @@ public class Supplier extends BaseEntity{
 
     public void setRawMaterials(List<RawMaterial> rawMaterials) {
         this.rawMaterials = rawMaterials;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

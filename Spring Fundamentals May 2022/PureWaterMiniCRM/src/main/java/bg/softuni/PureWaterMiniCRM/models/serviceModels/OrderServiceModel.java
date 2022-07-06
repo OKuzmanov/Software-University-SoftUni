@@ -1,14 +1,11 @@
 package bg.softuni.PureWaterMiniCRM.models.serviceModels;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
-import bg.softuni.PureWaterMiniCRM.models.entities.User;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class OrderServiceModel extends BaseServiceModel{
-
     private String name;
 
     private BigDecimal totalPrice;

@@ -1,13 +1,13 @@
 -- https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.data-initialization.using-basic-sql-scripts
 
--- user roles
+-- userEntity roles
 INSERT INTO roles (id, name)
 VALUES (1, 'ADMIN'),
 (2, 'MODERATOR'),
 (3, 'USER');
 
--- populating users (problem with encryption of password)
--- INSERT INTO users (id, first_name, last_name, email, password, username)
+-- populating userEntities (problem with encryption of password)
+-- INSERT INTO userEntities (id, first_name, last_name, email, password, username)
 -- VALUES (1, 'Oleg', 'Kuzmanov', 'ok@gmail.com', '12345', 'oleg4o'),
 -- (2, 'Albena', 'Yazovska', 'ay@gmail.com', '12345', 'benati'),
 -- (3, 'Pesho', 'Peshev', 'pp@gmail.com', '12345', 'pesho'),

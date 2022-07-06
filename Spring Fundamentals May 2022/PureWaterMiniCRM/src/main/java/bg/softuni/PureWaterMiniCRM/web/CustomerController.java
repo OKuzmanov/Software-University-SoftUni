@@ -2,10 +2,12 @@ package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.CustomerAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.CustomerService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,18 +45,12 @@ public class CustomerController {
 
     @GetMapping("/add")
     public String getAddCustomer() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
       return "addCustomer";
     }
 
     @PostMapping("/add")
     public String postAddCustomer(@Valid CustomerAddBindingModel customerAddBindingModel, BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes){
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
+                                  RedirectAttributes redirectAttributes, @AuthenticationPrincipal PureWaterUserDetails userDetails){
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("customerAddBindingModel", customerAddBindingModel);
@@ -73,16 +69,13 @@ public class CustomerController {
             return "redirect:/customers/add";
         }
 
-        this.customerService.addCustomer(this.modelMapper.map(customerAddBindingModel, CustomerServiceModel.class));
+        this.customerService.addCustomer(this.modelMapper.map(customerAddBindingModel, CustomerServiceModel.class), userDetails);
 
         return "redirect:/customers/all";
     }
 
     @GetMapping("/all")
     public String getAllCustomers() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
         return "allCustomers";
     }
 }

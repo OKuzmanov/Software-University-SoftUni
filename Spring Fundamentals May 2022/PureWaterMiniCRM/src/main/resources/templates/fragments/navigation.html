@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!--Nav Bar Fragment-->
 <nav th:fragment="myNav" class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
-    <a class="navbar-brand" th:href="@{/}"><img alt="car picture" src="/img/car.png" class="logo"></a>
+    <a class="navbar-brand" th:href="@{/}"><img alt="car picture" src="/images/car.png" class="logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,7 +13,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto col-12 justify-content-between">
-            <th:block th:if="${@currentUser.isLoggedIn} == true">
+            <th:block sec:authorize="isAuthenticated()">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/orders/add}">Add Order</a>
                 </li>
@@ -27,15 +29,39 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/customers/add}">Add Customers</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/offers/all}">All Offers</a>
-                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownReports" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        All
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
+<!--                        TODO: Update href with thymeleaf-->
+                        <a class="dropdown-item" href="/">Orders</a>
+                        <a class="dropdown-item" href="/">Customers</a>
+                        <a class="dropdown-item" href="/">Suppliers</a>
+                        <a class="dropdown-item" href="/">Products</a>
+                        <a class="dropdown-item" href="/">Raw Materials</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownAdmin" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                        <a class="dropdown-item" href="/">Action</a>
+                        <a class="dropdown-item" href="/">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">Something else here</a>
+                    </div>
+                </li>
+                </li>
+                <li class="nav-item dropdown" sec:authorize="hasRole('MODERATOR')">
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownModerator" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Moderator
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownModerator">
                         <a class="dropdown-item" href="/">Action</a>
                         <a class="dropdown-item" href="/">Another action</a>
                         <div class="dropdown-divider"></div>
@@ -44,13 +70,14 @@
                 </li>
                 <li class="nav-item">
                     <div class="form-inline my-2 my-lg-0 border px-3">
-                        <div class="logged-user"
-                             text="Welcome, Gosho"></div>
-                        <a class="nav-link" th:href="@{/users/logout}">Logout</a>
+                        <div class="text-white" >Welcome, <th:block th:text="${#authentication.principal.fullName}">!</th:block>!</div>
+                        <form th:action="@{/users/logout}" th:method="post">
+                            <input class="btn btn-link nav-link" type="submit" value="Logout">
+                        </form>
                     </div>
                 </li>
             </th:block>
-            <th:block th:if="${@currentUser.isLoggedIn} == false">
+            <th:block sec:authorize="!isAuthenticated()">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/users/register}">Register</a>
                 </li>

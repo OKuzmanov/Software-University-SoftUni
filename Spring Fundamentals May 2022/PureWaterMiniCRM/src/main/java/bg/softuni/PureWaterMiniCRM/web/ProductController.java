@@ -38,19 +38,12 @@ public class ProductController {
 
     @GetMapping("/add")
     public String getAddProducts(){
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
-
         return "addProduct";
     }
 
     @PostMapping("/add")
     public String postAddProducts(@Valid ProductAddBindingModel productAddBindingModel, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
 
         if (bindingResult.hasErrors()) {
            redirectAttributes.addFlashAttribute("productAddBindingModel", productAddBindingModel);
@@ -66,9 +59,6 @@ public class ProductController {
 
     @GetMapping("/all")
     public String getAllProducts() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
         return "allProducts";
     }
 }

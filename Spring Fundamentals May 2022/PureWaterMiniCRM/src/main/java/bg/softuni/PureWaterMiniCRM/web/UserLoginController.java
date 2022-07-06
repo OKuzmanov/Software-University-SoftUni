@@ -2,10 +2,13 @@ package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.UserLoginBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +34,9 @@ public class UserLoginController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @ModelAttribute("userLoginBindingModel")
-    public UserLoginBindingModel userLoginBindingModel() {
-        return new UserLoginBindingModel();
+    @ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+    public String addUsernameValue() {
+        return "";
     }
 
     @ModelAttribute("wrongCredentials")
@@ -42,53 +45,63 @@ public class UserLoginController {
     }
 
     @GetMapping("/login")
-    public String getLogin() {
-        if(this.userService.isCurrentUserLoggedIn()) {
+    public String getLogin(@AuthenticationPrincipal PureWaterUserDetails userDetails) {
+        if(userDetails != null) {
             return "redirect:/home";
         }
-
         return "login";
     }
 
-    @PostMapping("/login")
-    public String postLogin(@Valid UserLoginBindingModel userLoginBindingModel, BindingResult bindingResult,
-                            RedirectAttributes redirectAttributes) {
+    //Obsolete due to Spring Boot Security Login
+//    @PostMapping("/login")
+//    public String postLogin(@Valid UserLoginBindingModel userLoginBindingModel, BindingResult bindingResult,
+//                            RedirectAttributes redirectAttributes) {
+//
+//        if(this.userService.isCurrentUserLoggedIn()) {
+//            return "redirect:/home";
+//        }
+//
+//        if(bindingResult.hasErrors()) {
+//            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
+//            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginBindingModel", bindingResult);
+//
+//            return "redirect:/users/login";
+//        }
+//
+//        UserServiceModel usm = modelMapper.map(userLoginBindingModel, UserServiceModel.class);
+//
+//        UserServiceModel existingUser = userService.findUserByUsername(usm);
+//
+//        if (existingUser == null || !passwordEncoder.matches(userLoginBindingModel.getPassword(), existingUser.getPassword())) {
+//            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
+//            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginBindingModel", bindingResult);
+//            redirectAttributes.addFlashAttribute("wrongCredentials", true);
+//            return "redirect:/users/login";
+//        }
+//
+//        userService.login(existingUser);
+//
+//        return "redirect:/home";
+//    }
 
-        if(this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/home";
-        }
+    @PostMapping("/login-error")
+    public String getLoginErr(String username, RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginBindingModel", bindingResult);
+        redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
+        redirectAttributes.addFlashAttribute("wrongCredentials", true);
 
-            return "redirect:/users/login";
-        }
-
-        UserServiceModel usm = modelMapper.map(userLoginBindingModel, UserServiceModel.class);
-
-        UserServiceModel existingUser = userService.findUserByUsername(usm);
-
-        if (existingUser == null || !passwordEncoder.matches(userLoginBindingModel.getPassword(), existingUser.getPassword())) {
-            redirectAttributes.addFlashAttribute("userLoginBindingModel", userLoginBindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginBindingModel", bindingResult);
-            redirectAttributes.addFlashAttribute("wrongCredentials", true);
-            return "redirect:/users/login";
-        }
-
-        userService.login(existingUser);
-
-        return "redirect:/home";
+        return "redirect:/users/login";
     }
 
-    @GetMapping("/logout")
-    public String getLogout() {
-        if(!this.userService.isCurrentUserLoggedIn()) {
-            return "redirect:/users/login";
-        }
-
-        this.userService.logout();
-
-        return "redirect:/";
-    }
+    //Obsolete due to Spring Boot Security Logout
+//    @GetMapping("/logout")
+//    public String getLogout() {
+//        if(!this.userService.isCurrentUserLoggedIn()) {
+//            return "redirect:/users/login";
+//        }
+//
+//        this.userService.logout();
+//
+//        return "redirect:/";
+//    }
 }

@@ -2,9 +2,11 @@ package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.UserRegisterBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,15 +35,15 @@ public class UserRegisterController {
         return new UserRegisterBindingModel();
     }
 
+    //Obsolete due to custom validation.
 //    @ModelAttribute("isExists")
 //    public boolean addExistingUserAtt() {
 //        return false;
 //    }
 
     @GetMapping("/register")
-    public String getRegister() {
-
-        if(this.userService.isCurrentUserLoggedIn()) {
+    public String getRegister(@AuthenticationPrincipal PureWaterUserDetails userDetails) {
+        if(userDetails != null) {
             return "redirect:/home";
         }
 
@@ -50,9 +52,8 @@ public class UserRegisterController {
 
     @PostMapping("/register")
     public String postRegister(@Valid UserRegisterBindingModel userRegisterBindingModel, BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes) {
-
-        if(this.userService.isCurrentUserLoggedIn()) {
+                               RedirectAttributes redirectAttributes, @AuthenticationPrincipal PureWaterUserDetails userDetails) {
+        if(userDetails != null) {
             return "redirect:/home";
         }
 

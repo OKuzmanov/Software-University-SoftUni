@@ -1,40 +1,44 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.User;
+import bg.softuni.PureWaterMiniCRM.models.entities.Role;
+import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.UserViewModel;
 import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
-import bg.softuni.PureWaterMiniCRM.security.CurrentUser;
+import bg.softuni.PureWaterMiniCRM.services.RoleService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
+    private final RoleService roleService;
     private final ModelMapper modelMapper;
-    private final CurrentUser currentUser;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepo, ModelMapper modelMapper, CurrentUser currentUser, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepo, RoleService roleService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.roleService = roleService;
         this.modelMapper = modelMapper;
-        this.currentUser = currentUser;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserServiceModel findUserByUsername(UserServiceModel userServiceModel) {
-        User userEntity = userRepo.findByUsername(userServiceModel.getUsername()).orElse(null);
+    public UserServiceModel findUserByUsername(String username) {
+        UserEntity userEntity = userRepo.findByUsername(username).orElse(null);
         return userEntity != null
                 ? modelMapper.map(userEntity, UserServiceModel.class)
                 : null;
@@ -42,48 +46,47 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel findUserByEmail(UserServiceModel userServiceModel) {
-        User userEntity = userRepo.findByEmail(userServiceModel.getEmail()).orElse(null);
+        UserEntity userEntity = userRepo.findByEmail(userServiceModel.getEmail()).orElse(null);
         return userEntity != null
                 ? modelMapper.map(userEntity, UserServiceModel.class)
                 : null;
     }
 
-    @Override
-    public void login(UserServiceModel userServiceModel) {
-        this.currentUser.setUsername(userServiceModel.getUsername());
-        this.currentUser.setFirstName(userServiceModel.getFirstName());
-        this.currentUser.setLastName(userServiceModel.getLastName());
-        this.currentUser.setLoggedIn(true);
-    }
+    // Obsolete due to Spring Boot Security login.
+//    @Override
+//    public void login(UserServiceModel userServiceModel) {
+//        this.currentUser.setUsername(userServiceModel.getUsername());
+//        this.currentUser.setFirstName(userServiceModel.getFirstName());
+//        this.currentUser.setLastName(userServiceModel.getLastName());
+//        this.currentUser.setLoggedIn(true);
+//    }
 
-    @Override
-    public void logout() {
-        this.currentUser.clear();
-    }
+    //Obsolete due to Spring Boot Security Logout.
+//    @Override
+//    public void logout() {
+//        this.currentUser.clear();
+//    }
 
     @Override
     public UserServiceModel register(UserServiceModel userServiceModel) {
 
-        this.modelMapper.addMappings(new PropertyMap<UserServiceModel, User>() {
+        this.modelMapper.addMappings(new PropertyMap<UserServiceModel, UserEntity>() {
             @Override
             protected void configure() {
                 skip().setPassword(null);
             }
         });
 
-        User entityToPersist = this.modelMapper.map(userServiceModel, User.class);
+        UserEntity entityToPersist = this.modelMapper.map(userServiceModel, UserEntity.class);
+
         entityToPersist.setPassword(passwordEncoder.encode(userServiceModel.getPassword()));
 
-        //TODO Add Roles
+        Optional<Role> optRole = this.roleService.findByName(RoleEnum.USER);
+        entityToPersist.setRole(Set.of(optRole.isEmpty()
+                                        ? null
+                                        : optRole.get()));
 
         return this.modelMapper.map(this.userRepo.save(entityToPersist), UserServiceModel.class);
-    }
-
-    @Override
-    public User getCurrentUser() {
-        Optional<User> optUser = this.userRepo.findByUsername(this.currentUser.getUsername());
-
-        return optUser.get();
     }
 
     @Override
@@ -92,12 +95,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveAll(List<User> users) {
-        this.userRepo.saveAll(users);
+    public void saveAll(List<UserEntity> userEntities) {
+        this.userRepo.saveAll(userEntities);
     }
 
     @Override
-    public boolean isCurrentUserLoggedIn() {
-        return this.currentUser.getIsLoggedIn();
+    public UserServiceModel findById(long id) {
+        Optional<UserEntity> userOpt = this.userRepo.findById(id);
+        return userOpt.isEmpty()
+                ? null
+                : this.modelMapper.map(userOpt.get(), UserServiceModel.class);
+    }
+
+    @Override
+    public List<UserViewModel> fetchAll() {
+        return this.userRepo.findAll()
+                .stream()
+                .map(u -> this.modelMapper.map(u, UserViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderViewModel> fetchAllOrdersByUserId(Long id) {
+        Optional<UserEntity> userOpt = this.userRepo.findById(id);
+
+        if (userOpt.isEmpty()) {
+            return null;
+        } else {
+            return userOpt.get()
+                    .getOrders()
+                    .stream()
+                    .map(o -> this.modelMapper.map(o, OrderViewModel.class))
+                    .collect(Collectors.toList());
+        }
     }
 }

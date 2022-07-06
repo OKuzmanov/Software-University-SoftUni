@@ -3,6 +3,7 @@ package bg.softuni.PureWaterMiniCRM.services.impl;
 import bg.softuni.PureWaterMiniCRM.models.entities.Product;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.ProductViewModel;
 import bg.softuni.PureWaterMiniCRM.repositories.ProductRepository;
 import bg.softuni.PureWaterMiniCRM.services.ProductService;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -43,5 +46,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void saveAll(List<Product> products) {
         this.productRepo.saveAll(products);
+    }
+
+    @Override
+    public List<ProductViewModel> fetchAll() {
+        List<ProductViewModel> models = this.productRepo.findAll()
+                .stream()
+                .map(p -> this.modelMapper.map(p, ProductViewModel.class))
+                .collect(Collectors.toList());
+
+        return models;
+    }
+
+    @Override
+    public ProductViewModel fetchById(Long id) {
+        Optional<Product> productOpt = this.productRepo.findById(id);
+        return productOpt.isEmpty()
+                ? null
+                : this.modelMapper.map(productOpt.get(), ProductViewModel.class);
     }
 }
