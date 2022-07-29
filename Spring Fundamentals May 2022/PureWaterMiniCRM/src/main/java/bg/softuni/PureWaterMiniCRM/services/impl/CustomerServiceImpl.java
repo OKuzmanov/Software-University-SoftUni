@@ -1,8 +1,11 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.CustomerViewModel;
@@ -85,8 +88,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerViewModel fetchById(Long id) {
         Optional<Customer> customerOpt = this.customerRepo.findById(id);
-        return customerOpt.isEmpty()
-                ? null
-                : this.modelMapper.map(customerOpt.get(), CustomerViewModel.class);
+
+        CustomerViewModel cvm = customerOpt.map( c ->this.modelMapper.map(c, CustomerViewModel.class))
+                .orElseThrow(() -> new ApiObjectNotFoundException(id, "Customer"));
+
+        return cvm;
+    }
+
+    @Override
+    public Customer findById(int id) {
+        return customerRepo.findById(Long.valueOf(id))
+                .orElseThrow(() -> new ObjectNotFoundException(Long.valueOf(id), "Customer"));
     }
 }

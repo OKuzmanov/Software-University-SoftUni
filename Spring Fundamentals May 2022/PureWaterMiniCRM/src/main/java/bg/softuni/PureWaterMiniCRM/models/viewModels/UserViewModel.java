@@ -1,23 +1,25 @@
 package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.Role;
+import bg.softuni.PureWaterMiniCRM.models.entities.Order;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.Set;
 
 public class UserViewModel {
-    private String username;
+    private Long id;
 
+    private String username;
 
     private String firstName;
 
-
     private String lastName;
-
 
     private String password;
 
 
     private String email;
+
+    private Set<Order> orders;
 
     public UserViewModel() {
     }
@@ -60,5 +62,21 @@ public class UserViewModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }

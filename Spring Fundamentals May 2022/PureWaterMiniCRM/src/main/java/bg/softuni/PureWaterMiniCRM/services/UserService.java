@@ -4,6 +4,7 @@ import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.UserViewModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public interface UserService {
 
     UserServiceModel findById(long id);
 
+    List<UserViewModelRest> fetchAllRest();
     List<UserViewModel> fetchAll();
 
     List<OrderViewModel> fetchAllOrdersByUserId(Long id);

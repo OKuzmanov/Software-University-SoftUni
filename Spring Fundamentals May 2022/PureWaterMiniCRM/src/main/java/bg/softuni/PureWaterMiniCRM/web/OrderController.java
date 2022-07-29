@@ -8,14 +8,12 @@ import bg.softuni.PureWaterMiniCRM.services.OrderService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -41,6 +39,11 @@ public class OrderController {
     @ModelAttribute("orderAddBindingModel")
     public OrderAddBindingModel addBindingModel() {
         return new OrderAddBindingModel();
+    }
+
+    @ModelAttribute("isNotSuccessDel")
+    public boolean addIsNotSuccessDel() {
+        return false;
     }
 
     @GetMapping("/add")
@@ -69,7 +72,16 @@ public class OrderController {
 
         this.orderService.addOrder(osm, userDetails);
 
-        return "redirect:/orders/all";
+        return "redirect:/home";
+    }
+
+    @GetMapping("/remove/{id}")
+    public String removeOrder(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+        boolean isSuccessDel = this.orderService.deleteById(id);
+        if (!isSuccessDel) {
+            redirectAttributes.addFlashAttribute("isNotSuccessDel", true);
+        }
+        return "redirect:/home";
     }
 
     @GetMapping("/all")

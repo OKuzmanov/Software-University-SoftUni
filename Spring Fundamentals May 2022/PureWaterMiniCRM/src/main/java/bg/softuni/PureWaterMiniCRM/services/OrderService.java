@@ -1,5 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.services;
 
+import bg.softuni.PureWaterMiniCRM.models.entities.Order;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.OrderServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
@@ -15,7 +16,17 @@ public interface OrderService {
 
     Long addOrderViaRestApi(OrderServiceModel orderServiceModel);
 
-    void deleteById(Long id);
+    boolean deleteByIdRest(Long id);
+
+    boolean deleteById(Long id);
 
     OrderServiceModel updateOrder(Long id, OrderServiceModel orderServiceModel);
+
+    boolean isRepoEmpty();
+
+    void saveAll(List<Order> orders);
+
+    int deleteOverDueOrders();
+
+    int completeOrders();
 }

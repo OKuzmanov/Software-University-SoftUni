@@ -1,6 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
-import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
 
 public class CustomerViewModel {
 
@@ -15,7 +15,7 @@ public class CustomerViewModel {
 
     private String description;
 
-    private UserViewModel user;
+    private UserViewModelRest user;
 
     public CustomerViewModel() {
     }
@@ -60,11 +60,11 @@ public class CustomerViewModel {
         this.description = description;
     }
 
-    public UserViewModel getUser() {
+    public UserViewModelRest getUser() {
         return user;
     }
 
-    public void setUser(UserViewModel user) {
+    public void setUser(UserViewModelRest user) {
         this.user = user;
     }
 

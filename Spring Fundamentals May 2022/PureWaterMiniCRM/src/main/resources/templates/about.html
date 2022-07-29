@@ -2,7 +2,7 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>About</title>
+    <title th:text="#{about_head}">About</title>
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 
@@ -16,7 +16,7 @@
     <div class="info">
         <div></div>
         <div>
-            <h4>За нас</h4>
+            <h4 th:text="#{about_head}">About</h4>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque consectetur consequuntur dolores error est
             fugit
             illo illum iure libero, necessitatibus, nihil possimus recusandae repudiandae sapiente similique sunt

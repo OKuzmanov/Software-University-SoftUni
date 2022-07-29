@@ -15,53 +15,53 @@
         <ul class="navbar-nav mr-auto col-12 justify-content-between">
             <th:block sec:authorize="isAuthenticated()">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/orders/add}">Add Order</a>
+                    <a class="nav-link" th:href="@{/orders/add}" th:text="#{navbar_add_order}">Add Order</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/products/add}">Add Product</a>
+                    <a class="nav-link" th:href="@{/products/add}" th:text="#{navbar_add_products}">Add Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/materials/add}">Add Raw Materials</a>
+                    <a class="nav-link" th:href="@{/materials/add}" th:text="#{navbar_add_raw_materials}">Add Raw Materials</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/suppliers/add}">Add Suppliers</a>
+                    <a class="nav-link" th:href="@{/suppliers/add}" th:text="#{navbar_add_supplier}">Add Supplier</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/customers/add}">Add Customers</a>
+                    <a class="nav-link" th:href="@{/customers/add}" th:text="#{navbar_add_customer}">Add Customer</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownReports" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{navbar_all}">
                         All
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
-<!--                        TODO: Update href with thymeleaf-->
-                        <a class="dropdown-item" href="/">Orders</a>
-                        <a class="dropdown-item" href="/">Customers</a>
-                        <a class="dropdown-item" href="/">Suppliers</a>
-                        <a class="dropdown-item" href="/">Products</a>
-                        <a class="dropdown-item" href="/">Raw Materials</a>
+                        <a class="dropdown-item" th:href="@{/orders/all}" th:text="#{navbar_all_orders}">Orders</a>
+                        <a class="dropdown-item" th:href="@{/customers/all}" th:text="#{navbar_all_customers}">Customers</a>
+                        <a class="dropdown-item" th:href="@{/suppliers/all}" th:text="#{navbar_all_suppliers}">Suppliers</a>
+                        <a class="dropdown-item" th:href="@{/products/all}" th:text="#{navbar_all_products}">Products</a>
+                        <a class="dropdown-item" th:href="@{/materials/all}" th:text="#{navbar_all_raw_materials}">Raw Materials</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownAdmin" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{navbar_admin}">
                         Admin
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                        <!--                        todo: admin implementation-->
                         <a class="dropdown-item" href="/">Action</a>
                         <a class="dropdown-item" href="/">Another action</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/">Something else here</a>
                     </div>
                 </li>
-                </li>
                 <li class="nav-item dropdown" sec:authorize="hasRole('MODERATOR')">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownModerator" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{navbar_moderator}">
                         Moderator
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownModerator">
+                        <!--                        todo: moderator implementation-->
                         <a class="dropdown-item" href="/">Action</a>
                         <a class="dropdown-item" href="/">Another action</a>
                         <div class="dropdown-divider"></div>
@@ -70,24 +70,37 @@
                 </li>
                 <li class="nav-item">
                     <div class="form-inline my-2 my-lg-0 border px-3">
-                        <div class="text-white" >Welcome, <th:block th:text="${#authentication.principal.fullName}">!</th:block>!</div>
+                        <div class="text-white" >
+                            <th:block th:text="#{navbar_welcome}"></th:block>
+                            <th:block th:text="${#authentication.principal.fullName}">full name</th:block>
+                            !
+                        </div>
                         <form th:action="@{/users/logout}" th:method="post">
-                            <input class="btn btn-link nav-link" type="submit" value="Logout">
+                            <input class="btn btn-link nav-link" type="submit" th:value="#{navbar_logout}">
                         </form>
                     </div>
                 </li>
             </th:block>
-            <th:block sec:authorize="!isAuthenticated()">
+            <th:block sec:authorize="isAnonymous()">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/users/register}">Register</a>
+                    <a class="nav-link" th:text="#{navbar_register}" th:href="@{/users/register}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/users/login}">Login</a>
+                    <a class="nav-link" th:text="#{navbar_login}" th:href="@{/users/login}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/about}">About</a>
+                    <a class="nav-link" th:text="#{navbar_about}" th:href="@{/about}">About</a>
                 </li>
             </th:block>
+            <li>
+                <form th:method="get">
+                    <label class="text-white" th:text="#{navbar_language}" for="lang"></label>
+                    <select onchange="this.form.submit()" id="lang" name="lang">
+                        <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                        <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+                    </select>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>

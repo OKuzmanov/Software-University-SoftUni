@@ -70,7 +70,7 @@ public class SuppliersController {
 
         this.supplierService.addSupplier(ssm, userDetails);
 
-        return "redirect:/suppliers/all";
+        return "redirect:/home";
     }
 
     @GetMapping("/all")

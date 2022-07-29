@@ -1,6 +1,8 @@
 package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.RawMaterialServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.RawMaterialViewModel;
 
@@ -16,4 +18,8 @@ public interface RawMaterialService {
     List<RawMaterialViewModel> fetchAll();
 
     RawMaterialViewModel fetchById(Long id);
+
+    int fetchAllByType(RawMaterialType type);
+
+    void reduceQuantityBy(RawMaterialType type, int quantity);
 }

@@ -60,12 +60,10 @@ public class RawMaterialsController {
 
         RawMaterialServiceModel rmsm = this.modelMapper.map(rawMaterialAddBindingModel, RawMaterialServiceModel.class);
         rmsm.setSupplier(this.supplierService.findByCompanyName(rawMaterialAddBindingModel.getSupplierName()));
-        //TODO
-//        rmsm.setUser(this.userService.getCurrentUser());
 
         this.rawMaterialService.addRawMaterials(rmsm);
 
-        return "redirect:/materials/all";
+        return "redirect:/home";
     }
 
     @GetMapping("/all")

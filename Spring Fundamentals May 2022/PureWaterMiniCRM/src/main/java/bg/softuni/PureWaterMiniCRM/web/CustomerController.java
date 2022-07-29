@@ -71,7 +71,7 @@ public class CustomerController {
 
         this.customerService.addCustomer(this.modelMapper.map(customerAddBindingModel, CustomerServiceModel.class), userDetails);
 
-        return "redirect:/customers/all";
+        return "redirect:/home";
     }
 
     @GetMapping("/all")

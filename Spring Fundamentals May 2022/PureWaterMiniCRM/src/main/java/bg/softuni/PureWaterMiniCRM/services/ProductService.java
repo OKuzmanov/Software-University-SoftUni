@@ -1,6 +1,7 @@
 package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.Product;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.ProductViewModel;
 
@@ -16,4 +17,8 @@ public interface ProductService {
     List<ProductViewModel> fetchAll();
 
     ProductViewModel fetchById(Long id);
+
+    Integer findQuantityProducedOfType(ProductCategoryEnum type);
+
+    void reduceQuantityBy(ProductCategoryEnum type, int orderQuantity);
 }

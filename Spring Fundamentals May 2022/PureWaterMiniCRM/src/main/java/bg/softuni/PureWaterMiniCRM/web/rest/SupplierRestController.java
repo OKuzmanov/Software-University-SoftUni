@@ -1,5 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.web.rest;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.*;
 import bg.softuni.PureWaterMiniCRM.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,7 @@ public class SupplierRestController {
 
         SupplierViewModel svm = this.supplierService.fetchById(id);
 
-        if(svm == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(svm);
-        }
+
+        return ResponseEntity.ok(svm);
     }
 }

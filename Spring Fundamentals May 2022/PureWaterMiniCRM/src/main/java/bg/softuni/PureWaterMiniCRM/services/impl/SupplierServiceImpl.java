@@ -1,5 +1,7 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
@@ -86,8 +88,16 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public SupplierViewModel fetchById(Long id) {
         Optional<Supplier> supplierOpt = this.supplierRepo.findById(id);
-        return supplierOpt.isEmpty()
-                ? null
-                : this.modelMapper.map(supplierOpt.get(), SupplierViewModel.class);
+
+        SupplierViewModel svm = supplierOpt.map(s -> this.modelMapper.map(s, SupplierViewModel.class))
+                .orElseThrow(() -> new ApiObjectNotFoundException(id, "Supplier"));
+
+        return svm;
+    }
+
+    @Override
+    public SupplierServiceModel findById(int id) {
+        Supplier supplierSource = supplierRepo.findById(Long.valueOf(id)).orElseThrow(() -> new ObjectNotFoundException(Long.valueOf(id), "Supplier"));
+        return this.modelMapper.map(supplierSource, SupplierServiceModel.class);
     }
 }

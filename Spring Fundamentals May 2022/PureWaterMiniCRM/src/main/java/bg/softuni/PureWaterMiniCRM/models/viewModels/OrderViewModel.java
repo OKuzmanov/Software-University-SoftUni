@@ -1,6 +1,8 @@
 package bg.softuni.PureWaterMiniCRM.models.viewModels;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,9 +20,9 @@ public class OrderViewModel {
 
     private String description;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime expiryDate;
 
-    private UserViewModel user;
+    private UserViewModelRest user;
 
     private CustomerViewModel customer;
 
@@ -67,19 +69,19 @@ public class OrderViewModel {
         this.description = description;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
-    public UserViewModel getUser() {
+    public UserViewModelRest getUser() {
         return user;
     }
 
-    public void setUser(UserViewModel user) {
+    public void setUser(UserViewModelRest user) {
         this.user = user;
     }
 

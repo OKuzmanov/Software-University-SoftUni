@@ -1,8 +1,10 @@
 package bg.softuni.PureWaterMiniCRM.web.rest;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.*;
 import bg.softuni.PureWaterMiniCRM.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,10 +35,7 @@ public class CustomerRestController {
 
         CustomerViewModel cvm = this.customerService.fetchById(id);
 
-        if(cvm == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(cvm);
-        }
+        return ResponseEntity.ok(cvm);
+
     }
 }

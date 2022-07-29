@@ -25,8 +25,8 @@ public class Order extends BaseEntity{
 
     private String description;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "expires_at", nullable = false)
+    private LocalDateTime expiryDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -37,21 +37,16 @@ public class Order extends BaseEntity{
     private Customer customer;
 
     public Order() {
-        //TODO: Replace '1' with the actual quantity in a pallet
-//        switch(prodCategory.name()){
-//            case "HALF_LITRE":
-//                this.totalPrice = prodCategory.getPrice().multiply(BigDecimal.valueOf(1));
-//                break;
-//            case "LITRE_AND_HALF":
-//                this.totalPrice = prodCategory.getPrice().multiply(BigDecimal.valueOf(1));
-//                break;
-//            case "TEN_LITRES":
-//                this.totalPrice = prodCategory.getPrice().multiply(BigDecimal.valueOf(1));
-//                break;
-//            case "NINETEEN_LITRES":
-//                this.totalPrice = prodCategory.getPrice().multiply(BigDecimal.valueOf(1));
-//                break;
-//        }
+    }
+
+    public Order(String name, int quantity, ProductCategoryEnum prodCategory, String description, LocalDateTime expiryDate, UserEntity userEntity, Customer customer) {
+        this.name = name;
+        this.quantity = quantity;
+        this.prodCategory = prodCategory;
+        this.description = description;
+        this.expiryDate = expiryDate;
+        this.userEntity = userEntity;
+        this.customer = customer;
     }
 
     public String getName() {
@@ -94,12 +89,12 @@ public class Order extends BaseEntity{
         this.description = description;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public UserEntity getUser() {

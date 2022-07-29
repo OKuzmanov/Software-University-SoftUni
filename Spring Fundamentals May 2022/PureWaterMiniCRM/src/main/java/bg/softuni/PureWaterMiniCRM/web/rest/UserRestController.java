@@ -1,8 +1,9 @@
 package bg.softuni.PureWaterMiniCRM.web.rest;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
-import bg.softuni.PureWaterMiniCRM.models.viewModels.UserViewModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -25,23 +26,21 @@ public class UserRestController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserViewModel>> getAllUsers() {
-       return ResponseEntity
-                .ok(this.userService.fetchAll());
+    public ResponseEntity<List<UserViewModelRest>> getAllUsers() {
+        return ResponseEntity
+                .ok(this.userService.fetchAllRest());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserViewModel> getUserById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<UserViewModelRest> getUserById(@PathVariable(name = "id") Long id) {
 
         UserServiceModel usm = this.userService.findById(id);
 
         if (usm == null) {
-         return ResponseEntity
-                 .notFound()
-                 .build();
+            throw new ApiObjectNotFoundException(id, "User");
         } else {
             return ResponseEntity
-                    .ok(this.modelMapper.map(usm, UserViewModel.class));
+                    .ok(this.modelMapper.map(usm, UserViewModelRest.class));
         }
     }
 
@@ -49,13 +48,8 @@ public class UserRestController {
     public ResponseEntity<List<OrderViewModel>> getAllUserOrdersByID(@PathVariable(name = "id") Long id) {
         List<OrderViewModel> ordersById = this.userService.fetchAllOrdersByUserId(id);
 
-        if (ordersById == null) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        } else {
-            return ResponseEntity
-                    .ok(ordersById);
-        }
+        return ResponseEntity
+                .ok(ordersById);
+
     }
 }

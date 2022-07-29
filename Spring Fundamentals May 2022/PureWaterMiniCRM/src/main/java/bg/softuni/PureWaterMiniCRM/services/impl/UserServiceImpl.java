@@ -1,11 +1,13 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.UserViewModel;
+import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
 import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
 import bg.softuni.PureWaterMiniCRM.services.RoleService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
@@ -108,8 +110,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserViewModel> fetchAll() {
+    public List<UserViewModelRest> fetchAllRest() {
         return this.userRepo.findAll()
+                .stream()
+                .map(u -> this.modelMapper.map(u, UserViewModelRest.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserViewModel> fetchAll() {
+        return this.userRepo.findAllSortedByOrders()
                 .stream()
                 .map(u -> this.modelMapper.map(u, UserViewModel.class))
                 .collect(Collectors.toList());
@@ -120,7 +130,7 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> userOpt = this.userRepo.findById(id);
 
         if (userOpt.isEmpty()) {
-            return null;
+            throw new ApiObjectNotFoundException(id, "User");
         } else {
             return userOpt.get()
                     .getOrders()

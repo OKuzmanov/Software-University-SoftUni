@@ -1,7 +1,9 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.RawMaterialServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.RawMaterialViewModel;
@@ -64,8 +66,28 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     @Override
     public RawMaterialViewModel fetchById(Long id) {
         Optional<RawMaterial> rawMaterialOpt = this.rawMaterialRepo.findById(id);
+
+        RawMaterialViewModel rvm = rawMaterialOpt.map(rm -> this.modelMapper.map(rm, RawMaterialViewModel.class))
+                .orElseThrow(() -> new ApiObjectNotFoundException(id, "Raw Material"));
+
+        return rvm;
+    }
+
+    @Override
+    public int fetchAllByType(RawMaterialType type) {
+        Optional<RawMaterial> rawMaterialOpt = this.rawMaterialRepo.findByType(type);
         return rawMaterialOpt.isEmpty()
-                ? null
-                : this.modelMapper.map(rawMaterialOpt.get(), RawMaterialViewModel.class);
+                ? 0
+                : rawMaterialOpt.get().getQuantity();
+    }
+
+    @Override
+    public void reduceQuantityBy(RawMaterialType type, int quantity) {
+        Optional<RawMaterial> rawMaterialOpt = this.rawMaterialRepo.findByType(type);
+
+        RawMaterial rawMaterialEntity = rawMaterialOpt.get();
+        rawMaterialEntity.setQuantity(rawMaterialEntity.getQuantity() - quantity);
+
+        this.rawMaterialRepo.save(rawMaterialEntity);
     }
 }

@@ -23,9 +23,9 @@ public class OrderAddBindingModel {
     private String description;
 
     @NotNull(message = "Date should be selected!")
-    @PastOrPresent(message = "Created At date should not be in the future!")
+    @Future(message = "Expiry date should not be in the past!")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime createdAt;
+    private LocalDateTime expiryDate;
 
     @NotBlank(message = "Customer name should be selected!")
     private String customer;
@@ -65,12 +65,12 @@ public class OrderAddBindingModel {
         this.description = description;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public String getCustomer() {

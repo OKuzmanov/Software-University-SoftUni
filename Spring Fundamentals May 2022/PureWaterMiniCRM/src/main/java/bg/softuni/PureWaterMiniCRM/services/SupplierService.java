@@ -23,4 +23,6 @@ public interface SupplierService {
     List<SupplierViewModel> fetchAll();
 
     SupplierViewModel fetchById(Long id);
+
+    SupplierServiceModel findById(int id);
 }

@@ -1,5 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Product;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
@@ -61,8 +62,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductViewModel fetchById(Long id) {
         Optional<Product> productOpt = this.productRepo.findById(id);
-        return productOpt.isEmpty()
-                ? null
-                : this.modelMapper.map(productOpt.get(), ProductViewModel.class);
+
+        ProductViewModel pvm = productOpt.map(p -> this.modelMapper.map(p, ProductViewModel.class))
+                .orElseThrow(() -> new ApiObjectNotFoundException(id, "Product"));
+
+        return pvm;
+    }
+
+    @Override
+    public Integer findQuantityProducedOfType(ProductCategoryEnum type) {
+        Product productEntity = this.productRepo.findByType(type).get();
+        return productEntity.getQuantity();
+    }
+
+    @Override
+    public void reduceQuantityBy(ProductCategoryEnum type, int orderQuantity) {
+        Product productEntity = this.productRepo.findByType(type).get();
+        productEntity.setQuantity(productEntity.getQuantity() - orderQuantity);
+        this.productRepo.save(productEntity);
     }
 }

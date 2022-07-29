@@ -46,7 +46,6 @@ public class UserRegisterController {
         if(userDetails != null) {
             return "redirect:/home";
         }
-
         return "register";
     }
 

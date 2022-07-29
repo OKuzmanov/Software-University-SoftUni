@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 public class SupplierServiceModel extends BaseServiceModel {
+    private Long id;
     private String companyName;
 
     private String email;
@@ -69,5 +70,15 @@ public class SupplierServiceModel extends BaseServiceModel {
 
     public void setRawMaterials(List<RawMaterial> rawMaterials) {
         this.rawMaterials = rawMaterials;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 }

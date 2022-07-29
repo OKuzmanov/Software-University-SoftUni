@@ -16,7 +16,7 @@ public class OrderServiceModel extends BaseServiceModel{
 
     private String description;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime expiryDate;
 
     private UserServiceModel user;
 
@@ -65,12 +65,12 @@ public class OrderServiceModel extends BaseServiceModel{
         this.description = description;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public UserServiceModel getUser() {

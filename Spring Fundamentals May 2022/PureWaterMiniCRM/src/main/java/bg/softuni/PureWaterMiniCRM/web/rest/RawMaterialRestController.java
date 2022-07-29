@@ -1,5 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.web.rest;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.*;
 import bg.softuni.PureWaterMiniCRM.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,6 @@ public class RawMaterialRestController {
 
         RawMaterialViewModel rmvm = this.rawMaterialService.fetchById(id);
 
-        if(rmvm == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(rmvm);
-        }
+        return ResponseEntity.ok(rmvm);
     }
 }

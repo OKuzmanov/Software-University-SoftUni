@@ -14,15 +14,18 @@
 </div>
 
 <div class="container">
-    <h2 class="text-center text-white">Add Products</h2>
+    <h2 class="text-center text-white" th:text="#{add_products_title}">Add Products</h2>
 
     <form th:action="@{/products/add}" th:method="post" th:object="${productAddBindingModel}"
           class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+        <p th:if="${insufficientResources}" class="errors alert alert-danger" th:text="#{add_products_err}">
+            Resources to create the requested amount of products are not enough!
+        </p>
 <!--        <div class="row">-->
             <div class="form-group col-md-6 mb-3">
-                <label for="type" class="text-white font-weight-bold">Type</label>
+                <label for="type" class="text-white font-weight-bold" th:text="#{add_products_type}">Type</label>
                 <select th:field="*{type}" th:errorclass="'is-invalid bg-danger'" id="type" name="type" class="custom-select">
-                    <option value="" selected>Select Type</option>
+                    <option value="" th:text="#{add_products_select_type}" selected>Select Type</option>
                     <option th:each="p : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum).values()}" th:value="${p}" th:text="${p.name().substring(0, 1) + p.name().substring(1).toLowerCase()}">Select Type</option>
                 </select>
                 <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="errors alert alert-danger">
@@ -30,9 +33,9 @@
                 </p>
             </div>
             <div class="form-group col-md-6 mb-3">
-                <label class="text-center text-white font-weight-bold" for="quantity">Quantity</label>
+                <label class="text-center text-white font-weight-bold" for="quantity" th:text="#{add_products_quantity}">Quantity</label>
                 <input th:field="*{quantity}" th:errorclass="'is-invalid bg-danger'" id="quantity" name="quantity" type="number" required min="0" class="form-control"
-                       placeholder="Quantity"/>
+                       th:placeholder="#{add_products_quantity}"/>
                 <p th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="errors alert alert-danger">
                     Custom Err Msg.
                 </p>
@@ -40,7 +43,7 @@
 <!--        </div>-->
 <!--        <div class="row">-->
             <div class="form-group col-md-6 mb-3">
-                <label for="productionDate" class="text-white font-weight-bold">Production Date</label>
+                <label for="productionDate" class="text-white font-weight-bold" th:text="#{add_products_production_date}">Production Date</label>
                     <input th:field="*{productionDate}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="productionDate" name="productionDate"
                            aria-describedby="orderTimeHelpInline">
                 <p th:if="${#fields.hasErrors('productionDate')}" th:errors="*{productionDate}" class="errors alert alert-danger">
@@ -52,7 +55,7 @@
         <div class="row">
             <div class="col col-md-4">
                 <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" value="Add"/>
+                    <input type="submit" class="btn btn-info btn-lg" th:value="#{add_products_submit}"/>
                 </div>
             </div>
         </div>

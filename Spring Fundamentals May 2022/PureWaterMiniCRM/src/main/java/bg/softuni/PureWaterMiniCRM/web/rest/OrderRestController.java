@@ -1,13 +1,15 @@
 package bg.softuni.PureWaterMiniCRM.web.rest;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiNotSuccessfulDeleteException;
+import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.OrderAddBindingModelRest;
-import bg.softuni.PureWaterMiniCRM.models.entities.Order;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.OrderServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.*;
 import bg.softuni.PureWaterMiniCRM.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,8 +31,8 @@ public class OrderRestController {
 
     @GetMapping()
     public ResponseEntity<List<OrderViewModel>> getAllOrders() {
-       return ResponseEntity
-               .ok(this.orderService.fetchAll());
+        return ResponseEntity
+                .ok(this.orderService.fetchAll());
 
     }
 
@@ -39,19 +41,14 @@ public class OrderRestController {
 
         OrderViewModel ovm = this.orderService.fetchById(id);
 
-        if(ovm == null) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        } else {
-            return ResponseEntity
-                    .ok(ovm);
-        }
+        return ResponseEntity
+                .ok(ovm);
     }
 
     //Most Probably doesn't work due to Spring boot security CSRF restrictions
     @PostMapping()
     public ResponseEntity<OrderViewModel> createOrder(@Valid @RequestBody OrderAddBindingModelRest orderAddBindingModelRest,
+                                                      BindingResult bindingResult,
                                                       UriComponentsBuilder uriComponentsBuilder) {
 
         Long newOrderId = this.orderService.addOrderViaRestApi(this.modelMapper.map(orderAddBindingModelRest, OrderServiceModel.class));
@@ -67,17 +64,18 @@ public class OrderRestController {
     public ResponseEntity<OrderViewModel> updateOrderById(@PathVariable(name = "id") Long id, @Valid @RequestBody OrderAddBindingModelRest orderAddBindingModelRest) {
         OrderServiceModel osm = this.orderService.updateOrder(id, this.modelMapper.map(orderAddBindingModelRest, OrderServiceModel.class));
 
-        if(osm == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok(this.modelMapper.map(osm, OrderViewModel.class));
     }
 
     //Most Probably doesn't work due to Spring boot security CSRF restrictions
     @DeleteMapping("/{id}")
     public ResponseEntity<OrderViewModel> deleteOrderById(@PathVariable(name = "id") Long id) {
-        this.orderService.deleteById(id);
+        boolean isDeleted = this.orderService.deleteByIdRest(id);
+
+        if (!isDeleted) {
+            throw new ApiNotSuccessfulDeleteException(id, "Order");
+        }
+
         return ResponseEntity
                 .noContent()
                 .build();
