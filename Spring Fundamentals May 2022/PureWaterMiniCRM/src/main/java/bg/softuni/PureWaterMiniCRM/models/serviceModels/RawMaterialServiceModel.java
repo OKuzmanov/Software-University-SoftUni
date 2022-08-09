@@ -4,6 +4,7 @@ import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RawMaterialServiceModel extends BaseServiceModel{
 
@@ -18,6 +19,14 @@ public class RawMaterialServiceModel extends BaseServiceModel{
     private UserEntity userEntity;
 
     public RawMaterialServiceModel() {
+    }
+
+    public RawMaterialServiceModel(int quantity, RawMaterialType type, LocalDateTime deliveredAt, SupplierServiceModel supplier, UserEntity userEntity) {
+        this.quantity = quantity;
+        this.type = type;
+        this.deliveredAt = deliveredAt;
+        this.supplier = supplier;
+        this.userEntity = userEntity;
     }
 
     public int getQuantity() {
@@ -38,6 +47,10 @@ public class RawMaterialServiceModel extends BaseServiceModel{
 
     public LocalDateTime getDeliveredAt() {
         return deliveredAt;
+    }
+
+    public String getFormattedDeliveredAt() {
+        return deliveredAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public void setDeliveredAt(LocalDateTime deliveredAt) {

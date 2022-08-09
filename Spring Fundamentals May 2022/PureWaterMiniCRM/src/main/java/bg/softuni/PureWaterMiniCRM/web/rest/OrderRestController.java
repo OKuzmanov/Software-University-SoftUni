@@ -1,7 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.web.rest;
 
 import bg.softuni.PureWaterMiniCRM.exceptions.ApiNotSuccessfulDeleteException;
-import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.OrderAddBindingModelRest;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.OrderServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.*;
@@ -62,7 +61,7 @@ public class OrderRestController {
     //Most Probably doesn't work due to Spring boot security CSRF restrictions
     @PatchMapping("/{id}")
     public ResponseEntity<OrderViewModel> updateOrderById(@PathVariable(name = "id") Long id, @Valid @RequestBody OrderAddBindingModelRest orderAddBindingModelRest) {
-        OrderServiceModel osm = this.orderService.updateOrder(id, this.modelMapper.map(orderAddBindingModelRest, OrderServiceModel.class));
+        OrderServiceModel osm = this.orderService.updateOrderRest(id, this.modelMapper.map(orderAddBindingModelRest, OrderServiceModel.class));
 
         return ResponseEntity.ok(this.modelMapper.map(osm, OrderViewModel.class));
     }

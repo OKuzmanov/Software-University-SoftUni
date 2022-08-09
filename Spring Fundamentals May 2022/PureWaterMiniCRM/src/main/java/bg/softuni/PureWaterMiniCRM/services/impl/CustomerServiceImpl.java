@@ -100,4 +100,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepo.findById(Long.valueOf(id))
                 .orElseThrow(() -> new ObjectNotFoundException(Long.valueOf(id), "Customer"));
     }
+
+    @Override
+    public List<Customer> findAll() {
+        return this.customerRepo.findAll();
+    }
 }

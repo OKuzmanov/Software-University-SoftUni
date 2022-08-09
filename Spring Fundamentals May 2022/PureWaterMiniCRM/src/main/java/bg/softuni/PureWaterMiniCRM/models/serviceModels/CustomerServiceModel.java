@@ -1,7 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.models.serviceModels;
 
 public class CustomerServiceModel extends BaseServiceModel {
-    private Long id;
     private String companyName;
 
     private String email;
@@ -15,6 +14,15 @@ public class CustomerServiceModel extends BaseServiceModel {
     private UserServiceModel user;
 
     public CustomerServiceModel() {
+    }
+
+    public CustomerServiceModel(String companyName, String email, String phoneNumber, String address, String description, UserServiceModel user) {
+        this.companyName = companyName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.description = description;
+        this.user = user;
     }
 
     public String getCompanyName() {
@@ -63,15 +71,5 @@ public class CustomerServiceModel extends BaseServiceModel {
 
     public void setUser(UserServiceModel user) {
         this.user = user;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
     }
 }

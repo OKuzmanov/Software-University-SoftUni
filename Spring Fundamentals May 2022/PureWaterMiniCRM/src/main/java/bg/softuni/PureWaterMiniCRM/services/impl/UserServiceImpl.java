@@ -1,10 +1,12 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
 import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.UserViewModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
@@ -138,5 +140,57 @@ public class UserServiceImpl implements UserService {
                     .map(o -> this.modelMapper.map(o, OrderViewModel.class))
                     .collect(Collectors.toList());
         }
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        return this.userRepo.findAll();
+    }
+
+    @Override
+    public UserServiceModel updateUserDetails(Long userId, UserServiceModel userServiceModel) {
+        UserEntity userEntity = this.userRepo.findById(userId).get();
+
+        userEntity.setUsername(userServiceModel.getUsername());
+        userEntity.setFirstName(userServiceModel.getFirstName());
+        userEntity.setLastName(userServiceModel.getLastName());
+        userEntity.setEmail(userServiceModel.getEmail());
+        userEntity.setPassword(this.passwordEncoder.encode(userServiceModel.getPassword()));
+
+        if(userServiceModel.getRole() != null) {
+            userEntity.setRole(userServiceModel.getRole());
+        }
+
+        UserEntity persistedEntity = this.userRepo.save(userEntity);
+
+        return this.modelMapper.map(persistedEntity, UserServiceModel.class);
+    }
+
+    @Override
+    public boolean deleteUser(Long id) {
+        Optional<UserEntity> optUser = this.userRepo.findById(id);
+
+        if (optUser.isEmpty()) {
+            throw new ObjectNotFoundException(id, "UserEntity");
+        }
+
+        this.userRepo.delete(optUser.get());
+
+        return true;
+    }
+
+    @Override
+    public boolean isUserAuthorized(PureWaterUserDetails userDetails, Long userId) {
+
+        if(userDetails.getId() == userId) {
+            return true;
+        }
+
+        boolean isAdmin = userDetails
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
+
+        return isAdmin;
     }
 }

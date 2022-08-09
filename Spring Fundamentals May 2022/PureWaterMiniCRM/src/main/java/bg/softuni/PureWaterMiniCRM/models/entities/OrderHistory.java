@@ -36,6 +36,9 @@ public class OrderHistory extends BaseEntity {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
+    public OrderHistory() {
+    }
+
     public OrderHistory(String name, BigDecimal totalPrice, int quantity, ProductCategoryEnum prodCategory, LocalDateTime completionDate, UserEntity userEntity, Customer customer) {
         this.name = name;
         this.totalPrice = totalPrice;

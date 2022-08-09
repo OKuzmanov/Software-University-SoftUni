@@ -19,7 +19,7 @@ public class OrderAddBindingModel {
     private ProductCategoryEnum prodCategory;
 
     @NotBlank(message = "Description should not be blank!")
-    @Size(min=2, max=20, message = "Description should be between 2 to 20 characters long!")
+    @Size(min=5, message = "Description should be at least 5 characters long!")
     private String description;
 
     @NotNull(message = "Date should be selected!")

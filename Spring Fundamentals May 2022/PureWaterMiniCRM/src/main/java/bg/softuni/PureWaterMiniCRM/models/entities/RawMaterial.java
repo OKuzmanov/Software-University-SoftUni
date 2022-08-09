@@ -32,6 +32,13 @@ public class RawMaterial extends BaseEntity{
         this.supplier = supplier;
     }
 
+    public RawMaterial(int quantity, RawMaterialType type, Supplier supplier, LocalDateTime deliveredAt) {
+        this.quantity = quantity;
+        this.type = type;
+        this.deliveredAt = deliveredAt;
+        this.supplier = supplier;
+    }
+
     public int getQuantity() {
         return quantity;
     }

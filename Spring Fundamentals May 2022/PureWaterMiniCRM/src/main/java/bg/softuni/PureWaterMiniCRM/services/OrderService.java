@@ -1,5 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.services;
 
+import bg.softuni.PureWaterMiniCRM.models.bindingModels.OrderAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.entities.Order;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.OrderServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
@@ -18,9 +19,11 @@ public interface OrderService {
 
     boolean deleteByIdRest(Long id);
 
-    boolean deleteById(Long id);
+    boolean ifReadyDeleteById(Long id);
 
-    OrderServiceModel updateOrder(Long id, OrderServiceModel orderServiceModel);
+    OrderServiceModel updateOrderRest(Long id, OrderServiceModel orderServiceModel);
+
+    OrderServiceModel updateOrder(Long id, OrderAddBindingModel orderAddBindingModel);
 
     boolean isRepoEmpty();
 
@@ -29,4 +32,10 @@ public interface OrderService {
     int deleteOverDueOrders();
 
     int completeOrders();
+
+    OrderServiceModel findById(Long id);
+
+    boolean deleteById(Long id);
+
+    boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long orderId);
 }

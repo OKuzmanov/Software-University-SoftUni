@@ -25,6 +25,18 @@ public class OrderServiceModel extends BaseServiceModel{
     public OrderServiceModel() {
     }
 
+    public OrderServiceModel(String name, BigDecimal totalPrice, int quantity, ProductCategoryEnum prodCategory, String description,
+                             LocalDateTime expiryDate, UserServiceModel user, CustomerServiceModel customer) {
+        this.name = name;
+        this.totalPrice = totalPrice;
+        this.quantity = quantity;
+        this.prodCategory = prodCategory;
+        this.description = description;
+        this.expiryDate = expiryDate;
+        this.user = user;
+        this.customer = customer;
+    }
+
     public String getName() {
         return name;
     }

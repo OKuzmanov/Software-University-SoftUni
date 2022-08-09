@@ -2,11 +2,12 @@ package bg.softuni.PureWaterMiniCRM.config;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
-import bg.softuni.PureWaterMiniCRM.services.impl.AppUserDetailsService;
+import bg.softuni.PureWaterMiniCRM.services.AppUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -27,7 +29,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .antMatchers("/", "/users/register", "/users/login", "/about").permitAll()
+                .antMatchers("/", "/users/register", "/users/login", "/about", "/maintenance").permitAll()
                 .antMatchers("/pages/moderators").hasRole(RoleEnum.MODERATOR.name())
                 .antMatchers("/pages/admins").hasRole(RoleEnum.ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/api/orders", "/api/orders/{id}").permitAll()

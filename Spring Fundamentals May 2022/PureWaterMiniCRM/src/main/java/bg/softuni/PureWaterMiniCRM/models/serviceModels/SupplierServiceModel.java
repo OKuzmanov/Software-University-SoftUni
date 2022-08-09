@@ -24,6 +24,15 @@ public class SupplierServiceModel extends BaseServiceModel {
     public SupplierServiceModel() {
     }
 
+    public SupplierServiceModel(Long id, String companyName, String email, String phoneNumber, String address, String description) {
+        this.id = id;
+        this.companyName = companyName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.description = description;
+    }
+
     public String getCompanyName() {
         return companyName;
     }

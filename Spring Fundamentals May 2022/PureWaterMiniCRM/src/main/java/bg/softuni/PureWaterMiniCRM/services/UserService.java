@@ -2,6 +2,7 @@ package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.UserViewModel;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.rest.UserViewModelRest;
@@ -31,4 +32,12 @@ public interface UserService {
     List<UserViewModel> fetchAll();
 
     List<OrderViewModel> fetchAllOrdersByUserId(Long id);
+
+    List<UserEntity> findAll();
+
+    UserServiceModel updateUserDetails(Long userId, UserServiceModel userServiceModel);
+
+    boolean deleteUser(Long id);
+
+    boolean isUserAuthorized(PureWaterUserDetails userDetails, Long userId);
 }

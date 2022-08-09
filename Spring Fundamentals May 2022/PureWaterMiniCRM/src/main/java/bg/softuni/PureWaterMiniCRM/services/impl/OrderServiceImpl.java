@@ -2,23 +2,29 @@ package bg.softuni.PureWaterMiniCRM.services.impl;
 
 import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
+import bg.softuni.PureWaterMiniCRM.models.bindingModels.OrderAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
 import bg.softuni.PureWaterMiniCRM.models.entities.Order;
 import bg.softuni.PureWaterMiniCRM.models.entities.OrderHistory;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
+import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.OrderServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.OrderViewModel;
 import bg.softuni.PureWaterMiniCRM.repositories.OrderRepository;
 import bg.softuni.PureWaterMiniCRM.services.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderHistoryService orderHistoryService;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public OrderServiceImpl(OrderRepository orderRepo, UserService userService, CustomerService customerService, ProductService productService, OrderHistoryService orderHistoryService, ModelMapper modelMapper) {
         this.orderRepo = orderRepo;
         this.userService = userService;
@@ -93,21 +100,21 @@ public class OrderServiceImpl implements OrderService {
             throw new ApiObjectNotFoundException(id, "Order");
         }
 
-        return isDeleted(id, orderOpt);
+        return isDeleteSuccess(id, orderOpt);
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean ifReadyDeleteById(Long id) {
         Optional<Order> orderOpt = this.orderRepo.findById(id);
 
         if (orderOpt.isEmpty()) {
             throw new ObjectNotFoundException(id, "Order");
         }
 
-        return isDeleted(id, orderOpt);
+        return isDeleteSuccess(id, orderOpt);
     }
 
-    private boolean isDeleted(Long id, Optional<Order> orderOpt) {
+    private boolean isDeleteSuccess(Long id, Optional<Order> orderOpt) {
         ProductCategoryEnum prodCategory = orderOpt.get().getProdCategory();
         Integer quantityProduced = this.productService.findQuantityProducedOfType(prodCategory);
 
@@ -122,23 +129,39 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderServiceModel updateOrder(Long id, OrderServiceModel orderServiceModel) {
+    public OrderServiceModel updateOrderRest(Long id, OrderServiceModel orderServiceModel) {
         Optional<Order> orderOpt = this.orderRepo.findById(id);
 
         if (orderOpt.isEmpty()) {
             throw new ApiObjectNotFoundException(id, "Order");
-        } else {
-            Order orderEntity = orderOpt.get();
-            orderEntity.setName(orderServiceModel.getName());
-            orderEntity.setQuantity(orderServiceModel.getQuantity());
-            orderEntity.setTotalPrice(orderServiceModel.getTotalPrice());
-            orderEntity.setProdCategory(orderServiceModel.getProdCategory());
-            orderEntity.setDescription(orderServiceModel.getDescription());
-            orderEntity.setExpiryDate(orderServiceModel.getExpiryDate());
-
-            this.orderRepo.save(orderEntity);
-            return this.modelMapper.map(orderEntity, OrderServiceModel.class);
         }
+        Order orderEntity = orderOpt.get();
+        orderEntity.setName(orderServiceModel.getName());
+        orderEntity.setQuantity(orderServiceModel.getQuantity());
+        orderEntity.setTotalPrice(orderServiceModel.getTotalPrice());
+        orderEntity.setProdCategory(orderServiceModel.getProdCategory());
+        orderEntity.setDescription(orderServiceModel.getDescription());
+        orderEntity.setExpiryDate(orderServiceModel.getExpiryDate());
+
+        this.orderRepo.save(orderEntity);
+        return this.modelMapper.map(orderEntity, OrderServiceModel.class);
+
+    }
+
+    @Override
+    public OrderServiceModel updateOrder(Long id, OrderAddBindingModel orderAddBindingModel) {
+        Order orderEntity = orderRepo.findById(id).get();
+
+        orderEntity.setName(orderAddBindingModel.getName());
+        orderEntity.setQuantity(orderAddBindingModel.getQuantity());
+        orderEntity.setProdCategory(orderAddBindingModel.getProdCategory());
+        orderEntity.setTotalPrice(orderAddBindingModel.getProdCategory().getPrice().multiply(BigDecimal.valueOf(orderAddBindingModel.getQuantity())));
+        orderEntity.setDescription(orderAddBindingModel.getDescription());
+        orderEntity.setExpiryDate(orderAddBindingModel.getExpiryDate());
+        orderEntity.setCustomer(this.modelMapper.map(customerService.findCustomerByCompanyName(orderAddBindingModel.getCustomer()), Customer.class));
+
+        Order savedEntity = orderRepo.save(orderEntity);
+        return this.modelMapper.map(savedEntity, OrderServiceModel.class);
     }
 
     @Override
@@ -179,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
             if (order.getQuantity() <= productService.findQuantityProducedOfType(order.getProdCategory())) {
                 ordersToComplete.add(order);
                 orderHistories.add(new OrderHistory(order.getName(), order.getTotalPrice(), order.getQuantity(), order.getProdCategory(),
-                        LocalDateTime.now() ,order.getUser(), order.getCustomer()));
+                        LocalDateTime.now(), order.getUser(), order.getCustomer()));
 
                 this.productService.reduceQuantityBy(order.getProdCategory(), order.getQuantity());
             }
@@ -190,5 +213,38 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepo.deleteAll(ordersToComplete);
 
         return ordersToComplete.size();
+    }
+
+    @Override
+    public OrderServiceModel findById(Long id) {
+        return this.modelMapper.map(this.orderRepo.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Order")), OrderServiceModel.class);
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        this.orderRepo
+                .delete(this.orderRepo.findById(id)
+                        .orElseThrow(() -> new ObjectNotFoundException(id, "Order")));
+        return true;
+    }
+
+    @Override
+    public boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long orderId) {
+        Long userEntityId = this.orderRepo
+                .findById(orderId)
+                .orElseThrow(() -> new ObjectNotFoundException(orderId, "Order"))
+                .getUser()
+                .getId();
+        if(userDetails.getId() == userEntityId) {
+            return true;
+        }
+
+        boolean isAdmin = userDetails
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
+
+        return isAdmin;
     }
 }

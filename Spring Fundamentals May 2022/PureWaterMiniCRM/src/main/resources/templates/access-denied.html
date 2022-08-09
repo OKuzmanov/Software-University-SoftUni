@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Access Denied</title>
+    <th:block th:include="fragments/head::myHead"></th:block>
+</head>
+<body>
+
+<h1>Access Denied</h1>
+<p>
+    Dear User,
+
+    <br>Unfortunately you do not have the permission to further continue this action.
+
+    <br>Please get back to the home page!
+
+    <br>Best Regards,
+    <br>PureWater Mini CRM's team
+</p>
+
+<form th:action="@{/home}" th:method="get">
+    <div class="col col-md-4">
+        <div class="button-holder d-flex">
+            <input type="submit" class="btn btn-info btn-lg" th:value="Home"/>
+        </div>
+    </div>
+</form>
+</body>
+</html>

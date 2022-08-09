@@ -13,8 +13,7 @@
 
     <div class="jumbotron text-center">
         <div class="container text-light text-center">
-            <h1 class="display-3"><strong class="bg-blur rounded">All active</strong></h1>
-            <h1 class="display-3"><strong class="bg-blur rounded">Orders</strong></h1>
+            <h1 class="display-3"><strong class="bg-blur rounded" th:text="#{home_head}">All Due Orders</strong></h1>
         </div>
         <div class="row mt-3 mb-3 ">
             <div class="col-5 bg-blur rounded m-auto pb-3">
@@ -23,15 +22,12 @@
                     Not enough products in storage to complete the order!
                 </p>
                 <div th:each="order : ${allOrders}" th:object="${order}" class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/cake.png" alt="type"
-                         width="50px" height="50px">
                     <span class="p-3" th:text="*{name}">Name</span>
                     <span class="p-3" th:text="*{prodCategory.name()}">Type</span>
                     <span class="p-3" th:text="*{quantity}">Quantity</span>
                     <span class="p-3" th:text="*{totalPrice}">Price</span>
                     <a class="ml-3 p-3 text-warning" th:text="#{home_ready}" th:href="@{/orders/remove/{id}(id = *{id})}">Ready</a>
-<!--                    TODO: finish details-->
-                    <a class="ml-3 p-3 text-warning" th:text="#{home_details}" href="/">Details</a>
+                    <a class="ml-3 p-3 text-warning" th:text="#{home_details}" th:href="@{/orders/details/{id}(id = *{id})}">Details</a>
                 </div>
             </div>
             <div class="col-5 bg-blur rounded m-auto pb-3">
@@ -41,6 +37,7 @@
                          width="50px" height="50px">
                     <span class="p-3" th:inline="text"><span th:text="#{home_employee}">Employee - </span>[[*{username}]]</span>
                     <span class="p-3" th:inline="text"><span th:text="#{home_num_orders}">Number of orders: </span>[[*{orders.size()}]]</span>
+                    <a class="ml-3 p-3 text-warning" th:text="#{home_details}" th:href="@{/users/profile/{id}(id=*{id})}">Details</a>
                 </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/materials")
@@ -67,7 +68,9 @@ public class RawMaterialsController {
     }
 
     @GetMapping("/all")
-    public String getAllSupps() {
+    public String getAllSupps(Model model) {
+        List<RawMaterialServiceModel> allMaterials = this.rawMaterialService.findAll();
+        model.addAttribute("allMaterials", allMaterials);
         return "allRawMaterials";
     }
 }

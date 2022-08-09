@@ -7,14 +7,15 @@ import java.util.Collection;
 
 public class PureWaterUserDetails implements UserDetails {
 
+    private Long id;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private Collection<GrantedAuthority> authorities;
 
-    public PureWaterUserDetails(String username, String password, String firstName, String lastName, Collection<GrantedAuthority> authorities) {
-
+    public PureWaterUserDetails(Long id, String username, String password, String firstName, String lastName, Collection<GrantedAuthority> authorities) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -101,5 +102,13 @@ public class PureWaterUserDetails implements UserDetails {
 
     public void setAuthorities(Collection<GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

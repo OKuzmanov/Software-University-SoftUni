@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="#{order_details_title}">Order Details</title>
+    <th:block th:include="fragments/head::myHead"></th:block>
+</head>
+
+<body>
+
+<div>
+    <nav th:replace="fragments/navigation::myNav"></nav>
+</div>
+
+<div class="container">
+    <h2 class="text-center text-white" th:text="#{order_details_title}">Order Details</h2>
+
+    <p th:if="${isNotSuccessUpdate}" class="errors alert alert-danger" th:text="#{order_details_notSuccessUpdate}">
+        Update was not successful!
+    </p>
+
+    <p th:if="${isSuccessUpdate}" class="errors alert alert-danger" th:text="#{order_details_SuccessUpdate}">
+        Successful update!
+    </p>
+    <form th:object="${orderDetails}" th:action="@{/orders/update/{id}(id=*{id})}" th:method="patch"
+          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+        <div class="row">
+            <div class="form-group col-md-6 mb-3">
+                <label for="name" class="text-white font-weight-bold" th:text="#{add_order_order_name}">Order Name</label>
+                <input th:field="*{name}" th:errorclass="'is-invalid bg-danger'" id="name" name="name" type="text" min="2" max="20" class="form-control"
+                       />
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
+            </div>
+            <div class="form-group">
+                <label class="text-center text-white font-weight-bold" for="quantity" th:text="#{add_order_quantity}">Quantity</label>
+                <input th:field="*{quantity}" th:errorclass="'is-invalid bg-danger'" id="quantity" name="quantity" type="number" required min="0" class="form-control"
+                       />
+                <p th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6 mb-3">
+                <label for="prodCategory" class="text-white font-weight-bold" th:text="#{add_order_category}">Category</label>
+                <select th:field="*{prodCategory}" th:errorclass="'is-invalid bg-danger'" id="prodCategory" name="prodCategory" class="custom-select">
+                    <option value="" th:text="*{prodCategory}" selected>Category</option>
+                    <option th:each="categ : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum).values()}" th:value="${categ}" th:text="${categ.name().substring(0, 1) + categ.name().substring(1).toLowerCase()}">Select Category</option>
+                </select>
+                <p th:if="${#fields.hasErrors('prodCategory')}" th:errors="*{prodCategory}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <label for="expiryDate" class="text-white font-weight-bold" th:inline="text"><span th:text="#{add_order_time}"></span> (<span th:text="#{order_details_expiry}"></span> : [[*{expiryDate}]])</label>
+                <input th:field="*{expiryDate}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="expiryDate" name="expiryDate"
+                       aria-describedby="orderTimeHelpInline">
+                <p th:if="${#fields.hasErrors('expiryDate')}" th:errors="*{expiryDate}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6 mb-3">
+                <label for="description" class="text-white font-weight-bold" th:text="#{add_order_description}">Description</label>
+                <input th:field="*{description}" th:errorclass="'is-invalid bg-danger'" id="description" name="description" type="text" min="2" max="20" class="form-control"
+                       />
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <label for="customer" class="text-white font-weight-bold" th:text="#{add_order_customer}">Customer</label>
+                <select th:field="*{customer}" th:errorclass="'is-invalid bg-danger'" id="customer" name="customer" class="custom-select">
+                    <option value="*{customer.getCompanyName()}" th:text="*{customer.getCompanyName()}" selected>Customer</option>
+                    <option th:each="c : ${customers}" th:value="${c.getCompanyName()}" th:text="${c.getCompanyName()}">Select Customer</option>
+                </select>
+                <p th:if="${#fields.hasErrors('customer')}" th:errors="*{customer}" class="errors alert alert-danger">
+                    Custom Err Msg.
+                </p>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="button-holder d-flex">
+                    <input type="submit" class="btn btn-info btn-lg" th:value="#{order_details_update}"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form th:object="${orderDetails}" th:action="@{/orders/delete/{id}(id=*{id})}" th:method="delete">
+        <div class="col col-md-4">
+            <div class="button-holder d-flex">
+                <input type="submit" class="btn btn-info btn-lg" th:value="#{order_details_delete}"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <footer th:replace="fragments/footer::myFooter"> </footer>
+</div>
+
+</body>
+</html>

@@ -74,7 +74,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     }
 
     @Override
-    public int fetchAllByType(RawMaterialType type) {
+    public int getQuantityByType(RawMaterialType type) {
         Optional<RawMaterial> rawMaterialOpt = this.rawMaterialRepo.findByType(type);
         return rawMaterialOpt.isEmpty()
                 ? 0
@@ -82,12 +82,23 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     }
 
     @Override
-    public void reduceQuantityBy(RawMaterialType type, int quantity) {
+    public RawMaterialServiceModel reduceQuantityBy(RawMaterialType type, int quantity) {
         Optional<RawMaterial> rawMaterialOpt = this.rawMaterialRepo.findByType(type);
 
         RawMaterial rawMaterialEntity = rawMaterialOpt.get();
         rawMaterialEntity.setQuantity(rawMaterialEntity.getQuantity() - quantity);
 
         this.rawMaterialRepo.save(rawMaterialEntity);
+
+        return this.modelMapper.map(rawMaterialEntity, RawMaterialServiceModel.class);
+    }
+
+    @Override
+    public List<RawMaterialServiceModel> findAll() {
+        return this.rawMaterialRepo
+                .findAll()
+                .stream()
+                .map(rm -> this.modelMapper.map(rm, RawMaterialServiceModel.class))
+                .toList();
     }
 }

@@ -12,55 +12,16 @@
 
     <div class="jumbotron text-center">
         <div class="container text-light text-center">
-            <h1 class="display-3"><strong class="bg-blur rounded">All active</strong></h1>
-            <h1 class="display-3"><strong class="bg-blur rounded">Orders</strong></h1>
+            <h1 class="display-3"><strong class="bg-blur rounded" th:text="#{all_raw_materials_title}">All Raw Materials</strong></h1>
         </div>
-        <div class="row mt-3 mb-3 ">
-            <div class="col-5 bg-blur rounded m-auto pb-3">
-                <h3 class="mySticky bg-gray text-light rounded">Тime to prepare all orders(in min): 10</h3>
-                <div class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/cake.png" alt="Cake"
-                         width="50px" height="50px">
-                    <span class="p-3">Name</span>
-                    <span class="p-3">Price</span>
-                    <a class="ml-3 p-3 text-warning" href="/">Ready</a>
-                </div>
-                <div class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/drink.png" alt="Drink"
-                         width="50px" height="50px">
-                    <span class="p-3">Name</span>
-                    <span class="p-3">Price</span>
-                    <a class="ml-3 p-3 text-warning" href="/">Ready</a>
-                </div>
-                <div class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/other.png" alt="Other"
-                         width="50px" height="50px">
-                    <span class="p-3">Name</span>
-                    <span class="p-3">Price</span>
-                    <a class="ml-3 p-3 text-warning" href="/">Ready</a>
-                </div>
-                <div class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/coffee.png" alt="Coffee"
-                         width="50px" height="50px">
-                    <span class="p-3">Name</span>
-                    <span class="p-3">Price</span>
-                    <a class="ml-3 p-3 text-warning" href="/">Ready</a>
-                </div>
-            </div>
-            <div class="col-5 bg-blur rounded m-auto pb-3">
-                <h3 class="mySticky bg-gray text-light rounded">Orders by employee</h3>
-                <div class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/employee.png" alt="Employee"
-                         width="50px" height="50px">
-                    <span class="p-3">Employee - Pesho</span>
-                    <span class="p-3">Number of orders: 4</span>
-                </div>
-                <div class="mt-3 rounded badge-info p-3">
-                    <img class="mr-2" src="/images/employee.png" alt="Employee"
-                         width="50px" height="50px">
-                    <span class="p-3">Employee - Gosho</span>
-                    <span class="p-3">Number of orders: 2</span>
-                </div>
+        <div class="col-5 bg-blur rounded m-auto pb-3">
+            <h3 class="mySticky bg-gray text-light rounded"></h3>
+            <div th:each="m : ${allMaterials}" th:object="${m}" class="mt-3 rounded badge-info p-3">
+                <span class="p-3" th:inline="text"><strong th:text="#{all_raw_materials_type}">Type:</strong> [[*{type}]]
+                    &nbsp;&nbsp;&nbsp;<strong th:text="#{all_raw_materials_quantity}">Quantity:</strong> [[*{quantity}]]
+                    &nbsp&nbsp;&nbsp;<strong th:text="#{all_raw_materials_production_date}">Delivery Date:</strong> [[${m.getFormattedDeliveredAt()}]]
+                    &nbsp;&nbsp;&nbsp;<strong th:text="#{all_raw_materials_supplier}">Supplier:</strong> [[*{supplier.getCompanyName()}]]
+                </span>
             </div>
         </div>
     </div>

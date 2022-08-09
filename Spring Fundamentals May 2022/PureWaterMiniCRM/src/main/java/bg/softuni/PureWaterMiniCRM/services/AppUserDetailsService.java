@@ -1,4 +1,4 @@
-package bg.softuni.PureWaterMiniCRM.services.impl;
+package bg.softuni.PureWaterMiniCRM.services;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.stream.Collectors;
 
@@ -52,6 +51,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
     private UserDetails map(UserEntity userEntity) {
         return new PureWaterUserDetails(
+                userEntity.getId(),
                 userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity.getFirstName(),

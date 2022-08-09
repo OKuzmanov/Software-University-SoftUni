@@ -11,6 +11,7 @@ import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/products")
@@ -76,18 +78,20 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public String getAllProducts() {
+    public String getAllProducts(Model model) {
+        List<ProductServiceModel> allProducts = this.productService.findAll();
+        model.addAttribute("allProducts", allProducts);
         return "allProducts";
     }
 
     private boolean areThereSufficientResources(ProductCategoryEnum type, int quantity) {
         switch (type) {
             case HALF_LITRE:
-                int quantityHalfLitreBottle = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLE_HALF_LITRE);
-                int quantityHalfLitreCap = this.rawMaterialService.fetchAllByType(RawMaterialType.CAP_HALF_LITRE);
-                int quantityBottleneck = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLENECK);
-                int quantityLabel = this.rawMaterialService.fetchAllByType(RawMaterialType.LABEL);
-                int quantityGlue = this.rawMaterialService.fetchAllByType(RawMaterialType.GLUE);
+                int quantityHalfLitreBottle = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLE_HALF_LITRE);
+                int quantityHalfLitreCap = this.rawMaterialService.getQuantityByType(RawMaterialType.CAP_HALF_LITRE);
+                int quantityBottleneck = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLENECK);
+                int quantityLabel = this.rawMaterialService.getQuantityByType(RawMaterialType.LABEL);
+                int quantityGlue = this.rawMaterialService.getQuantityByType(RawMaterialType.GLUE);
 
                 if (quantityHalfLitreBottle < quantity || quantityHalfLitreCap < quantity || quantityBottleneck < quantity
                         || quantityLabel < quantity || quantityGlue < quantity) {
@@ -101,11 +105,11 @@ public class ProductController {
                     return true;
                 }
             case LITRE_AND_HALF:
-                int quantityLitreAndHalfBottle = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLE_LITRE_AND_HALF);
-                int quantityLitreAndHalfCap = this.rawMaterialService.fetchAllByType(RawMaterialType.CAP_LITRE_AND_HALF);
-                int quantityLitreAndHalfBottleneck = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLENECK);
-                int quantityLitreAndHalfLabel = this.rawMaterialService.fetchAllByType(RawMaterialType.LABEL);
-                int quantityLitreAndHalfGlue = this.rawMaterialService.fetchAllByType(RawMaterialType.GLUE);
+                int quantityLitreAndHalfBottle = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLE_LITRE_AND_HALF);
+                int quantityLitreAndHalfCap = this.rawMaterialService.getQuantityByType(RawMaterialType.CAP_LITRE_AND_HALF);
+                int quantityLitreAndHalfBottleneck = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLENECK);
+                int quantityLitreAndHalfLabel = this.rawMaterialService.getQuantityByType(RawMaterialType.LABEL);
+                int quantityLitreAndHalfGlue = this.rawMaterialService.getQuantityByType(RawMaterialType.GLUE);
 
                 if (quantityLitreAndHalfBottle < quantity || quantityLitreAndHalfCap < quantity
                         || quantityLitreAndHalfBottleneck < quantity || quantityLitreAndHalfLabel < quantity
@@ -122,12 +126,12 @@ public class ProductController {
                     return true;
                 }
             case TEN_LITRES:
-                int quantityTenLitreBottle = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLE_TEN_LITRE);
-                int quantityTenLitreCap = this.rawMaterialService.fetchAllByType(RawMaterialType.CAP_TEN_LITRE);
-                int quantityTenLitreBottleneck = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLENECK);
-                int quantityTenLitreHandle = this.rawMaterialService.fetchAllByType(RawMaterialType.HANDLE_TEN_LITRES);
-                int quantityTenLitreLabel = this.rawMaterialService.fetchAllByType(RawMaterialType.LABEL);
-                int quantityTenLitreGlue = this.rawMaterialService.fetchAllByType(RawMaterialType.GLUE);
+                int quantityTenLitreBottle = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLE_TEN_LITRE);
+                int quantityTenLitreCap = this.rawMaterialService.getQuantityByType(RawMaterialType.CAP_TEN_LITRE);
+                int quantityTenLitreBottleneck = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLENECK);
+                int quantityTenLitreHandle = this.rawMaterialService.getQuantityByType(RawMaterialType.HANDLE_TEN_LITRES);
+                int quantityTenLitreLabel = this.rawMaterialService.getQuantityByType(RawMaterialType.LABEL);
+                int quantityTenLitreGlue = this.rawMaterialService.getQuantityByType(RawMaterialType.GLUE);
 
                 if (quantityTenLitreBottle < quantity || quantityTenLitreCap < quantity || quantityTenLitreBottleneck < quantity
                         || quantityTenLitreHandle < quantity || quantityTenLitreLabel < quantity || quantityTenLitreGlue < quantity) {
@@ -143,11 +147,11 @@ public class ProductController {
                     return true;
                 }
             case NINETEEN_LITRES:
-                int quantityNineteenLitreBottle = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLE_NINETEEN_LITRE);
-                int quantityNineteenLitreCap = this.rawMaterialService.fetchAllByType(RawMaterialType.CAP_NINETEEN_LITRE);
-                int quantityNineteenLitreBottleneck = this.rawMaterialService.fetchAllByType(RawMaterialType.BOTTLENECK);
-                int quantityNineteenLitreLabel = this.rawMaterialService.fetchAllByType(RawMaterialType.LABEL);
-                int quantityNineteenLitreGlue = this.rawMaterialService.fetchAllByType(RawMaterialType.GLUE);
+                int quantityNineteenLitreBottle = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLE_NINETEEN_LITRE);
+                int quantityNineteenLitreCap = this.rawMaterialService.getQuantityByType(RawMaterialType.CAP_NINETEEN_LITRE);
+                int quantityNineteenLitreBottleneck = this.rawMaterialService.getQuantityByType(RawMaterialType.BOTTLENECK);
+                int quantityNineteenLitreLabel = this.rawMaterialService.getQuantityByType(RawMaterialType.LABEL);
+                int quantityNineteenLitreGlue = this.rawMaterialService.getQuantityByType(RawMaterialType.GLUE);
 
                 if (quantityNineteenLitreBottle < quantity || quantityNineteenLitreCap < quantity || quantityNineteenLitreBottleneck < quantity
                         || quantityNineteenLitreLabel < quantity || quantityNineteenLitreGlue < quantity) {

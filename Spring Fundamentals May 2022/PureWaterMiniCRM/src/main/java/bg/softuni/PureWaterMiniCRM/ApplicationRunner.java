@@ -104,27 +104,27 @@ public class ApplicationRunner implements CommandLineRunner {
         }
 
         if(rawMaterialService.isRepoEmpty()) {
-            RawMaterial r1 = new RawMaterial(0, RawMaterialType.BOTTLE_HALF_LITRE, this.supplierService.getRandomSupplier());
-            RawMaterial r2 = new RawMaterial(0, RawMaterialType.BOTTLE_LITRE_AND_HALF, this.supplierService.getRandomSupplier());
-            RawMaterial r3 = new RawMaterial(0, RawMaterialType.BOTTLE_TEN_LITRE, this.supplierService.getRandomSupplier());
-            RawMaterial r4 = new RawMaterial(0, RawMaterialType.BOTTLE_NINETEEN_LITRE, this.supplierService.getRandomSupplier());
-            RawMaterial r5 = new RawMaterial(0, RawMaterialType.BOTTLENECK, this.supplierService.getRandomSupplier());
-            RawMaterial r6 = new RawMaterial(0, RawMaterialType.CAP_HALF_LITRE, this.supplierService.getRandomSupplier());
-            RawMaterial r7 = new RawMaterial(0, RawMaterialType.CAP_LITRE_AND_HALF, this.supplierService.getRandomSupplier());
-            RawMaterial r8 = new RawMaterial(0, RawMaterialType.CAP_NINETEEN_LITRE, this.supplierService.getRandomSupplier());
-            RawMaterial r9 = new RawMaterial(0, RawMaterialType.CAP_TEN_LITRE, this.supplierService.getRandomSupplier());
-            RawMaterial r10 = new RawMaterial(0, RawMaterialType.GLUE, this.supplierService.getRandomSupplier());
-            RawMaterial r11 = new RawMaterial(0, RawMaterialType.HANDLE_TEN_LITRES, this.supplierService.getRandomSupplier());
-            RawMaterial r12 = new RawMaterial(0, RawMaterialType.LABEL, this.supplierService.getRandomSupplier());
+            RawMaterial r1 = new RawMaterial(0, RawMaterialType.BOTTLE_HALF_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r2 = new RawMaterial(0, RawMaterialType.BOTTLE_LITRE_AND_HALF, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r3 = new RawMaterial(0, RawMaterialType.BOTTLE_TEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r4 = new RawMaterial(0, RawMaterialType.BOTTLE_NINETEEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r5 = new RawMaterial(0, RawMaterialType.BOTTLENECK, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r6 = new RawMaterial(0, RawMaterialType.CAP_HALF_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r7 = new RawMaterial(0, RawMaterialType.CAP_LITRE_AND_HALF, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r8 = new RawMaterial(0, RawMaterialType.CAP_NINETEEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r9 = new RawMaterial(0, RawMaterialType.CAP_TEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r10 = new RawMaterial(0, RawMaterialType.GLUE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r11 = new RawMaterial(0, RawMaterialType.HANDLE_TEN_LITRES, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r12 = new RawMaterial(0, RawMaterialType.LABEL, this.supplierService.getRandomSupplier(), LocalDateTime.now());
 
             this.rawMaterialService.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12));
         }
 
         if(productService.isRepoEmpty()) {
-            Product p1 = new Product(0, ProductCategoryEnum.HALF_LITRE);
-            Product p2 = new Product(0, ProductCategoryEnum.LITRE_AND_HALF);
-            Product p3 = new Product(0, ProductCategoryEnum.TEN_LITRES);
-            Product p4 = new Product(0, ProductCategoryEnum.NINETEEN_LITRES);
+            Product p1 = new Product(0, ProductCategoryEnum.HALF_LITRE, LocalDateTime.now());
+            Product p2 = new Product(0, ProductCategoryEnum.LITRE_AND_HALF, LocalDateTime.now());
+            Product p3 = new Product(0, ProductCategoryEnum.TEN_LITRES, LocalDateTime.now());
+            Product p4 = new Product(0, ProductCategoryEnum.NINETEEN_LITRES, LocalDateTime.now());
 
             this.productService.saveAll(List.of(p1, p2, p3, p4));
         }
@@ -144,12 +144,12 @@ public class ApplicationRunner implements CommandLineRunner {
     }
 
     private Customer getRandomCustomerEntity() {
-        List<Customer> customers = List.of(c1, c2, c3);
-        return customers.get(new Random().nextInt(0, 3));
+        List<Customer> allCustomers = this.customerService.findAll();
+        return allCustomers.get(new Random().nextInt(0, allCustomers.size()));
     }
 
     private UserEntity getRandomUserEntity() {
-        List<UserEntity> users = List.of(u1, u2, u3);
-        return users.get(new Random().nextInt(0, 3));
+        List<UserEntity> allUsers = this.userService.findAll();
+        return allUsers.get(new Random().nextInt(0, allUsers.size()));
     }
 }

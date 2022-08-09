@@ -1,11 +1,11 @@
-package bg.softuni.PureWaterMiniCRM.service.impl;
+package bg.softuni.PureWaterMiniCRM.services.impl;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
-import bg.softuni.PureWaterMiniCRM.services.impl.AppUserDetailsService;
+import bg.softuni.PureWaterMiniCRM.services.AppUserDetailsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,16 +20,16 @@ import java.util.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AppUserDetailsServiceUT {
+public class AppUserDetailsServiceImplUT {
 
     @Mock
     private UserRepository mockUserRepo;
 
-    private AppUserDetailsService toTest;
+    private AppUserDetailsService serviceToTest;
 
     @BeforeEach
     public void setup() {
-        toTest = new AppUserDetailsService(mockUserRepo);
+        serviceToTest = new AppUserDetailsService(mockUserRepo);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AppUserDetailsServiceUT {
         when(mockUserRepo.findByUsername(userEntity.getUsername()))
                 .thenReturn(Optional.of(userEntity));
 
-        PureWaterUserDetails userDetails = (PureWaterUserDetails) toTest.loadUserByUsername(userEntity.getUsername());
+        PureWaterUserDetails userDetails = (PureWaterUserDetails) serviceToTest.loadUserByUsername(userEntity.getUsername());
 
         Assertions.assertEquals(userEntity.getUsername(), userDetails.getUsername());
         Assertions.assertEquals(userEntity.getFirstName(), userDetails.getFirstName());
@@ -67,6 +67,6 @@ public class AppUserDetailsServiceUT {
         roles.add(new Role(RoleEnum.MODERATOR));
         userEntity.setRole(roles);
 
-        Assertions.assertThrows(UsernameNotFoundException.class, () -> toTest.loadUserByUsername(userEntity.getUsername()));
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> serviceToTest.loadUserByUsername(userEntity.getUsername()));
     }
 }

@@ -81,4 +81,13 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setQuantity(productEntity.getQuantity() - orderQuantity);
         this.productRepo.save(productEntity);
     }
+
+    @Override
+    public List<ProductServiceModel> findAll() {
+        return this.productRepo
+                .findAll()
+                .stream()
+                .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
+                .toList();
+    }
 }

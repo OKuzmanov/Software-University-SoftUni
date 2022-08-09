@@ -23,4 +23,6 @@ public interface CustomerService {
     CustomerViewModel fetchById(Long id);
 
     Customer findById(int id);
+
+    List<Customer> findAll();
 }

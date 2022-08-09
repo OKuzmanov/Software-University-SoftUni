@@ -21,4 +21,6 @@ public interface ProductService {
     Integer findQuantityProducedOfType(ProductCategoryEnum type);
 
     void reduceQuantityBy(ProductCategoryEnum type, int orderQuantity);
+
+    List<ProductServiceModel> findAll();
 }

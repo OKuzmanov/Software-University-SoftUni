@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Customers</title>
+    <th:block th:include="fragments/head::myHead"></th:block>
+</head>
+
+<body class="bg-secondary">
+<div>
+    <nav th:replace="fragments/navigation::myNav"></nav>
+</div>
+<main role="main" class="bg-secondary">
+
+    <div class="jumbotron text-center">
+        <div class="container text-light text-center">
+            <h1 class="display-3"><strong class="bg-blur rounded" th:text="#{orders_history_title}">Order History</strong></h1>
+        </div>
+        <div th:each="order : ${allOrders}" th:object="${order}" class="mt-3 rounded badge-info p-3">
+            <span class="p-3" th:text="*{name}">Name</span>
+            <span class="p-3" th:text="*{prodCategory.name()}">Type</span>
+            <span class="p-3" th:text="*{quantity}">Quantity</span>
+            <span class="p-3" th:text="*{totalPrice}">Price</span>
+            <span class="p-3" th:text="*{completionDate}">Completion Date</span>
+        </div>
+    </div>
+</main>
+<div>
+    <footer th:replace="fragments/footer::myFooter"> </footer>
+</div>
+</body>
+</html>
