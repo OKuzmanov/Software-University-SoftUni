@@ -25,4 +25,8 @@ public interface CustomerService {
     Customer findById(int id);
 
     List<Customer> findAll();
+
+    CustomerServiceModel updateCustomer(Long id, CustomerServiceModel customerServiceModel);
+
+    boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long customerId);
 }

@@ -1,9 +1,12 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Order;
 import bg.softuni.PureWaterMiniCRM.models.entities.Product;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.repositories.ProductRepository;
 import bg.softuni.PureWaterMiniCRM.services.ProductService;
 import org.aspectj.lang.annotation.Before;
@@ -14,12 +17,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -32,9 +37,19 @@ public class ProductServiceImplUT {
 
     private ProductService prodServiceToTest;
 
+    private Product testEntity;
+
+    private PureWaterUserDetails userDetails;
+
+    private ProductServiceModel serviceModel;
+
     @BeforeEach()
     public void setup() {
         this.prodServiceToTest = new ProductServiceImpl(mockProductRepo, mockModelMapper);
+        this.testEntity = new Product(101, ProductCategoryEnum.NINETEEN_LITRES, LocalDateTime.now());
+        serviceModel = new ProductServiceModel(101, ProductCategoryEnum.NINETEEN_LITRES, LocalDateTime.now());
+        userDetails = new PureWaterUserDetails(Long.valueOf(111), "test", "12345", "Oleg", "Kuzmanov",
+                List.of(new SimpleGrantedAuthority("ROLE_" + RoleEnum.ADMIN)));
     }
 
     @Test
@@ -109,5 +124,77 @@ public class ProductServiceImplUT {
                 .thenReturn(Optional.of(new Product(170, testType)));
 
         Assertions.assertDoesNotThrow(() -> this.prodServiceToTest.reduceQuantityBy(testType, testQuantity));
+    }
+
+    @Test
+    public void testProductService_findAll() {
+        when(mockProductRepo.findAll())
+                .thenReturn(List.of(new Product()));
+
+        List<ProductServiceModel> resultCollection = prodServiceToTest.findAll();
+
+        Assertions.assertEquals(1, resultCollection.size());
+    }
+
+    @Test
+    public void testProductService_findById() {
+        when(mockProductRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        when(mockModelMapper.map(any(Product.class), eq(ProductServiceModel.class)))
+                .thenReturn(serviceModel);
+
+        ProductServiceModel resultPSM = prodServiceToTest.findById(anyLong());
+
+        Assertions.assertEquals(serviceModel.getType() ,resultPSM.getType());
+        Assertions.assertEquals(serviceModel.getQuantity() ,resultPSM.getQuantity());
+        Assertions.assertEquals(serviceModel.getProductionDate() ,resultPSM.getProductionDate());
+    }
+
+    @Test
+    public void testProductService_findByIdThrowsException() {
+        when(mockProductRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> prodServiceToTest.findById(anyLong()));
+    }
+
+    @Test
+    public void testProductService_updateProduct() {
+        when(mockProductRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        when(mockProductRepo.save(any(Product.class)))
+                .thenReturn(testEntity);
+
+        when(mockModelMapper.map(any(Product.class), eq(ProductServiceModel.class)))
+                .thenReturn(serviceModel);
+
+        ProductServiceModel resultPSM = this.prodServiceToTest.updateProduct(anyLong(), serviceModel);
+
+        Assertions.assertEquals(serviceModel.getType() ,resultPSM.getType());
+        Assertions.assertEquals(serviceModel.getQuantity() ,resultPSM.getQuantity());
+        Assertions.assertEquals(serviceModel.getProductionDate() ,resultPSM.getProductionDate());
+    }
+
+    @Test
+    public void testProductService_isAdmin() {
+        Assertions.assertTrue(prodServiceToTest.isAdmin(userDetails));
+    }
+
+    @Test
+    public void testProductService_deleteProduct() {
+        when(mockProductRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        Assertions.assertDoesNotThrow(() -> prodServiceToTest.deleteProduct(anyLong()));
+    }
+
+    @Test
+    public void testProductService_deleteProductThrowsException() {
+        when(mockProductRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> prodServiceToTest.deleteProduct(anyLong()));
     }
 }

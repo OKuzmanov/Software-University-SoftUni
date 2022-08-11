@@ -23,7 +23,7 @@ public class CustomerAddBindingModel {
     private String address;
 
     @NotBlank(message = "Description should not be blank!")
-    @Size(min=3, max=25, message = "Description should be between 3 and 25 characters long!")
+    @Size(min=3, message = "Description should be at least 3 characters long!")
     private String description;
 
     public CustomerAddBindingModel() {

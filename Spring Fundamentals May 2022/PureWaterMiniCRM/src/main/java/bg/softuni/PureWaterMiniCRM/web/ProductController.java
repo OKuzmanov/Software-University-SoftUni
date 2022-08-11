@@ -1,22 +1,24 @@
 package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.ProductAddBindingModel;
+import bg.softuni.PureWaterMiniCRM.models.bindingModels.SupplierAddBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.ProductService;
 import bg.softuni.PureWaterMiniCRM.services.RawMaterialService;
 import bg.softuni.PureWaterMiniCRM.services.SupplierService;
 import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -46,6 +48,16 @@ public class ProductController {
 
     @ModelAttribute("insufficientResources")
     public boolean addInsufficientResources() {
+        return false;
+    }
+
+    @ModelAttribute(name = "isNotUpdateSuccess")
+    public boolean addIsNotUpdateSuccess() {
+        return false;
+    }
+
+    @ModelAttribute(name = "isUpdateSuccess")
+    public boolean addIsUpdateSuccess() {
         return false;
     }
 
@@ -82,6 +94,42 @@ public class ProductController {
         List<ProductServiceModel> allProducts = this.productService.findAll();
         model.addAttribute("allProducts", allProducts);
         return "allProducts";
+    }
+
+    @GetMapping("/details/{id}")
+    public String getDetails(@PathVariable(name = "id") Long id, Model model) {
+        ProductServiceModel psm = this.productService.findById(id.intValue());
+        model.addAttribute("productDetails", psm);
+        return "product-details";
+    }
+
+    @PreAuthorize("@productServiceImpl.isAdmin(#userDetails)")
+    @PostMapping("/update/{id}")
+    public String productUpdate(@PathVariable(name = "id") Long id,
+                             @Valid ProductAddBindingModel productAddBindingModel,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes,
+                             @AuthenticationPrincipal PureWaterUserDetails userDetails) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("isNotUpdateSuccess", true);
+            return "redirect:/products/details/" + id;
+        }
+
+        this.productService.updateProduct(id, this.modelMapper.map(productAddBindingModel, ProductServiceModel.class));
+
+        redirectAttributes.addFlashAttribute("isUpdateSuccess", true);
+        return "redirect:/products/details/" + id;
+    }
+
+    @PreAuthorize("@productServiceImpl.isAdmin(#userDetails)")
+    @DeleteMapping("/delete/{id}")
+    public String productUser(@PathVariable(name = "id") Long id,
+                             @AuthenticationPrincipal PureWaterUserDetails userDetails) {
+
+        this.productService.deleteProduct(id);
+
+        return "redirect:/products/all";
     }
 
     private boolean areThereSufficientResources(ProductCategoryEnum type, int quantity) {

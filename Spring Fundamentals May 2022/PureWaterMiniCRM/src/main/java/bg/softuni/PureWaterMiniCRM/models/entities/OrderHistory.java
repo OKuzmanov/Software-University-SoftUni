@@ -39,6 +39,16 @@ public class OrderHistory extends BaseEntity {
     public OrderHistory() {
     }
 
+    public OrderHistory(String name, int quantity, ProductCategoryEnum prodCategory, String description, LocalDateTime completionDate, UserEntity userEntity, Customer customer) {
+        this.name = name;
+        this.quantity = quantity;
+        this.prodCategory = prodCategory;
+        this.description = description;
+        this.completionDate = completionDate;
+        this.userEntity = userEntity;
+        this.customer = customer;
+    }
+
     public OrderHistory(String name, BigDecimal totalPrice, int quantity, ProductCategoryEnum prodCategory, LocalDateTime completionDate, UserEntity userEntity, Customer customer) {
         this.name = name;
         this.totalPrice = totalPrice;

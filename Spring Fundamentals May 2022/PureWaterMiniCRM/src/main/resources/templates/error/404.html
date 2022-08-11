@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <th:block th:include="fragments/head::myHead"></th:block>
+</head>
+<body>
+
+<h1>A 404 error occurred while processing your request.</h1>
+<p> The webpage you are looking for can not be found on the given address.</p>
+
+<form th:action="@{/home}" th:method="get">
+    <div class="col col-md-4">
+        <div class="button-holder d-flex">
+            <input type="submit" class="btn btn-info btn-lg" th:value="Home"/>
+        </div>
+    </div>
+</form>
+</body>
+</html>

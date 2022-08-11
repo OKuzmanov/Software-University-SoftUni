@@ -115,6 +115,8 @@ public class UserServiceImpl implements UserService {
     public List<UserViewModelRest> fetchAllRest() {
         return this.userRepo.findAll()
                 .stream()
+                //Could deprecate
+                .filter(u -> !u.getIsDeleted())
                 .map(u -> this.modelMapper.map(u, UserViewModelRest.class))
                 .collect(Collectors.toList());
     }
@@ -123,6 +125,8 @@ public class UserServiceImpl implements UserService {
     public List<UserViewModel> fetchAll() {
         return this.userRepo.findAllSortedByOrders()
                 .stream()
+                //Could deprecate
+                .filter(u -> !u.getIsDeleted())
                 .map(u -> this.modelMapper.map(u, UserViewModel.class))
                 .collect(Collectors.toList());
     }
@@ -168,13 +172,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(Long id) {
-        Optional<UserEntity> optUser = this.userRepo.findById(id);
+        UserEntity userEntity = this.userRepo.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(id, "UserEntity"));
 
-        if (optUser.isEmpty()) {
-            throw new ObjectNotFoundException(id, "UserEntity");
-        }
+        userEntity.setIsDeleted(true);
 
-        this.userRepo.delete(optUser.get());
+        this.userRepo.save(userEntity);
 
         return true;
     }

@@ -4,9 +4,6 @@ import bg.softuni.PureWaterMiniCRM.models.entities.*;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
-import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
-import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
-import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,7 @@ public class ApplicationRunner implements CommandLineRunner {
     private final RawMaterialService rawMaterialService;
     private final ProductService productService;
     private final OrderService orderService;
+    private final OrderHistoryService orderHistoryService;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +41,7 @@ public class ApplicationRunner implements CommandLineRunner {
     private Customer c3;
 
     @Autowired
-    public ApplicationRunner(RoleService roleService, UserService userService, SupplierService supplierService, CustomerService customerService, RawMaterialService rawMaterialService, ProductService productService, OrderService orderService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public ApplicationRunner(RoleService roleService, UserService userService, SupplierService supplierService, CustomerService customerService, RawMaterialService rawMaterialService, ProductService productService, OrderService orderService, OrderHistoryService orderHistoryService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.roleService = roleService;
         this.userService = userService;
         this.supplierService = supplierService;
@@ -51,6 +49,7 @@ public class ApplicationRunner implements CommandLineRunner {
         this.rawMaterialService = rawMaterialService;
         this.productService = productService;
         this.orderService = orderService;
+        this.orderHistoryService = orderHistoryService;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -140,6 +139,19 @@ public class ApplicationRunner implements CommandLineRunner {
             o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(10)));
 
             this.orderService.saveAll(List.of(o1, o2, o3, o4));
+        }
+
+        if (orderHistoryService.isRepoEmpty()) {
+            OrderHistory o1 = new OrderHistory("Litre and a Half", 11, ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o1.setTotalPrice(ProductCategoryEnum.LITRE_AND_HALF.getPrice().multiply(BigDecimal.valueOf(o1.getQuantity())));
+            OrderHistory o2 = new OrderHistory("Half Litre", 102, ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o2.setTotalPrice(ProductCategoryEnum.HALF_LITRE.getPrice().multiply(new BigDecimal(o2.getQuantity())));
+            OrderHistory o3 = new OrderHistory("Nineteen Litres", 75, ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o3.setTotalPrice(ProductCategoryEnum.NINETEEN_LITRES.getPrice().multiply(new BigDecimal(o3.getQuantity())));
+            OrderHistory o4 = new OrderHistory("Ten Litres", 10, ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(o4.getQuantity())));
+
+            this.orderHistoryService.saveAll(List.of(o1, o2, o3, o4));
         }
     }
 

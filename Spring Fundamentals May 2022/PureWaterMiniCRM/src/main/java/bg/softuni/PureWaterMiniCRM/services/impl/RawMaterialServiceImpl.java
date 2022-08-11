@@ -1,11 +1,13 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
 import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
-import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.RawMaterialServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.RawMaterialViewModel;
 import bg.softuni.PureWaterMiniCRM.repositories.RawMaterialRepository;
 import bg.softuni.PureWaterMiniCRM.services.RawMaterialService;
@@ -100,5 +102,41 @@ public class RawMaterialServiceImpl implements RawMaterialService {
                 .stream()
                 .map(rm -> this.modelMapper.map(rm, RawMaterialServiceModel.class))
                 .toList();
+    }
+
+    @Override
+    public RawMaterialServiceModel findById(long id) {
+        RawMaterial rawMaterialEntity = this.rawMaterialRepo.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Raw Material"));
+
+        return this.modelMapper.map(rawMaterialEntity, RawMaterialServiceModel.class);
+    }
+
+    @Override
+    public RawMaterialServiceModel updateRawMaterial(Long id, RawMaterialServiceModel rawMaterialServiceModel) {
+        RawMaterial rawMaterialEntity = this.rawMaterialRepo.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Raw Material"));
+
+        rawMaterialEntity.setQuantity(rawMaterialServiceModel.getQuantity());
+        rawMaterialEntity.setDeliveredAt(rawMaterialServiceModel.getDeliveredAt());
+        rawMaterialEntity.setSupplier(this.modelMapper.map(rawMaterialServiceModel.getSupplier(), Supplier.class));
+
+        RawMaterial savedEntity = this.rawMaterialRepo.save(rawMaterialEntity);
+
+        return this.modelMapper.map(savedEntity, RawMaterialServiceModel.class);
+    }
+
+    @Override
+    public boolean isAdmin(PureWaterUserDetails userDetails) {
+        return userDetails
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
+    }
+
+    @Override
+    public void deleteRawMaterial(long id) {
+        RawMaterial rawMaterialEntity = this.rawMaterialRepo.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Raw Material"));
+
+        this.rawMaterialRepo.delete(rawMaterialEntity);
     }
 }

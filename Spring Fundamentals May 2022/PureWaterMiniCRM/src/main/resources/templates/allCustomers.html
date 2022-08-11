@@ -23,6 +23,7 @@
                 <br><strong th:text="#{all_orders_address}">Address:</strong> [[*{address}]]
                     &nbsp;&nbsp;&nbsp;<strong th:text="#{all_orders_phone_number}">Phone Number:</strong> [[*{phoneNumber}]]
                 <br><strong th:text="#{all_orders_description}">Description:</strong> [[*{description}]]</span>
+                <a class="ml-3 p-3 text-warning" th:text="#{home_details}" th:href="@{/customers/details/{id}(id = *{id})}">Details</a>
             </div>
         </div>
     </div>

@@ -33,4 +33,10 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                 .map(o -> this.modelMapper.map(o, OrderHistoryServiceModel.class))
                 .toList();
     }
+
+    @Override
+    public boolean isRepoEmpty() {
+
+        return this.orderHistoryRepo.count() == 0;
+    }
 }

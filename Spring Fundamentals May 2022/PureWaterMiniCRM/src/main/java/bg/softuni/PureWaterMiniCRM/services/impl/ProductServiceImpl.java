@@ -1,16 +1,18 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
 import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Product;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.ProductServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.ProductViewModel;
 import bg.softuni.PureWaterMiniCRM.repositories.ProductRepository;
 import bg.softuni.PureWaterMiniCRM.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,5 +91,40 @@ public class ProductServiceImpl implements ProductService {
                 .stream()
                 .map(p -> this.modelMapper.map(p, ProductServiceModel.class))
                 .toList();
+    }
+
+    @Override
+    public ProductServiceModel findById(long id) {
+        Product productEntity = this.productRepo.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Product"));
+        return this.modelMapper.map(productEntity, ProductServiceModel.class);
+    }
+
+    @Override
+    public ProductServiceModel updateProduct(Long id, ProductServiceModel productServiceModel) {
+        Product productEntity = this.productRepo.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Product"));
+
+        productEntity.setType(productServiceModel.getType());
+        productEntity.setQuantity(productServiceModel.getQuantity());
+        productEntity.setProductionDate(productServiceModel.getProductionDate());
+
+        Product savedEntity = this.productRepo.save(productEntity);
+
+        return this.modelMapper.map(savedEntity, ProductServiceModel.class);
+    }
+
+    @Override
+    public boolean isAdmin(PureWaterUserDetails userDetails) {
+        return userDetails
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
+    }
+
+    @Override
+    public void deleteProduct(long id) {
+        Product productEntity = this.productRepo.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Product"));
+
+        this.productRepo.delete(productEntity);
     }
 }

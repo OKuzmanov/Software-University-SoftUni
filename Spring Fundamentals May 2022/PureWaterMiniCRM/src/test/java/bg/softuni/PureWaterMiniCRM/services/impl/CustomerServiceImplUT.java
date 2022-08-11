@@ -1,5 +1,6 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
 import bg.softuni.PureWaterMiniCRM.models.entities.Role;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
@@ -23,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,9 +41,27 @@ public class CustomerServiceImplUT {
 
     private CustomerService serviceToTest;
 
+    private Customer customerEntity;
+
+    private UserEntity userEntity;
+
+    private CustomerServiceModel customerServiceModel;
+
+    private PureWaterUserDetails userDetails;
+
     @BeforeEach
     public void setup() {
         this.serviceToTest = new CustomerServiceImpl(mockCustomerRepo, mockModelMapper, mockUserService);
+
+        customerEntity = new Customer("testName", "mail@gmail.com",
+                "12345678", "testAddress", "Test Description", null);
+
+        customerServiceModel = new CustomerServiceModel("testName", "mail@gmail.com",
+                "12345678", "testAddress", "Test Description", null);
+
+        userEntity = new UserEntity("username", "firstName", "lastName", "password", "mail@gmail.com");
+
+        userDetails = new PureWaterUserDetails(Long.valueOf(111), "test", "12345", "Oleg", "Kuzmanov", null);
     }
 
     @Test
@@ -203,5 +223,77 @@ public class CustomerServiceImplUT {
         boolean resultBool = this.serviceToTest.isRepoEmpty();
 
         Assertions.assertFalse(resultBool);
+    }
+
+    @Test
+    public void testCustomerService_updateCustomer() {
+        long testId = 111;
+
+        when(mockCustomerRepo.findById(anyLong()))
+                .thenReturn(Optional.of(customerEntity));
+
+        when(mockCustomerRepo.save(any(Customer.class)))
+                .thenReturn(customerEntity);
+
+        when(mockModelMapper.map(any(Customer.class), eq(CustomerServiceModel.class)))
+                .thenReturn(customerServiceModel);
+
+        CustomerServiceModel resultCSM = serviceToTest.updateCustomer(testId, customerServiceModel);
+
+        Assertions.assertEquals(customerServiceModel.getCompanyName(), resultCSM.getCompanyName());
+        Assertions.assertEquals(customerServiceModel.getEmail(), resultCSM.getEmail());
+        Assertions.assertEquals(customerServiceModel.getAddress(), resultCSM.getAddress());
+        Assertions.assertEquals(customerServiceModel.getDescription(), resultCSM.getDescription());
+        Assertions.assertEquals(customerServiceModel.getPhoneNumber(), resultCSM.getPhoneNumber());
+    }
+
+    @Test
+    public void testCustomerService_updateCustomerThrowsException() {
+        long testId = 111;
+
+        when(mockCustomerRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ObjectNotFoundException.class,() -> serviceToTest.updateCustomer(testId, customerServiceModel));
+    }
+
+    @Test
+    public void testSupplierService_isOwnerOrAdmin_Owner() {
+        long testId = 111;
+
+        userEntity.setId(testId);
+
+        customerEntity.setUser(userEntity);
+
+        when(mockCustomerRepo.findById(anyLong()))
+                .thenReturn(Optional.of(customerEntity));
+
+        Assertions.assertTrue(this.serviceToTest.isOwnerOrAdmin(userDetails, testId));
+    }
+
+    @Test
+    public void testSupplierService_isOwnerOrAdmin_Admin() {
+        long testId = 111;
+
+        userEntity.setId(Long.valueOf(1));
+
+        customerEntity.setUser(userEntity);
+
+        when(mockCustomerRepo.findById(anyLong()))
+                .thenReturn(Optional.of(customerEntity));
+
+        userDetails.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_" + RoleEnum.ADMIN)));
+
+        Assertions.assertTrue(this.serviceToTest.isOwnerOrAdmin(userDetails, testId));
+    }
+
+    @Test
+    public void testSupplierService_findAll() {
+        when(mockCustomerRepo.findAll())
+                .thenReturn(List.of(new Customer()));
+
+        List<Customer> resultAllCustomers = serviceToTest.findAll();
+
+        Assertions.assertEquals(1, resultAllCustomers.size());
     }
 }

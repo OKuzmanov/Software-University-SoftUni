@@ -56,11 +56,5 @@ public class Product extends BaseEntity{
         this.productionDate = productionDate;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+
 }

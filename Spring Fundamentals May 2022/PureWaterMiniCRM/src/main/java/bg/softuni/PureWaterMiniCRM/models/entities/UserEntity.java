@@ -25,6 +25,9 @@ public class UserEntity extends BaseEntity{
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -52,6 +55,7 @@ public class UserEntity extends BaseEntity{
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+        this.isDeleted = false;
     }
 
     public String getUsername() {
@@ -108,6 +112,22 @@ public class UserEntity extends BaseEntity{
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
     }
     //
 //    public List<RawMaterial> getRawMaterials() {

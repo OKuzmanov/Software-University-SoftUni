@@ -2,7 +2,6 @@ package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.bindingModels.UserUpdateBindingModel;
 import bg.softuni.PureWaterMiniCRM.models.entities.Role;
-import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.services.RoleService;
@@ -10,6 +9,7 @@ import bg.softuni.PureWaterMiniCRM.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,10 +48,10 @@ public class UserController {
         return false;
     }
 
-//    @ModelAttribute(name = "isAuthPrincipal")
-//    public boolean addIsAuthenticationPrincipal() {
-//        return false;
-//    }
+    @ModelAttribute(name = "isAuthPrincipal")
+    public boolean addIsAuthenticationPrincipal() {
+        return false;
+    }
 
     @GetMapping("/profile")
     public String getPrincipalDetails(@AuthenticationPrincipal PureWaterUserDetails userDetails, Model model,
@@ -97,18 +97,19 @@ public class UserController {
         return "redirect:/users/profile/" + id;
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public String deleteUser(@PathVariable(name = "id") Long id,
-//                             @AuthenticationPrincipal PureWaterUserDetails userDetails,
-//                             RedirectAttributes redirectAttributes) {
-//
-//        if (id == userDetails.getId()) {
-//            redirectAttributes.addFlashAttribute("isAuthPrincipal", true);
-//            return "redirect:/users/profile/" + id;
-//        }
-//
-//        this.userService.deleteUser(id);
-//
-//        return "redirect:/home";
-//    }
+    @PreAuthorize("@userServiceImpl.isUserAuthorized(#userDetails, #id)")
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Long id,
+                             @AuthenticationPrincipal PureWaterUserDetails userDetails,
+                             RedirectAttributes redirectAttributes) {
+
+        if (id == userDetails.getId()) {
+            redirectAttributes.addFlashAttribute("isAuthPrincipal", true);
+            return "redirect:/users/logout";
+        }
+
+        this.userService.deleteUser(id);
+
+        return "redirect:/home";
+    }
 }

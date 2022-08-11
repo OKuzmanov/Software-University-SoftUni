@@ -4,6 +4,7 @@ import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.SupplierViewModel;
@@ -99,5 +100,53 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierServiceModel findById(int id) {
         Supplier supplierSource = supplierRepo.findById(Long.valueOf(id)).orElseThrow(() -> new ObjectNotFoundException(Long.valueOf(id), "Supplier"));
         return this.modelMapper.map(supplierSource, SupplierServiceModel.class);
+    }
+
+    @Override
+    public SupplierServiceModel updateSupplier(Long id, SupplierServiceModel supplierServiceModel) {
+        Optional<Supplier> optSupplier = this.supplierRepo.findById(id);
+
+        if (optSupplier.isEmpty()) {
+            throw new ObjectNotFoundException(id, "Customer");
+        }
+
+        Supplier supplierEntity = optSupplier.get();
+
+        supplierEntity.setCompanyName(supplierServiceModel.getCompanyName());
+        supplierEntity.setEmail(supplierServiceModel.getEmail());
+        supplierEntity.setPhoneNumber(supplierServiceModel.getPhoneNumber());
+        supplierEntity.setAddress(supplierServiceModel.getAddress());
+        supplierEntity.setDescription(supplierServiceModel.getDescription());
+
+        Supplier savedEntity = this.supplierRepo.save(supplierEntity);
+
+        return this.modelMapper.map(savedEntity, SupplierServiceModel.class);
+    }
+
+    @Override
+    public boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long supplierId) {
+        Long userEntityId = this.supplierRepo
+                .findById(supplierId)
+                .orElseThrow(() -> new ObjectNotFoundException(supplierId, "Supplier"))
+                .getUserEntity()
+                .getId();
+
+        if(userDetails.getId() == userEntityId) {
+            return true;
+        }
+
+        boolean isAdmin = userDetails
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
+
+        return isAdmin;
+    }
+
+    @Override
+    public SupplierServiceModel getSupplierByCompanyName(String companyName) {
+        Supplier supplierEntity = this.supplierRepo.findByCompanyName(companyName).orElseThrow(() -> new ObjectNotFoundException(null, "Supplier"));
+
+        return this.modelMapper.map(supplierEntity, SupplierServiceModel.class);
     }
 }

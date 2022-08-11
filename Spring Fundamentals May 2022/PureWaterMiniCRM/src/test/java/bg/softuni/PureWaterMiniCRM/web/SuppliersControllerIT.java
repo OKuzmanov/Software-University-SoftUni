@@ -1,6 +1,10 @@
 package bg.softuni.PureWaterMiniCRM.web;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
+import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
+import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.repositories.SupplierRepository;
+import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,8 +13,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.util.Random;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -22,6 +25,27 @@ public class SuppliersControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
+    private SupplierRepository supplierRepo;
+
+    private UserRepository userRepository;
+
+    private Supplier testEntity;
+
+    @Autowired
+    public SuppliersControllerIT(SupplierRepository supplierRepo, UserRepository userRepository) {
+        this.supplierRepo = supplierRepo;
+        this.userRepository = userRepository;
+    }
+
+    @BeforeEach
+    public void setup(){
+        int rand = new Random().nextInt();
+        testEntity = new Supplier("Test Name" + rand, "mail@gmail.com", "11111111",
+                "Test Address", "Test Description", null);
+
+        this.supplierRepo.save(testEntity);
+    }
+
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testSuppliersController_getAddWithUser() throws Exception {
@@ -32,7 +56,7 @@ public class SuppliersControllerIT {
     }
 
     @Test
-    public void testRawMaterialsController_getAddNoUser() throws Exception {
+    public void testSuppliersController_getAddNoUser() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/suppliers/add"))
                 .andExpect(status().is3xxRedirection())
@@ -50,7 +74,7 @@ public class SuppliersControllerIT {
     }
 
     @Test
-    public void testRawMaterialsController_getAllNoUser() throws Exception {
+    public void testSuppliersController_getAllNoUser() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/suppliers/all"))
                 .andExpect(status().is3xxRedirection())
@@ -59,7 +83,7 @@ public class SuppliersControllerIT {
 
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
-    public void testRawMaterialsController_postWithValidDataValidSupplier() throws Exception {
+    public void testSuppliersController_postWithValidDataValidSupplier() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/suppliers/add")
                         .param("companyName", "Test Company Name")
@@ -74,7 +98,7 @@ public class SuppliersControllerIT {
 
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
-    public void testRawMaterialsController_postWithInvalidDataValidSupplier() throws Exception {
+    public void testSuppliersController_postWithInvalidDataValidSupplier() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/suppliers/add")
                         .param("companyName", "1")
@@ -92,7 +116,7 @@ public class SuppliersControllerIT {
 
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
-    public void testRawMaterialsController_postExistingCompanyName() throws Exception {
+    public void testSuppliersController_postExistingCompanyName() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/suppliers/add")
                         .param("companyName", "Euro Supply ltd.")
@@ -107,5 +131,57 @@ public class SuppliersControllerIT {
                 .andExpect(flash().attributeExists("org.springframework.validation.BindingResult.supplierAddBindingModel"))
                 .andExpect(flash().attributeExists("isExist"))
                 .andExpect(redirectedUrl("/suppliers/add"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testSuppliersController_getDetails() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/suppliers//details/" + testEntity.getId()))
+                .andExpect(handler().methodName("getDetails"))
+                .andExpect(model().attributeExists("supplierDetails"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("supplier-details"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testSuppliersController_supplierUpdate() throws Exception {
+
+        UserEntity loggedInUser = userRepository.findByUsername("oleg4o").get();
+
+        testEntity.setUserEntity(loggedInUser);
+
+        this.supplierRepo.save(testEntity);
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/suppliers/update/" + testEntity.getId())
+                        .param("companyName", "testCompanyName")
+                        .param("email", "tm@gmail.com")
+                        .param("phoneNumber", "11111111")
+                        .param("address", "testAddress")
+                        .param("description", "testDescription")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/suppliers/details/" + testEntity.getId()))
+                .andExpect(flash().attributeExists("isUpdateSuccess"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testSuppliersController_supplierUpdateNoParams() throws Exception {
+
+        UserEntity loggedInUser = userRepository.findByUsername("oleg4o").get();
+
+        testEntity.setUserEntity(loggedInUser);
+
+        this.supplierRepo.save(testEntity);
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/suppliers/update/" + testEntity.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/suppliers/details/" + testEntity.getId()))
+                .andExpect(flash().attributeExists("isNotUpdateSuccess"));
     }
 }

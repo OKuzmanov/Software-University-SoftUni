@@ -3,6 +3,7 @@ package bg.softuni.PureWaterMiniCRM.services.impl;
 import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +36,26 @@ public class SupplierServiceImplUT {
 
     private SupplierService suppServToTest;
 
+    private Supplier testEntity;
+
+    private UserEntity userEntity;
+
+    private PureWaterUserDetails userDetails;
+
+    private SupplierServiceModel serviceModel;
+
     @BeforeEach
     public void setup() {
         this.suppServToTest = new SupplierServiceImpl(mockSupplierRepo, mockUserService, mockModelMapper);
+
+        testEntity = new Supplier("testName", "tm@gmail.com", "12345678910", "testAddress", "testDesc", null);
+
+        serviceModel = new SupplierServiceModel(null, "testName", "tm@gmail.com", "12345678910",
+                "testAddress", "testDescription");
+
+        userEntity = new UserEntity("username", "firstName", "lastName", "password", "mail@gmail.com");
+
+        userDetails = new PureWaterUserDetails(Long.valueOf(111), "test", "12345", "Oleg", "Kuzmanov", null);
     }
 
     @Test
@@ -183,5 +202,84 @@ public class SupplierServiceImplUT {
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(ObjectNotFoundException.class,() -> this.suppServToTest.findById(testId));
+    }
+
+    @Test
+    public void testSupplierService_updateSupplier() {
+        long testId = 111;
+
+        when(mockSupplierRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        when(mockSupplierRepo.save(any(Supplier.class)))
+                .thenReturn(testEntity);
+
+        when(mockModelMapper.map(any(Supplier.class), eq(SupplierServiceModel.class)))
+                .thenReturn(serviceModel);
+
+        SupplierServiceModel resultSSM = suppServToTest.updateSupplier(testId, serviceModel);
+
+        Assertions.assertEquals(resultSSM.getCompanyName(), serviceModel.getCompanyName());
+        Assertions.assertEquals(resultSSM.getEmail(), serviceModel.getEmail());
+        Assertions.assertEquals(resultSSM.getPhoneNumber(), serviceModel.getPhoneNumber());
+        Assertions.assertEquals(resultSSM.getDescription(), serviceModel.getDescription());
+        Assertions.assertEquals(resultSSM.getAddress(), serviceModel.getAddress());
+    }
+
+    @Test
+    public void testSupplierService_updateSupplierThrowsException() {
+        long testId = 111;
+
+        when(mockSupplierRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> suppServToTest.updateSupplier(testId, serviceModel));
+    }
+
+    @Test
+    public void testSupplierService_isOwnerOrAdmin_Owner() {
+        long testId = 111;
+
+        userEntity.setId(testId);
+
+        testEntity.setUserEntity(userEntity);
+
+        when(mockSupplierRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        Assertions.assertTrue(this.suppServToTest.isOwnerOrAdmin(userDetails, testId));
+    }
+
+    @Test
+    public void testSupplierService_isOwnerOrAdmin_Admin() {
+        long testId = 111;
+
+        userEntity.setId(Long.valueOf(1));
+
+        testEntity.setUserEntity(userEntity);
+
+        when(mockSupplierRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        userDetails.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_" + RoleEnum.ADMIN)));
+
+        Assertions.assertTrue(this.suppServToTest.isOwnerOrAdmin(userDetails, testId));
+    }
+
+    @Test
+    public void testSupplierService_getSupplierByCompanyName() {
+        when(this.mockSupplierRepo.findByCompanyName(anyString()))
+                .thenReturn(Optional.of(testEntity));
+
+        when(mockModelMapper.map(any(Supplier.class), eq(SupplierServiceModel.class)))
+                .thenReturn(serviceModel);
+
+        SupplierServiceModel resultSSM = suppServToTest.getSupplierByCompanyName("anyString");
+
+        Assertions.assertEquals(serviceModel.getCompanyName(), resultSSM.getCompanyName());
+        Assertions.assertEquals(serviceModel.getEmail(), resultSSM.getEmail());
+        Assertions.assertEquals(serviceModel.getDescription(), resultSSM.getDescription());
+        Assertions.assertEquals(serviceModel.getAddress(), resultSSM.getAddress());
+        Assertions.assertEquals(serviceModel.getPhoneNumber(), resultSSM.getPhoneNumber());
     }
 }

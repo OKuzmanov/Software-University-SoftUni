@@ -4,8 +4,8 @@ import bg.softuni.PureWaterMiniCRM.exceptions.ApiObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.CustomerServiceModel;
-import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.UserServiceModel;
 import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.models.viewModels.CustomerViewModel;
@@ -104,5 +104,46 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> findAll() {
         return this.customerRepo.findAll();
+    }
+
+    @Override
+    public CustomerServiceModel updateCustomer(Long id, CustomerServiceModel customerServiceModel) {
+        Optional<Customer> optCustomer = this.customerRepo.findById(id);
+
+        if (optCustomer.isEmpty()) {
+            throw new ObjectNotFoundException(id, "Customer");
+        }
+
+        Customer customerEntity = optCustomer.get();
+
+        customerEntity.setCompanyName(customerServiceModel.getCompanyName());
+        customerEntity.setEmail(customerServiceModel.getEmail());
+        customerEntity.setPhoneNumber(customerServiceModel.getPhoneNumber());
+        customerEntity.setAddress(customerServiceModel.getAddress());
+        customerEntity.setDescription(customerServiceModel.getDescription());
+
+        Customer savedEntity = this.customerRepo.save(customerEntity);
+
+        return this.modelMapper.map(savedEntity, CustomerServiceModel.class);
+    }
+
+    @Override
+    public boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long customerId) {
+        Long userEntityId = this.customerRepo
+                .findById(customerId)
+                .orElseThrow(() -> new ObjectNotFoundException(customerId, "Customer"))
+                .getUser()
+                .getId();
+
+        if(userDetails.getId() == userEntityId) {
+            return true;
+        }
+
+        boolean isAdmin = userDetails
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
+
+        return isAdmin;
     }
 }

@@ -1,7 +1,11 @@
 package bg.softuni.PureWaterMiniCRM.web;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
+import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
+import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
+import bg.softuni.PureWaterMiniCRM.repositories.RawMaterialRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,6 +27,19 @@ public class RawMaterialsControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
+    private RawMaterial testEntity;
+
+    private RawMaterialRepository rawMaterialRepo;
+
+    @Autowired
+    public RawMaterialsControllerIT(RawMaterialRepository rawMaterialRepo) {
+        this.rawMaterialRepo = rawMaterialRepo;
+    }
+
+    @BeforeEach
+    public void setup() {
+        testEntity = this.rawMaterialRepo.findByType(RawMaterialType.GLUE).get();
+    }
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testRawMaterialsController_getAddWithUser() throws Exception {
@@ -101,5 +118,53 @@ public class RawMaterialsControllerIT {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/users/login"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testRawMaterialsController_getDetails() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/materials/details/" + testEntity.getId()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("allSuppliers"))
+                .andExpect(model().attributeExists("materialDetails"))
+                .andExpect(view().name("material-details"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testRawMaterialsController_rawMaterialsUpdate() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/materials/update/" + testEntity.getId())
+                        .param("quantity", "101")
+                        .param("type", testEntity.getType().name())
+                        .param("deliveredAt", LocalDateTime.of(2022, Month.JULY, 29, 23, 59).toString())
+                        .param("supplier", "Euro Supply ltd.")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/materials/details/" + testEntity.getId()))
+                .andExpect(flash().attributeExists("isUpdateSuccess"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testRawMaterialsController_rawMaterialsUpdateNoParam() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/materials/update/" + testEntity.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/materials/details/" + testEntity.getId()))
+                .andExpect(flash().attributeExists("isNotUpdateSuccess"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testRawMaterialsController_deleteRawMaterial() throws Exception {
+        RawMaterial testEntityToDelete = this.rawMaterialRepo.findByType(RawMaterialType.CAP_HALF_LITRE).get();
+        mockMvc
+                .perform(MockMvcRequestBuilders.delete("/materials/delete/" + testEntityToDelete.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/materials/all"));
     }
 }

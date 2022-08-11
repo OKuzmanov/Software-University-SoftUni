@@ -9,4 +9,6 @@ public interface OrderHistoryService {
     void saveAll(List<OrderHistory> orders);
 
     List<OrderHistoryServiceModel> getAll();
+
+    boolean isRepoEmpty();
 }

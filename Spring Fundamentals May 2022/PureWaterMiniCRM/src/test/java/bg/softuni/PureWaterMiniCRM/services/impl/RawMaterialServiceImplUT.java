@@ -1,11 +1,13 @@
 package bg.softuni.PureWaterMiniCRM.services.impl;
 
-import bg.softuni.PureWaterMiniCRM.models.entities.Product;
+import bg.softuni.PureWaterMiniCRM.exceptions.ObjectNotFoundException;
 import bg.softuni.PureWaterMiniCRM.models.entities.RawMaterial;
 import bg.softuni.PureWaterMiniCRM.models.entities.Supplier;
-import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 import bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.models.serviceModels.RawMaterialServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.serviceModels.SupplierServiceModel;
+import bg.softuni.PureWaterMiniCRM.models.user.PureWaterUserDetails;
 import bg.softuni.PureWaterMiniCRM.repositories.RawMaterialRepository;
 import bg.softuni.PureWaterMiniCRM.services.RawMaterialService;
 import org.junit.jupiter.api.Assertions;
@@ -15,14 +17,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,9 +37,20 @@ public class RawMaterialServiceImplUT {
 
     private RawMaterialService rawMatServiceToTest;
 
+    private RawMaterial testEntity;
+
+    private PureWaterUserDetails userDetails;
+
+    private RawMaterialServiceModel serviceModel;
+
     @BeforeEach
     public void setup() {
         this.rawMatServiceToTest = new RawMaterialServiceImpl(mockRawMaterialRepo, mockModelMapper);
+        testEntity = new RawMaterial(101, RawMaterialType.GLUE, null);
+        serviceModel = new RawMaterialServiceModel(101, RawMaterialType.GLUE, LocalDateTime.now(), null, null);
+        userDetails = new PureWaterUserDetails(null, "username", "topsecret",
+                "firstName", "lastName",
+                List.of(new SimpleGrantedAuthority("ROLE_" + RoleEnum.ADMIN)));
     }
 
     @Test
@@ -135,4 +149,77 @@ public class RawMaterialServiceImplUT {
 
         Assertions.assertEquals(expectedQuantity, resultQuantity);
     }
+
+    @Test
+    public void testRawMaterialService_findById() {
+        when(mockRawMaterialRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        when(mockModelMapper.map(any(RawMaterial.class), eq(RawMaterialServiceModel.class)))
+                .thenReturn(serviceModel);
+
+        RawMaterialServiceModel resultRMSM = rawMatServiceToTest.findById(anyLong());
+
+        Assertions.assertEquals(serviceModel.getQuantity(), resultRMSM.getQuantity());
+        Assertions.assertEquals(serviceModel.getType(), resultRMSM.getType());
+        Assertions.assertEquals(serviceModel.getDeliveredAt(), resultRMSM.getDeliveredAt());
+    }
+
+    @Test
+    public void testRawMaterialService_findAll() {
+        when(mockRawMaterialRepo.findAll())
+                .thenReturn(List.of(new RawMaterial()));
+
+        List<RawMaterialServiceModel> resultAllRawMaterials = rawMatServiceToTest.findAll();
+
+        Assertions.assertEquals(1 , resultAllRawMaterials.size());
+    }
+
+    @Test
+    public void testRawMaterialService_updateRawMaterial(){
+        long testId = 101;
+
+        when(mockRawMaterialRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        serviceModel.setSupplier(new SupplierServiceModel());
+        when(mockModelMapper.map(any(SupplierServiceModel.class), eq(Supplier.class)))
+                .thenReturn(new Supplier());
+
+        when(mockRawMaterialRepo.save(any(RawMaterial.class)))
+                .thenReturn(testEntity);
+
+        when(mockModelMapper.map(any(RawMaterial.class), eq(RawMaterialServiceModel.class)))
+                .thenReturn(serviceModel);
+
+        RawMaterialServiceModel resultRMSM = rawMatServiceToTest.updateRawMaterial(testId, serviceModel);
+
+        Assertions.assertEquals(serviceModel.getType(), resultRMSM.getType());
+        Assertions.assertEquals(serviceModel.getQuantity(), resultRMSM.getQuantity());
+        Assertions.assertEquals(serviceModel.getDeliveredAt(), resultRMSM.getDeliveredAt());
+    }
+
+    @Test
+    public void testRawMaterialService_isAdmin(){
+        Assertions.assertTrue(this.rawMatServiceToTest.isAdmin(userDetails));
+    }
+
+    @Test
+    public void testRawMaterialService_deleteRawMaterial(){
+        when(mockRawMaterialRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        Assertions.assertDoesNotThrow(
+                () -> rawMatServiceToTest.deleteRawMaterial(anyLong()));
+    }
+
+    @Test
+    public void testRawMaterialService_deleteRawMaterialThrowsException(){
+        when(mockRawMaterialRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ObjectNotFoundException.class,
+                () -> rawMatServiceToTest.deleteRawMaterial(anyLong()));
+    }
+
 }

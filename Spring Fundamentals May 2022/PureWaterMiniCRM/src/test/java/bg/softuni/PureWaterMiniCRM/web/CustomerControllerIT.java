@@ -1,5 +1,10 @@
 package bg.softuni.PureWaterMiniCRM.web;
 
+import bg.softuni.PureWaterMiniCRM.models.entities.Customer;
+import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.repositories.CustomerRepository;
+import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -7,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Random;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -17,6 +24,27 @@ public class CustomerControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
+
+    private Customer testEntity;
+
+    private CustomerRepository customerRepo;
+
+    private UserRepository userRepo;
+
+    @Autowired
+    public CustomerControllerIT(CustomerRepository customerRepo, UserRepository userRepo) {
+        this.customerRepo = customerRepo;
+        this.userRepo = userRepo;
+    }
+
+    @BeforeEach
+    public void setup() {
+        int rand = new Random().nextInt();
+        testEntity = new Customer("testName" + rand, "mail@gmail.com",
+                "11111111", "Test Address", "Test Description", null);
+
+        customerRepo.save(testEntity);
+    }
 
     //TODO: Create a new user in the Arrange phase
     @Test
@@ -119,5 +147,54 @@ public class CustomerControllerIT {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/users/login"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testCustomerController_getDetails() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/customers/details/" + testEntity.getId()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("customerDetails"))
+                .andExpect(view().name("customer-details"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testCustomerController_userUpdate() throws Exception {
+        UserEntity loggedInUser = userRepo.findByUsername("oleg4o").get();
+
+        testEntity.setUser(loggedInUser);
+
+        this.customerRepo.save(testEntity);
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/customers/update/" + testEntity.getId())
+                        .param("companyName", "testCompanyName")
+                        .param("email", "tm@gmail.com")
+                        .param("phoneNumber", "11111111")
+                        .param("address", "testAddress")
+                        .param("description", "testDescription")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/customers/details/" + testEntity.getId()))
+                .andExpect(flash().attributeExists("isUpdateSuccess"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testCustomerController_userUpdate_NoParams() throws Exception {
+        UserEntity loggedInUser = userRepo.findByUsername("oleg4o").get();
+
+        testEntity.setUser(loggedInUser);
+
+        this.customerRepo.save(testEntity);
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/customers/update/" + testEntity.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/customers/details/" + testEntity.getId()))
+                .andExpect(flash().attributeExists("isNotUpdateSuccess"));
     }
 }

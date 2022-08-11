@@ -25,4 +25,10 @@ public interface SupplierService {
     SupplierViewModel fetchById(Long id);
 
     SupplierServiceModel findById(int id);
+
+    SupplierServiceModel updateSupplier(Long id, SupplierServiceModel supplierServiceModel);
+
+    boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long supplierId);
+
+    SupplierServiceModel getSupplierByCompanyName(String companyName);
 }
