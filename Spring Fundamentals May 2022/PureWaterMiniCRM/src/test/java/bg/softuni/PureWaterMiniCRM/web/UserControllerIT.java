@@ -1,7 +1,9 @@
 package bg.softuni.PureWaterMiniCRM.web;
 
 import bg.softuni.PureWaterMiniCRM.models.entities.UserEntity;
+import bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum;
 import bg.softuni.PureWaterMiniCRM.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,9 +26,21 @@ public class UserControllerIT {
 
     private final UserRepository userRepository;
 
+    private UserEntity testUser;
+
+    private UserRepository userRepo;
+
     @Autowired
     public UserControllerIT(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @BeforeEach
+    public void setup() {
+        int newRand = new Random().nextInt();
+        testUser = userRepository.save(new UserEntity("testUsername" + newRand, "Oleg",
+                "Kuzmanov", "12345", newRand + "tm@gmail.com"));
+
     }
 
     @Test
@@ -43,11 +57,8 @@ public class UserControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testUserController_getUserDetailsById() throws Exception {
-        int newRand = new Random().nextInt();
-        UserEntity savedEntity = userRepository.save(new UserEntity("testUsername" + newRand, "Oleg", "Kuzmanov", "12345", newRand + "tm@gmail.com"));
-
         mockMvc
-                .perform(MockMvcRequestBuilders.get("/users/profile/" + savedEntity.getId()))
+                .perform(MockMvcRequestBuilders.get("/users/profile/" + testUser.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user-profile"))
                 .andExpect(model().attributeExists("userServiceModel"))
@@ -57,12 +68,8 @@ public class UserControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testUserController_userUpdateValidInput() throws Exception {
-        int newRand = new Random().nextInt();
-        UserEntity savedEntity = userRepository.save(new UserEntity("testUsername" + newRand, "Oleg",
-                "Kuzmanov", "12345", newRand + "tm@gmail.com"));
-
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/users/update/" + savedEntity.getId())
+                .perform(MockMvcRequestBuilders.post("/users/update/" + testUser.getId())
                         .param("firstName", "testFirstName")
                         .param("lastName", "testLastName")
                         .param("username", "testUsername")
@@ -70,7 +77,27 @@ public class UserControllerIT {
                         .param("password", "topsecret")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users/profile/" + savedEntity.getId()))
+                .andExpect(redirectedUrl("/users/profile/" + testUser.getId()))
+                .andExpect(flash().attributeCount(1))
+                .andExpect(flash().attributeExists("isUpdateSuccess"))
+                .andExpect(handler().methodName("userUpdate"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testUserController_userUpdateValidInputWithRoles() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/users/update/" + testUser.getId())
+                        .param("firstName", "testFirstName")
+                        .param("lastName", "testLastName")
+                        .param("username", "testUsername")
+                        .param("email", "tm@gmail.com")
+                        .param("password", "topsecret")
+                        .param("roles", RoleEnum.ADMIN.name())
+                        .param("roles", RoleEnum.USER.name())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users/profile/" + testUser.getId()))
                 .andExpect(flash().attributeCount(1))
                 .andExpect(flash().attributeExists("isUpdateSuccess"))
                 .andExpect(handler().methodName("userUpdate"));
@@ -79,12 +106,8 @@ public class UserControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testUserController_userUpdateInvalidInput() throws Exception {
-        int newRand = new Random().nextInt();
-        UserEntity savedEntity = userRepository.save(new UserEntity("testUsername" + newRand, "Oleg",
-                "Kuzmanov", "12345", newRand + "tm@gmail.com"));
-
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/users/update/" + savedEntity.getId())
+                .perform(MockMvcRequestBuilders.post("/users/update/" + testUser.getId())
                         .param("firstName", "")
                         .param("lastName", "")
                         .param("username", "")
@@ -92,9 +115,19 @@ public class UserControllerIT {
                         .param("password", "")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users/profile/" + savedEntity.getId()))
+                .andExpect(redirectedUrl("/users/profile/" + testUser.getId()))
                 .andExpect(flash().attributeCount(1))
                 .andExpect(flash().attributeExists("isNotUpdateSuccess"))
                 .andExpect(handler().methodName("userUpdate"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testUserController_deleteUser() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.delete("/users/delete/" + testUser.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
     }
 }

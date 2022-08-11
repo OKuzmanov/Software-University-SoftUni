@@ -22,6 +22,9 @@ public class Customer extends BaseEntity{
 
     private String description;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity userEntity;
@@ -39,6 +42,7 @@ public class Customer extends BaseEntity{
         this.address = address;
         this.description = description;
         this.userEntity = userEntity;
+        this.isDeleted = false;
     }
 
     public String getCompanyName() {
@@ -95,6 +99,14 @@ public class Customer extends BaseEntity{
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override

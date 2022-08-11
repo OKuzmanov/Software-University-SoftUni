@@ -29,4 +29,6 @@ public interface CustomerService {
     CustomerServiceModel updateCustomer(Long id, CustomerServiceModel customerServiceModel);
 
     boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long customerId);
+
+    boolean deleteCustomer(long id);
 }

@@ -57,6 +57,7 @@ public class SupplierServiceImpl implements SupplierService {
         return this.supplierRepo
                 .findAll()
                 .stream()
+                .filter(s -> !s.isDeleted())
                 .map(s -> this.modelMapper.map(s, SupplierServiceModel.class))
                 .collect(Collectors.toList());
     }
@@ -82,6 +83,7 @@ public class SupplierServiceImpl implements SupplierService {
         List<Supplier> all = this.supplierRepo.findAll();
         return all
                 .stream()
+                .filter(s -> !s.isDeleted())
                 .map(s -> this.modelMapper.map(s, SupplierViewModel.class))
                 .collect(Collectors.toList());
     }
@@ -148,5 +150,17 @@ public class SupplierServiceImpl implements SupplierService {
         Supplier supplierEntity = this.supplierRepo.findByCompanyName(companyName).orElseThrow(() -> new ObjectNotFoundException(null, "Supplier"));
 
         return this.modelMapper.map(supplierEntity, SupplierServiceModel.class);
+    }
+
+    @Override
+    public boolean deleteSupplier(long id) {
+        Supplier supplierEntity = this.supplierRepo.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Supplier"));
+
+        supplierEntity.setDeleted(true);
+
+        this.supplierRepo.save(supplierEntity);
+
+        return true;
     }
 }

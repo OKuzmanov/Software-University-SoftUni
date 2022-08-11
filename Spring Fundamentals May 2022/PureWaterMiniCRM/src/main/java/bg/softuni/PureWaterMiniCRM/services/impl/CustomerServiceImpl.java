@@ -59,12 +59,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerServiceModel> getAllCustomers() {
-        List<Customer> allCustomers = this.customerRepo.findAll();
-        return allCustomers
+        return this.customerRepo.findAll()
                 .stream()
+                .filter(c -> !c.isDeleted())
                 .map(e -> this.modelMapper.map(e, CustomerServiceModel.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Customer> findAll() {
+        return this.customerRepo
+                .findAll()
+                .stream()
+                .filter(c -> !c.isDeleted())
+                .toList();
+    }
+
 
     @Override
     public boolean isRepoEmpty() {
@@ -81,6 +91,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> all = this.customerRepo.findAll();
         return all
                 .stream()
+                .filter(c -> !c.isDeleted())
                 .map(c -> this.modelMapper.map(c, CustomerViewModel.class))
                 .collect(Collectors.toList());
     }
@@ -99,11 +110,6 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer findById(int id) {
         return customerRepo.findById(Long.valueOf(id))
                 .orElseThrow(() -> new ObjectNotFoundException(Long.valueOf(id), "Customer"));
-    }
-
-    @Override
-    public List<Customer> findAll() {
-        return this.customerRepo.findAll();
     }
 
     @Override
@@ -145,5 +151,17 @@ public class CustomerServiceImpl implements CustomerService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_" + RoleEnum.ADMIN));
 
         return isAdmin;
+    }
+
+    @Override
+    public boolean deleteCustomer(long id) {
+        Customer customerEntity = this.customerRepo.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Customer"));
+
+        customerEntity.setDeleted(true);
+
+        this.customerRepo.save(customerEntity);
+
+        return true;
     }
 }

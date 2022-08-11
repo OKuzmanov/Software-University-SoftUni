@@ -108,4 +108,14 @@ public class SuppliersController {
         redirectAttributes.addFlashAttribute("isUpdateSuccess", true);
         return "redirect:/suppliers/details/" + id;
     }
+
+    @PreAuthorize("@supplierServiceImpl.isOwnerOrAdmin(#userDetails, #id)")
+    @DeleteMapping("/delete/{id}")
+    public String deleteSupplier(@PathVariable(name = "id") Long id,
+                                 @AuthenticationPrincipal PureWaterUserDetails userDetails) {
+
+        this.supplierService.deleteSupplier(id);
+
+        return "redirect:/suppliers/all";
+    }
 }

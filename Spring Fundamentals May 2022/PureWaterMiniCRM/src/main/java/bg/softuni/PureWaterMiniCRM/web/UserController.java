@@ -105,7 +105,7 @@ public class UserController {
 
         if (id == userDetails.getId()) {
             redirectAttributes.addFlashAttribute("isAuthPrincipal", true);
-            return "redirect:/users/logout";
+            return "redirect:/users/profile/" + id;
         }
 
         this.userService.deleteUser(id);

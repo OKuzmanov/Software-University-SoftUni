@@ -31,4 +31,6 @@ public interface SupplierService {
     boolean isOwnerOrAdmin(PureWaterUserDetails userDetails, Long supplierId);
 
     SupplierServiceModel getSupplierByCompanyName(String companyName);
+
+    boolean deleteSupplier(long id);
 }

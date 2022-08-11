@@ -123,4 +123,14 @@ public class CustomerController {
         redirectAttributes.addFlashAttribute("isUpdateSuccess", true);
         return "redirect:/customers/details/" + id;
     }
+
+    @PreAuthorize("@customerServiceImpl.isOwnerOrAdmin(#userDetails, #id)")
+    @DeleteMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable(name = "id") Long id,
+                             @AuthenticationPrincipal PureWaterUserDetails userDetails) {
+
+        this.customerService.deleteCustomer(id);
+
+        return "redirect:/customers/all";
+    }
 }
