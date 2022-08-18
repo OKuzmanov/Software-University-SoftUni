@@ -2,20 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Error Page</title>
+    <title>Error 403</title>
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
+
 <body>
+<div class="d-flex flex-column min-vh-100">
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 gray-linear-gradient-background text-white">
+        <h1>A 403 error occurred while processing your request.</h1>
+        <p> You do not have the needed authorization to access the given webpage or resource.</p>
 
-<h1>A 403 error occurred while processing your request.</h1>
-<p> You do not have the needed authorization to access the given webpage or resource.</p>
-
-<form th:action="@{/home}" th:method="get">
-    <div class="col col-md-4">
-        <div class="button-holder d-flex">
-            <input type="submit" class="btn btn-info btn-lg" th:value="Home"/>
-        </div>
-    </div>
-</form>
+        <form th:action="@{/home}" th:method="get">
+            <div class="col col-md-4">
+                <div class="button-holder d-flex">
+                    <input type="submit" class="btn btn-info btn-lg" th:value="Home"/>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
 </body>
 </html>

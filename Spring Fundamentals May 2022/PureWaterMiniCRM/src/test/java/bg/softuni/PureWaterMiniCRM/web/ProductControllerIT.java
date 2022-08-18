@@ -81,8 +81,21 @@ public class ProductControllerIT {
     public void testProductController_postWithValidParams() throws Exception {
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/products/add")
-                        .param("type", ProductCategoryEnum.LITRE_AND_HALF.name())
-                        .param("quantity", String.valueOf(10))
+                        .param("type", ProductCategoryEnum.HALF_LITRE.name())
+                        .param("quantity", String.valueOf(1))
+                        .param("productionDate", LocalDateTime.of(2022, Month.JULY, 29, 23, 59).toString())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testProductController_postWithValidParams_InsufficientResource() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/products/add")
+                        .param("type", ProductCategoryEnum.HALF_LITRE.name())
+                        .param("quantity", String.valueOf(1000000))
                         .param("productionDate", LocalDateTime.of(2022, Month.JULY, 29, 23, 59).toString())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())

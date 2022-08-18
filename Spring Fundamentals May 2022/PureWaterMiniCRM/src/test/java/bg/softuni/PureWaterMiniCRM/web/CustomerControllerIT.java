@@ -41,7 +41,8 @@ public class CustomerControllerIT {
     public void setup() {
         int rand = new Random().nextInt();
         testEntity = new Customer("testName" + rand, "mail@gmail.com",
-                "11111111", "Test Address", "Test Description", null);
+                "11111111", "Test Address",
+                "Test Description", userRepo.findByUsername("oleg4o").get());
 
         customerRepo.save(testEntity);
     }
@@ -162,12 +163,6 @@ public class CustomerControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testCustomerController_userUpdate() throws Exception {
-        UserEntity loggedInUser = userRepo.findByUsername("oleg4o").get();
-
-        testEntity.setUser(loggedInUser);
-
-        this.customerRepo.save(testEntity);
-
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/customers/update/" + testEntity.getId())
                         .param("companyName", "testCompanyName")
@@ -184,17 +179,21 @@ public class CustomerControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testCustomerController_userUpdate_NoParams() throws Exception {
-        UserEntity loggedInUser = userRepo.findByUsername("oleg4o").get();
-
-        testEntity.setUser(loggedInUser);
-
-        this.customerRepo.save(testEntity);
-
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/customers/update/" + testEntity.getId())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/customers/details/" + testEntity.getId()))
                 .andExpect(flash().attributeExists("isNotUpdateSuccess"));
+    }
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testCustomerController_deleteCustomer() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.delete("/customers/delete/" + testEntity.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/customers/all"));
+
     }
 }

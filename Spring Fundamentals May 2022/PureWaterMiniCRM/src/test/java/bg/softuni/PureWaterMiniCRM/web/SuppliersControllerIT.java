@@ -41,7 +41,7 @@ public class SuppliersControllerIT {
     public void setup(){
         int rand = new Random().nextInt();
         testEntity = new Supplier("Test Name" + rand, "mail@gmail.com", "11111111",
-                "Test Address", "Test Description", null);
+                "Test Address", "Test Description", this.userRepository.findByUsername("oleg4o").get());
 
         this.supplierRepo.save(testEntity);
     }
@@ -147,13 +147,6 @@ public class SuppliersControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testSuppliersController_supplierUpdate() throws Exception {
-
-        UserEntity loggedInUser = userRepository.findByUsername("oleg4o").get();
-
-        testEntity.setUserEntity(loggedInUser);
-
-        this.supplierRepo.save(testEntity);
-
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/suppliers/update/" + testEntity.getId())
                         .param("companyName", "testCompanyName")
@@ -170,18 +163,21 @@ public class SuppliersControllerIT {
     @Test
     @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
     public void testSuppliersController_supplierUpdateNoParams() throws Exception {
-
-        UserEntity loggedInUser = userRepository.findByUsername("oleg4o").get();
-
-        testEntity.setUserEntity(loggedInUser);
-
-        this.supplierRepo.save(testEntity);
-
         mockMvc
                 .perform(MockMvcRequestBuilders.post("/suppliers/update/" + testEntity.getId())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/suppliers/details/" + testEntity.getId()))
                 .andExpect(flash().attributeExists("isNotUpdateSuccess"));
+    }
+
+    @Test
+    @WithUserDetails(value = "oleg4o", userDetailsServiceBeanName = "userDetailsService")
+    public void testSuppliersController_deleteSupplier() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.delete("/suppliers/delete/" + testEntity.getId())
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/suppliers/all"));
     }
 }

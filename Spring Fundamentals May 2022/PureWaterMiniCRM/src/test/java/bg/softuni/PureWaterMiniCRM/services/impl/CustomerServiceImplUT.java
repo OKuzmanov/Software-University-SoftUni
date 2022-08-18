@@ -258,7 +258,7 @@ public class CustomerServiceImplUT {
     }
 
     @Test
-    public void testSupplierService_isOwnerOrAdmin_Owner() {
+    public void testCustomerService_isOwnerOrAdmin_Owner() {
         long testId = 111;
 
         userEntity.setId(testId);
@@ -272,7 +272,7 @@ public class CustomerServiceImplUT {
     }
 
     @Test
-    public void testSupplierService_isOwnerOrAdmin_Admin() {
+    public void testCustomerService_isOwnerOrAdmin_Admin() {
         long testId = 111;
 
         userEntity.setId(Long.valueOf(1));
@@ -288,12 +288,23 @@ public class CustomerServiceImplUT {
     }
 
     @Test
-    public void testSupplierService_findAll() {
+    public void testCustomerService_findAll() {
         when(mockCustomerRepo.findAll())
                 .thenReturn(List.of(new Customer()));
 
         List<Customer> resultAllCustomers = serviceToTest.findAll();
 
         Assertions.assertEquals(1, resultAllCustomers.size());
+    }
+
+    @Test
+    public void testCustomerService_deleteCustomer() {
+        when(mockCustomerRepo.findById(anyLong()))
+                .thenReturn(Optional.of(customerEntity));
+
+        when(mockCustomerRepo.save(any(Customer.class)))
+                .thenReturn(customerEntity);
+
+        Assertions.assertTrue(() -> serviceToTest.deleteCustomer(anyLong()));
     }
 }

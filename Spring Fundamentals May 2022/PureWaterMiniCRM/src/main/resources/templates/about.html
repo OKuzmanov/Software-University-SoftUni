@@ -7,45 +7,41 @@
 </head>
 
 <body>
-<div class="wrapper">
-    <!-- Navigation -->
-    <div>
+<div class="d-flex flex-column min-vh-100">
+    <header class="container-fluid p-0 bg-dark">
         <nav th:replace="fragments/navigation::myNav"></nav>
-    </div>
+    </header>
 
-    <div class="info">
-        <div></div>
-        <div>
-            <h4 th:text="#{about_head}">About</h4>
-            PureWater Mini CRM is a high end software solution for businesses within the water commerce business.
-            Our CRM will help you manage your relationships with all your Suppliers and Customers. It will keep track
-            of all orders allowing you to quickly and easily run ad hoc reports. The dynamic homepage will show you all
-            due orders and it will automatically calculate revenue upon completion. It will also give you insights of
-            all the current users and the count of orders they have created. The CRM will give you up-to-date data for
-            your Product and Raw Materials inventories. Also it will offer user roles solution giving you the optimal
-            control over the permissions of your employees.
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 gray-linear-gradient-background text-white">
+        <div class="info">
+            <h4 th:text="#{about_head}" class="text-center">About</h4>
+            <br>PureWater Mini CRM is a high end software solution for businesses within the water commerce business.
+            <br>Our CRM will help you manage your relationships with all your Suppliers and Customers. It will keep track
+            <br>of all orders allowing you to quickly and easily run ad hoc reports. The dynamic homepage will show you all
+            <br>due orders and it will automatically calculate revenue upon completion. It will also give you insights of
+            <br>all the current users and the count of orders they have created. The CRM will give you up-to-date data for
+            <br>your Product and Raw Materials inventories. Also it will offer user roles solution giving you the optimal
+            <br>control over the permissions of your employees.
+            <br>
+            <br>This application is intended for commercial use only! The subscription plan pricing is the following:
+            <br>- For up to 5 users and 10 orders per user per day the application is free of charge. (Bronze Tier)
+            <br>- For up to 50 users and 150 orders per user per day the monthly fee is $1500. (Silver Tier)
+            <br>- For up to 150 users and 300 orders per user per day the monthly fee is $2500. (Gold Tier)
+            <br>- For unlimited number of users and unlimited orders per user per day the monthly fee is $3000. (Platinum Tier)
+            <br>All our plans include 24/7 support services free of charge (*Except if you are using the software for free).
+            <br>Our agents will be more than happy to solve any issues you might have using our product, integrating it with
+            <br>all peripheral services you might be using and/or migrating from your current software storage management tools.
+            <br>
+            <br>The communication channels we use are:
+            <br>- Built in chat and email + scheduled Teams calls for Silver Tier. (Average respond time 8 hours)
+            <br>- Private Dicord group for Gold and Platinum Tier for urgent matters. (Average respond time 45 minutes)
+            <br>
+            <br>Thank you for using our CRM solution,
+            <br>Our team is incredibly happy that we can support and scale business for exceptional people like yourselves!
 
-            This application is intended for commercial use only! The subscription plan pricing is the following:
-                - For up to 5 users and 10 orders per user per day the application is free of charge. (Bronze Tier)
-                - For up to 50 users and 150 orders per user per day the monthly fee is $1500. (Silver Tier)
-                - For up to 150 users and 300 orders per user per day the monthly fee is $2500. (Gold Tier)
-                - For unlimited number of users and unlimited orders per user per day the monthly fee is $3000. (Platinum Tier)
-            All our plans include 24/7 support services free of charge (*Except if you are using the software for free).
-            Our agents will be more than happy to solve any issues you might have using our product, integrating it with
-            all peripheral services you might be using and/or migrating from your current software storage management tools.
-
-            The communication channels we use are:
-                - Built in chat and email + scheduled Teams calls for Silver Tier. (Average respond time 8 hours)
-                - Private Dicord group for Gold and Platinum Tier for urgent matters. (Average respond time 45 minutes)
-
-            Thank you for using our CRM solution,
-            Our team is incredibly happy that we can support and scale business for exceptional people like yourselves!
         </div>
-        <div></div>
-    </div>
-
+    </main>
+    <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
-<!-- Wrapper Ends -->
 </body>
-<footer th:replace="fragments/footer::myFooter"></footer>
 </html>

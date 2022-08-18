@@ -5,20 +5,27 @@
     <title>Maintenance</title>
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
-<body>
-<p>
-    The application is currently under maintenance.
-    <br>Please come back after midnight.
-    <br>Best Regards,
-    <br> PureWater CRM's team
-</p>
 
-<form th:action="@{/home}" th:method="get">
-    <div class="col col-md-4">
-        <div class="button-holder d-flex">
-            <input type="submit" class="btn btn-info btn-lg" th:value="Home"/>
-        </div>
+<body>
+    <div class="d-flex flex-column min-vh-100">
+        <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 gray-linear-gradient-background text-white">
+            <h1>The application is currently under maintenance.</h1>
+            <p>
+                <br>Please come back after midnight.
+                <br>
+                <br>Best Regards,
+                <br> PureWater CRM's team
+            </p>
+
+            <form th:action="@{/home}" th:method="get">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" th:value="Home"/>
+                    </div>
+                </div>
+            </form>
+        </main>
     </div>
-</form>
 </body>
+
 </html>

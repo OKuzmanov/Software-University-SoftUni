@@ -12,6 +12,7 @@ public class PureWaterUserDetails implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    private boolean isDeleted;
     private Collection<GrantedAuthority> authorities;
 
     public PureWaterUserDetails(Long id, String username, String password, String firstName, String lastName, Collection<GrantedAuthority> authorities) {
@@ -21,6 +22,7 @@ public class PureWaterUserDetails implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.authorities = authorities;
+        this.isDeleted = false;
     }
 
     public String getFullName() {
@@ -73,7 +75,7 @@ public class PureWaterUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !isDeleted;
     }
 
     public void setUsername(String username) {
@@ -110,5 +112,13 @@ public class PureWaterUserDetails implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

@@ -40,8 +40,13 @@ public class ApplicationRunner implements CommandLineRunner {
     private Customer c2;
     private Customer c3;
 
+    private Random random = new Random();
+
     @Autowired
-    public ApplicationRunner(RoleService roleService, UserService userService, SupplierService supplierService, CustomerService customerService, RawMaterialService rawMaterialService, ProductService productService, OrderService orderService, OrderHistoryService orderHistoryService, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public ApplicationRunner(RoleService roleService, UserService userService, SupplierService supplierService,
+                             CustomerService customerService, RawMaterialService rawMaterialService, ProductService productService,
+                             OrderService orderService, OrderHistoryService orderHistoryService, ModelMapper modelMapper,
+                             PasswordEncoder passwordEncoder) {
         this.roleService = roleService;
         this.userService = userService;
         this.supplierService = supplierService;
@@ -62,22 +67,20 @@ public class ApplicationRunner implements CommandLineRunner {
     private void dbInit() {
         if(this.roleService.isRepoEmpty()) {
             Role r1 = new Role(RoleEnum.ADMIN);
-            Role r2 = new Role(RoleEnum.MODERATOR);
             Role r3 = new Role(RoleEnum.USER);
 
-            this.roleService.saveAll(List.of(r1, r2, r3));
+            this.roleService.saveAll(List.of(r1, r3));
         }
 
         if(userService.isRepoEmpty()) {
             Role admin = this.roleService.findByName(RoleEnum.ADMIN).get();
-            Role moderator = this.roleService.findByName(RoleEnum.MODERATOR).get();
             Role user = this.roleService.findByName(RoleEnum.USER).get();
 
             u1 = new UserEntity("oleg4o", "Oleg", "Kuzmanov", passwordEncoder.encode("12345"),"ok@c.com");
             u1.setRole(Set.of(user, admin));
 
             u2 = new UserEntity("benati", "Albena", "Yazovska", passwordEncoder.encode("12345"),"ay@c.com");
-            u2.setRole(Set.of(user, moderator));
+            u2.setRole(Set.of(user));
 
             u3 = new UserEntity("pesh", "Pesho", "Peshev", passwordEncoder.encode("12345"),"pp@c.com");
             u3.setRole(Set.of(user));
@@ -103,52 +106,52 @@ public class ApplicationRunner implements CommandLineRunner {
         }
 
         if(rawMaterialService.isRepoEmpty()) {
-            RawMaterial r1 = new RawMaterial(0, RawMaterialType.BOTTLE_HALF_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r2 = new RawMaterial(0, RawMaterialType.BOTTLE_LITRE_AND_HALF, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r3 = new RawMaterial(0, RawMaterialType.BOTTLE_TEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r4 = new RawMaterial(0, RawMaterialType.BOTTLE_NINETEEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r5 = new RawMaterial(0, RawMaterialType.BOTTLENECK, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r6 = new RawMaterial(0, RawMaterialType.CAP_HALF_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r7 = new RawMaterial(0, RawMaterialType.CAP_LITRE_AND_HALF, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r8 = new RawMaterial(0, RawMaterialType.CAP_NINETEEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r9 = new RawMaterial(0, RawMaterialType.CAP_TEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r10 = new RawMaterial(0, RawMaterialType.GLUE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r11 = new RawMaterial(0, RawMaterialType.HANDLE_TEN_LITRES, this.supplierService.getRandomSupplier(), LocalDateTime.now());
-            RawMaterial r12 = new RawMaterial(0, RawMaterialType.LABEL, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r1 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.BOTTLE_HALF_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r2 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.BOTTLE_LITRE_AND_HALF, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r3 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.BOTTLE_TEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r4 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.BOTTLE_NINETEEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r5 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.BOTTLENECK, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r6 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.CAP_HALF_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r7 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.CAP_LITRE_AND_HALF, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r8 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.CAP_NINETEEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r9 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.CAP_TEN_LITRE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r10 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.GLUE, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r11 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.HANDLE_TEN_LITRES, this.supplierService.getRandomSupplier(), LocalDateTime.now());
+            RawMaterial r12 = new RawMaterial(random.nextInt(1, 75), RawMaterialType.LABEL, this.supplierService.getRandomSupplier(), LocalDateTime.now());
 
             this.rawMaterialService.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12));
         }
 
         if(productService.isRepoEmpty()) {
-            Product p1 = new Product(0, ProductCategoryEnum.HALF_LITRE, LocalDateTime.now());
-            Product p2 = new Product(0, ProductCategoryEnum.LITRE_AND_HALF, LocalDateTime.now());
-            Product p3 = new Product(0, ProductCategoryEnum.TEN_LITRES, LocalDateTime.now());
-            Product p4 = new Product(0, ProductCategoryEnum.NINETEEN_LITRES, LocalDateTime.now());
+            Product p1 = new Product(random.nextInt(1, 150), ProductCategoryEnum.HALF_LITRE, LocalDateTime.now());
+            Product p2 = new Product(random.nextInt(1, 150), ProductCategoryEnum.LITRE_AND_HALF, LocalDateTime.now());
+            Product p3 = new Product(random.nextInt(1, 150), ProductCategoryEnum.TEN_LITRES, LocalDateTime.now());
+            Product p4 = new Product(random.nextInt(1, 150), ProductCategoryEnum.NINETEEN_LITRES, LocalDateTime.now());
 
             this.productService.saveAll(List.of(p1, p2, p3, p4));
         }
 
         if (orderService.isRepoEmpty()) {
-            Order o1 = new Order("Litre and a Half", 16, ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
-            o1.setTotalPrice(ProductCategoryEnum.LITRE_AND_HALF.getPrice().multiply(new BigDecimal(16)));
-            Order o2 = new Order("Half Litre", 39, ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
-            o2.setTotalPrice(ProductCategoryEnum.HALF_LITRE.getPrice().multiply(new BigDecimal(39)));
-            Order o3 = new Order("Nineteen Litres", 115, ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
-            o3.setTotalPrice(ProductCategoryEnum.NINETEEN_LITRES.getPrice().multiply(new BigDecimal(115)));
-            Order o4 = new Order("Ten Litres", 10, ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
-            o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(10)));
+            Order o1 = new Order("Litre and a Half", random.nextInt(1, 16), ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o1.setTotalPrice(ProductCategoryEnum.LITRE_AND_HALF.getPrice().multiply(new BigDecimal(o1.getQuantity())));
+            Order o2 = new Order("Half Litre", random.nextInt(1, 39), ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o2.setTotalPrice(ProductCategoryEnum.HALF_LITRE.getPrice().multiply(new BigDecimal(o2.getQuantity())));
+            Order o3 = new Order("Nineteen Litres", random.nextInt(1, 115), ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o3.setTotalPrice(ProductCategoryEnum.NINETEEN_LITRES.getPrice().multiply(new BigDecimal(o3.getQuantity())));
+            Order o4 = new Order("Ten Litres", random.nextInt(1, 10), ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(o4.getQuantity())));
 
             this.orderService.saveAll(List.of(o1, o2, o3, o4));
         }
 
         if (orderHistoryService.isRepoEmpty()) {
-            OrderHistory o1 = new OrderHistory("Litre and a Half", 11, ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o1 = new OrderHistory("Litre and a Half", random.nextInt(1, 11), ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o1.setTotalPrice(ProductCategoryEnum.LITRE_AND_HALF.getPrice().multiply(BigDecimal.valueOf(o1.getQuantity())));
-            OrderHistory o2 = new OrderHistory("Half Litre", 102, ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o2 = new OrderHistory("Half Litre", random.nextInt(1, 102), ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o2.setTotalPrice(ProductCategoryEnum.HALF_LITRE.getPrice().multiply(new BigDecimal(o2.getQuantity())));
-            OrderHistory o3 = new OrderHistory("Nineteen Litres", 75, ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o3 = new OrderHistory("Nineteen Litres", random.nextInt(1, 75), ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o3.setTotalPrice(ProductCategoryEnum.NINETEEN_LITRES.getPrice().multiply(new BigDecimal(o3.getQuantity())));
-            OrderHistory o4 = new OrderHistory("Ten Litres", 10, ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o4 = new OrderHistory("Ten Litres", random.nextInt(1, 10), ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(o4.getQuantity())));
 
             this.orderHistoryService.saveAll(List.of(o1, o2, o3, o4));

@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>PureWater Mini CRM</title>
+        <th:block th:include="fragments/head::myHead"></th:block>
+    </head>
 
-<head>
-    <title>PureWater Mini CRM</title>
-    <th:block th:include="fragments/head::myHead"></th:block>
-</head>
+    <body>
+        <div class="d-flex flex-column min-vh-100">
+            <header class="container-fluid p-0 bg-dark">
+                <nav th:replace="fragments/navigation::myNav"></nav>
+            </header>
 
-<body>
-
-<div>
-        <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
-
-
-<div class="container-fluid">
-    <h5 class="text-center text-white mt-5" th:text="#{index_text}">Welcome to Pure Water. A CRM for water bottling manufacturing companies.</h5>
-</div>
-
-<div>
-    <footer th:replace="fragments/footer::myFooter"> </footer>
-</div>
-
-</body>
+            <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+                <h5 class="text-center text-white" th:text="#{index_text}">Welcome to Pure Water. A CRM for water bottling manufacturing companies.</h5>
+            </main>
+            <footer th:replace="fragments/footer::myFooter"> </footer>
+        </div>
+    </body>
 </html>

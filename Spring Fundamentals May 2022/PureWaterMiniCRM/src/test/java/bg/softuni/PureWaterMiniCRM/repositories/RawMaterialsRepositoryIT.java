@@ -18,6 +18,6 @@ public class RawMaterialsRepositoryIT {
         RawMaterial savedEntity = mockRawMaterialRepository.findByType(RawMaterialType.GLUE).get();
 
         Assertions.assertEquals(RawMaterialType.GLUE, savedEntity.getType());
-        Assertions.assertEquals(0, savedEntity.getQuantity());
+        Assertions.assertTrue(savedEntity.getQuantity() > 0);
     }
 }

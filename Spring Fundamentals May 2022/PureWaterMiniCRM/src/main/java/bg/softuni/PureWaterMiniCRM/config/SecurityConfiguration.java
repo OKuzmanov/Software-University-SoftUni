@@ -30,7 +30,6 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/", "/users/register", "/users/login", "/about", "/maintenance").permitAll()
-                .antMatchers("/pages/moderators").hasRole(RoleEnum.MODERATOR.name())
                 .antMatchers("/pages/admins").hasRole(RoleEnum.ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/api/orders", "/api/orders/{id}").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/customers", "/api/customers/{id}").permitAll()

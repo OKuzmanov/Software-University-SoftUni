@@ -282,4 +282,15 @@ public class SupplierServiceImplUT {
         Assertions.assertEquals(serviceModel.getAddress(), resultSSM.getAddress());
         Assertions.assertEquals(serviceModel.getPhoneNumber(), resultSSM.getPhoneNumber());
     }
+
+    @Test
+    public void testSupplierService_deleteSupplier() {
+        when(mockSupplierRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testEntity));
+
+        when(mockSupplierRepo.save(any(Supplier.class)))
+                .thenReturn(testEntity);
+
+        Assertions.assertTrue(() -> suppServToTest.deleteSupplier(anyLong()));
+    }
 }

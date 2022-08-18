@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Set;
@@ -101,14 +103,15 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Long id,
                              @AuthenticationPrincipal PureWaterUserDetails userDetails,
-                             RedirectAttributes redirectAttributes) {
-
-        if (id == userDetails.getId()) {
-            redirectAttributes.addFlashAttribute("isAuthPrincipal", true);
-            return "redirect:/users/profile/" + id;
-        }
+                             RedirectAttributes redirectAttributes,
+                             HttpServletRequest request) throws ServletException {
 
         this.userService.deleteUser(id);
+
+        if (id == userDetails.getId()) {
+            request.logout();
+            return "redirect:/";
+        }
 
         return "redirect:/home";
     }

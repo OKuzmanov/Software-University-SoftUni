@@ -7,44 +7,43 @@
 </head>
 
 <body>
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
+    <div class="d-flex flex-column min-vh-100">
+        <header class="container-fluid p-0 bg-dark">
+            <nav th:replace="fragments/navigation::myNav"></nav>
+        </header>
 
-<div class="container">
-    <h2 class="text-center text-white" th:text="#{login_head}">Login</h2>
-    <form th:action="@{/users/login}" th:method="post"
-          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+        <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 login-form">
+            <h2 class="text-center text-white" th:text="#{login_head}">Login</h2>
+            <form th:action="@{/users/login}" th:method="post"
+                  class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
-        <p th:if="${wrongCredentials} == true" class="errors alert alert-danger" th:text="#{login_credentials_error_message}">
-            No such username and password combination exists.
-        </p>
+                <p th:if="${wrongCredentials} == true" class="errors alert alert-danger" th:text="#{login_credentials_error_message}">
+                    No such username and password combination exists.
+                </p>
 
-        <div class="form-group">
-            <label for="username" class="text-white font-weight-bold" th:text="#{login_username}">Username</label>
-            <input th:value="${username}" id="username" name="username" type="text" min="2" max="20"
-                   class="form-control"
-                   th:placeholder="#{login_username_placeholder}"/>
-        </div>
-        <div class="form-group">
-            <label for="password" class="text-white font-weight-bold" th:text="#{login_password}">Password</label>
-            <input id="password" name="password" type="password" min="2"
-                   max="20" class="form-control"
-                   th:placeholder="#{login_password}"/>
-        </div>
-
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" th:value="#{login_submit}"/>
+                <div class="form-group">
+                    <label for="username" class="text-white font-weight-bold" th:text="#{login_username}">Username</label>
+                    <input th:value="${username}" id="username" name="username" type="text" min="2" max="20"
+                           class="form-control"
+                           th:placeholder="#{login_username_placeholder}"/>
                 </div>
-            </div>
-        </div>
-    </form>
-</div>
+                <div class="form-group mt-2">
+                    <label for="password" class="text-white font-weight-bold" th:text="#{login_password}">Password</label>
+                    <input id="password" name="password" type="password" min="2"
+                           max="20" class="form-control"
+                           th:placeholder="#{login_password}"/>
+                </div>
 
-<div>
-    <footer th:replace="fragments/footer::myFooter"> </footer>
-</div>
+                <div class="row">
+                    <div class="col col-md-4">
+                        <div class="button-holder d-flex">
+                            <input type="submit" class="btn btn-info btn-lg mt-3" th:value="#{login_submit}"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <footer th:replace="fragments/footer::myFooter"> </footer>
+    </div>
 </body>
 </html>

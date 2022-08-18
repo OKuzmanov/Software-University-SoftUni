@@ -3,83 +3,83 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Add Supplier</title>
+    <title th:text="#{add_supplier_title}">Add Supplier</title>
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 
 <body>
+<div class="d-flex flex-column min-vh-100">
+    <header class="container-fluid p-0 bg-dark">
+        <nav th:replace="fragments/navigation::myNav"></nav>
+    </header>
 
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+        <h2 class="text-center text-white" th:text="#{add_supplier_title}">Add Supplier</h2>
 
-<div class="container">
-    <h2 class="text-center text-white" th:text="#{add_supplier_title}">Add Supplier</h2>
+        <p th:if="${isExist} == true" class="errors alert alert-danger" th:text="#{add_supplier_err}">
+            A supplier with the provided company name is already added.
+        </p>
 
-    <p th:if="${isExist} == true" class="errors alert alert-danger" th:text="#{add_supplier_err}">
-        A supplier with the provided company name is already added.
-    </p>
-
-    <form th:action="@{/suppliers/add}" th:method="post" th:object="${supplierAddBindingModel}"
-          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="companyName" class="text-white font-weight-bold" th:text="#{add_supplier_company_name}">Company Name</label>
-                <input th:field="*{companyName}" th:errorclass="'is-invalid bg-danger'" id="companyName" name="companyName" type="text" min="3" max="25" class="form-control"
-                       th:placeholder="#{add_supplier_company_name}"/>
-                <p th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-            <div class="form-group">
-                <label class="text-center text-white font-weight-bold" for="email" th:text="#{add_supplier_email}">Email</label>
-                <input th:field="*{email}" th:errorclass="'is-invalid bg-danger'" id="email" name="email" type="email" required class="form-control"
-                       th:placeholder="#{add_supplier_email}"/>
-                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="address" class="text-white font-weight-bold" th:text="#{add_supplier_address}">Address</label>
-                <input th:field="*{address}" th:errorclass="'is-invalid bg-danger'" id="address" name="address" type="text" min="3" max="25" class="form-control"
-                       th:placeholder="#{add_supplier_address}"/>
-                <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="phoneNumber" class="text-white font-weight-bold" th:text="#{add_supplier_phone_number}">Phone Number</label>
-                <input th:field="*{phoneNumber}" th:errorclass="'is-invalid bg-danger'" id="phoneNumber" name="phoneNumber" type="tel" min="7" max="15" class="form-control"
-                       th:placeholder="#{add_supplier_phone_number}"/>
-                <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-        </div>
-        <div class="form-group col-md-6 mb-3">
-            <label for="description" class="text-white font-weight-bold" th:text="#{add_supplier_description}">Description</label>
-            <input th:field="*{description}" th:errorclass="'is-invalid bg-danger'" id="description" name="description" type="text" min="3" max="25" class="form-control"
-                   th:placeholder="#{add_supplier_description}"/>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="errors alert alert-danger">
-                Custom Err Msg.
-            </p>
-        </div>
-
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" th:value="#{add_supplier_submit}"/>
+        <form th:action="@{/suppliers/add}" th:method="post" th:object="${supplierAddBindingModel}"
+              class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+            <div class="row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="companyName" class="text-white font-weight-bold" th:text="#{add_supplier_company_name}">Company Name</label>
+                    <input th:field="*{companyName}" th:errorclass="'is-invalid bg-danger'" id="companyName" name="companyName" type="text" min="3" max="25" class="form-control"
+                           th:placeholder="#{add_supplier_company_name}"/>
+                    <p th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-center text-white font-weight-bold" for="email" th:text="#{add_supplier_email}">Email</label>
+                    <input th:field="*{email}" th:errorclass="'is-invalid bg-danger'" id="email" name="email" type="email" required class="form-control"
+                           th:placeholder="#{add_supplier_email}"/>
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+            <div class="row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="address" class="text-white font-weight-bold" th:text="#{add_supplier_address}">Address</label>
+                    <input th:field="*{address}" th:errorclass="'is-invalid bg-danger'" id="address" name="address" type="text" min="3" max="25" class="form-control"
+                           th:placeholder="#{add_supplier_address}"/>
+                    <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="phoneNumber" class="text-white font-weight-bold" th:text="#{add_supplier_phone_number}">Phone Number</label>
+                    <input th:field="*{phoneNumber}" th:errorclass="'is-invalid bg-danger'" id="phoneNumber" name="phoneNumber" type="tel" min="7" max="15" class="form-control"
+                           th:placeholder="#{add_supplier_phone_number}"/>
+                    <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="description" class="text-white font-weight-bold" th:text="#{add_supplier_description}">Description</label>
+                    <input th:field="*{description}" th:errorclass="'is-invalid bg-danger'" id="description" name="description" type="text" min="3" max="25" class="form-control"
+                           th:placeholder="#{add_supplier_description}"/>
+                    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+            </div>
 
-<div>
+            <div class="row mb-3">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" th:value="#{add_supplier_submit}"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
     <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
-
 </body>
+
 </html>

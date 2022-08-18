@@ -23,7 +23,7 @@ public class Customer extends BaseEntity{
     private String description;
 
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

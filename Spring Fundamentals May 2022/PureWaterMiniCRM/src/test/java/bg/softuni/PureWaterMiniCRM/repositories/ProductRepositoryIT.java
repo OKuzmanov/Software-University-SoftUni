@@ -20,6 +20,6 @@ public class ProductRepositoryIT {
         Product resultEntity = mockProductRepo.findByType(ProductCategoryEnum.NINETEEN_LITRES).get();
 
         Assertions.assertEquals(ProductCategoryEnum.NINETEEN_LITRES, resultEntity.getType());
-        Assertions.assertEquals(0, resultEntity.getQuantity());
+        Assertions.assertTrue(resultEntity.getQuantity() > 0);
     }
 }

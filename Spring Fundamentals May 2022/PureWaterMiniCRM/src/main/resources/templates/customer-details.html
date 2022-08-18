@@ -7,73 +7,73 @@
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 
+
 <body>
+<div class="d-flex flex-column min-vh-100">
+    <header class="container-fluid p-0 bg-dark">
+        <nav th:replace="fragments/navigation::myNav"></nav>
+    </header>
 
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+        <h2 class="text-center text-white" th:text="#{customer_details_title}">Customer Details</h2>
 
-<div class="container">
-    <h2 class="text-center text-white" th:text="#{customer_details_title}">Customer Details</h2>
+        <p th:if="${isNotUpdateSuccess}" class="errors alert alert-danger width-700" th:text="#{customer_details_notSuccessUpdate}">
+            Update was not successful!
+        </p>
 
-    <p th:if="${isNotUpdateSuccess}" class="errors alert alert-danger" th:text="#{customer_details_notSuccessUpdate}">
-        Update was not successful!
-    </p>
-
-    <p th:if="${isUpdateSuccess}" class="errors alert alert-danger" th:text="#{customer_details_SuccessUpdate}">
-        Successful update!
-    </p>
-
-    <form th:object="${customerDetails}" th:action="@{/customers/update/{id}(id=*{id})}" th:method="post"
-          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="companyName" class="text-white font-weight-bold" th:text="#{customer_details_company_name}">Company Name</label>
-                <input th:field="*{companyName}" id="companyName" name="companyName" type="text" min="3" max="25" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label class="text-center text-white font-weight-bold" for="email" th:text="#{customer_details_email}">Email</label>
-                <input th:field="*{email}" id="email" name="email" type="email" required class="form-control"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="phoneNumber" class="text-white font-weight-bold" th:text="#{customer_details_phone_number}">Phone Number</label>
-                <input th:field="*{phoneNumber}" id="phoneNumber" name="phoneNumber" type="text" min="7" max="15" class="form-control"/>
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="address" class="text-white font-weight-bold" th:text="#{customer_details_address}">Address</label>
-                <input th:field="*{address}" id="address" name="address" type="text" min="3" max="25" class="form-control"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="description" class="text-white font-weight-bold" th:text="#{customer_details_description}">Description</label>
-                <input th:field="*{description}" id="description" name="description" type="text" min="3" max="25" class="form-control"/>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" th:value="#{customer_details_update}"/>
+        <p th:if="${isUpdateSuccess}" class="alert alert-success width-700" th:text="#{customer_details_SuccessUpdate}">
+            Successful update!
+        </p>
+        <div class="d-flex flex-column justify-content-center align-items-center gray-linear-gradient-background border-radius-20 p-4 width-700">
+            <form th:object="${customerDetails}" th:action="@{/customers/update/{id}(id=*{id})}" th:method="post"
+                  class="col-md-12 d-flex flex-column justify-content-center">
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="companyName" class="text-white font-weight-bold" th:text="#{customer_details_company_name}">Company Name</label>
+                        <input th:field="*{companyName}" id="companyName" name="companyName" type="text" min="3" max="25" class="form-control"/>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label class="text-center text-white font-weight-bold" for="email" th:text="#{customer_details_email}">Email</label>
+                        <input th:field="*{email}" id="email" name="email" type="email" required class="form-control"/>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </form>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="phoneNumber" class="text-white font-weight-bold" th:text="#{customer_details_phone_number}">Phone Number</label>
+                        <input th:field="*{phoneNumber}" id="phoneNumber" name="phoneNumber" type="text" min="7" max="15" class="form-control"/>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="address" class="text-white font-weight-bold" th:text="#{customer_details_address}">Address</label>
+                        <input th:field="*{address}" id="address" name="address" type="text" min="3" max="25" class="form-control"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="description" class="text-white font-weight-bold" th:text="#{customer_details_description}">Description</label>
+                        <input th:field="*{description}" id="description" name="description" type="text" min="3" max="25" class="form-control"/>
+                    </div>
+                </div>
 
-    <form th:object="${customerDetails}" th:action="@{/customers/delete/{id}(id=*{id})}" th:method="delete">
-        <div class="col col-md-4">
-            <div class="button-holder d-flex">
-                <input type="submit" class="btn btn-info btn-lg" th:value="#{customer_details_delete}"/>
-            </div>
-        </div>
-    </form>
-</div>
+                <div class="row">
+                    <div class="col col-md-4">
+                        <div class="button-holder d-flex">
+                            <input type="submit" class="btn btn-info btn-lg" th:value="#{customer_details_update}"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
-<div>
+            <form th:object="${customerDetails}" th:action="@{/customers/delete/{id}(id=*{id})}" th:method="delete" class="col-md-12">
+                <div class="row">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg form-buttons-align" th:value="#{customer_details_delete}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
     <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
-
 </body>
+
 </html>

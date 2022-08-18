@@ -3,75 +3,73 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Add Raw Materials</title>
+    <title th:text="#{add_raw_materials_title}">Add Raw Materials</title>
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
 
 <body>
+<div class="d-flex flex-column min-vh-100">
+    <header class="container-fluid p-0 bg-dark">
+        <nav th:replace="fragments/navigation::myNav"></nav>
+    </header>
 
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+        <h2 class="text-center text-white" th:text="#{add_raw_materials_title}">Add Raw Materials</h2>
 
-<div class="container">
-    <h2 class="text-center text-white" th:text="#{add_raw_materials_title}">Add Raw Materials</h2>
-
-    <form th:action="@{/materials/add}" th:method="post" th:object="${rawMaterialAddBindingModel}"
-          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="type" class="text-white font-weight-bold" th:text="#{add_raw_materials_type}">Type</label>
-                <select th:field="*{type}" th:errorclass="'is-invalid bg-danger'" id="type" name="type" class="custom-select">
-                    <option value="" th:text="#{add_raw_materials_select_type}" selected>Select Type</option>
-                    <option th:each="raw : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType).values()}" th:value="${raw}" th:text="${raw.name().substring(0, 1) + raw.name().substring(1).toLowerCase()}">Select Type</option>
-                </select>
-                <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label class="text-center text-white font-weight-bold" for="quantity" th:text="#{add_raw_materials_quantity}">Quantity</label>
-                <input th:field="*{quantity}" th:errorclass="'is-invalid bg-danger'" id="quantity" name="quantity" type="number" required min="0" class="form-control"
-                       th:placeholder="#{add_raw_materials_quantity}"/>
-                <p th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="deliveredAt" class="text-white font-weight-bold" th:text="#{add_raw_materials_delivered_on}">Delivered On</label>
-                    <input th:field="*{deliveredAt}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="deliveredAt" name="deliveredAt"
-                           aria-describedby="orderTimeHelpInline">
-                <p th:if="${#fields.hasErrors('deliveredAt')}" th:errors="*{deliveredAt}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="supplierName" class="text-white font-weight-bold" th:text="#{add_raw_materials_supplier}">Supplier</label>
-                <select th:field="*{supplierName}" th:errorclass="'is-invalid bg-danger'" id="supplierName" name="supplierName" class="custom-select">
-                    <option value="" th:text="#{add_raw_materials_select_supplier}" selected>Select Supplier</option>
-                    <option th:each="s : ${suppliers}" th:value="${s.getCompanyName()}" th:text="${s.getCompanyName()}">Select Supplier</option>
-                </select>
-                <p th:if="${#fields.hasErrors('supplierName')}" th:errors="*{supplierName}" class="errors alert alert-danger">
-                    Custom Err Msg.
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" th:value="#{add_raw_materials_submit}"/>
+        <form th:action="@{/materials/add}" th:method="post" th:object="${rawMaterialAddBindingModel}"
+              class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+            <div class="row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="type" class="text-white font-weight-bold" th:text="#{add_raw_materials_type}">Type</label>
+                    <select th:field="*{type}" th:errorclass="'is-invalid bg-danger'" id="type" name="type" class="form-select">
+                        <option value="" th:text="#{add_raw_materials_select_type}" selected>Select Type</option>
+                        <option th:each="raw : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.RawMaterialType).values()}" th:value="${raw}" th:text="${raw.name().substring(0, 1) + raw.name().substring(1).toLowerCase()}">Select Type</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-center text-white font-weight-bold" for="quantity" th:text="#{add_raw_materials_quantity}">Quantity</label>
+                    <input th:field="*{quantity}" th:errorclass="'is-invalid bg-danger'" id="quantity" name="quantity" type="number" required min="0" class="form-control"
+                           th:placeholder="#{add_raw_materials_quantity}"/>
+                    <p th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+            <div class="row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="deliveredAt" class="text-white font-weight-bold" th:text="#{add_raw_materials_delivered_on}">Delivered On</label>
+                    <input th:field="*{deliveredAt}" th:errorclass="'is-invalid bg-danger'" type="datetime-local" class="form-control" id="deliveredAt" name="deliveredAt"
+                           aria-describedby="orderTimeHelpInline">
+                    <p th:if="${#fields.hasErrors('deliveredAt')}" th:errors="*{deliveredAt}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="supplierName" class="text-white font-weight-bold" th:text="#{add_raw_materials_supplier}">Supplier</label>
+                    <select th:field="*{supplierName}" th:errorclass="'is-invalid bg-danger'" id="supplierName" name="supplierName" class="form-select">
+                        <option value="" th:text="#{add_raw_materials_select_supplier}" selected>Select Supplier</option>
+                        <option th:each="s : ${suppliers}" th:value="${s.getCompanyName()}" th:text="${s.getCompanyName()}">Select Supplier</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('supplierName')}" th:errors="*{supplierName}" class="errors alert alert-danger">
+                        Custom Err Msg.
+                    </p>
+                </div>
+            </div>
 
-<div>
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" th:value="#{add_raw_materials_submit}"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
     <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
-
 </body>
+
 </html>

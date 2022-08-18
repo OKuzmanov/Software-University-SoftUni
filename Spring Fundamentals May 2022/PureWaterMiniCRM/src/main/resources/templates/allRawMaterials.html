@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>All Raw Materials</title>
+    <title th:text="#{all_raw_materials_title}">All Raw Materials</title>
     <th:block th:include="fragments/head::myHead"></th:block>
 </head>
+
+
 <body class="bg-secondary">
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
-<main role="main" class="bg-secondary">
+<div class="d-flex flex-column min-vh-100">
+    <header class="container-fluid p-0 bg-dark">
+        <nav th:replace="fragments/navigation::myNav"></nav>
+    </header>
 
-    <div class="jumbotron text-center">
-        <div class="container text-light text-center">
-            <h1 class="display-3"><strong class="bg-blur rounded" th:text="#{all_raw_materials_title}">All Raw Materials</strong></h1>
-        </div>
-        <div class="col-5 bg-blur rounded m-auto pb-3">
-            <h3 class="mySticky bg-gray text-light rounded"></h3>
-            <div th:each="m : ${allMaterials}" th:object="${m}" class="mt-3 rounded badge-info p-3">
-                <span class="p-3" th:inline="text"><strong th:text="#{all_raw_materials_type}">Type:</strong> [[*{type}]]
-                    &nbsp;&nbsp;&nbsp;<strong th:text="#{all_raw_materials_quantity}">Quantity:</strong> [[*{quantity}]]
-                    &nbsp&nbsp;&nbsp;<strong th:text="#{all_raw_materials_production_date}">Delivery Date:</strong> [[${m.getFormattedDeliveredAt()}]]
-                    &nbsp;&nbsp;&nbsp;<strong th:text="#{all_raw_materials_supplier}">Supplier:</strong> [[*{supplier.getCompanyName()}]]
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+        <h1 class="display-3"><strong class="bg-blur rounded text-white" th:text="#{all_raw_materials_title}">All Raw Materials</strong></h1>
+        <table class="table table-dark">
+            <thead>
+            <tr class="table-head">
+                <th scope="col" th:text="#{all_raw_materials_type}">Type</th>
+                <th scope="col" th:text="#{all_raw_materials_quantity}">Quantity</th>
+                <th scope="col" th:text="#{all_raw_materials_production_date}">Delivery Date</th>
+                <th scope="col" th:text="#{all_raw_materials_supplier}">Supplier</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="m : ${allMaterials}" th:object="${m}">
+                <th scope="row" th:text="*{type}">Type</th>
+                <td th:text="*{quantity}">Quantity</td>
+                <td th:text="${m.getFormattedDeliveredAt()}">Delivery Date</td>
+                <td th:text="*{supplier.getCompanyName()}">Supplier</td>
+                <td>
                     <a class="ml-3 p-3 text-warning" th:text="#{home_details}" th:href="@{/materials/details/{id}(id = *{id})}">Details</a>
-
-                </span>
-            </div>
-        </div>
-    </div>
-</main>
-<div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
     <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
 </body>
+
 </html>

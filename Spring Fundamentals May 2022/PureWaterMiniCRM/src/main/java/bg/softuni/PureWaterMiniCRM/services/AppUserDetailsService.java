@@ -50,7 +50,8 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails map(UserEntity userEntity) {
-        return new PureWaterUserDetails(
+
+        PureWaterUserDetails userDetails = new PureWaterUserDetails(
                 userEntity.getId(),
                 userEntity.getUsername(),
                 userEntity.getPassword(),
@@ -60,6 +61,10 @@ public class AppUserDetailsService implements UserDetailsService {
                         .stream()
                         .map(this::map)
                         .collect(Collectors.toList()));
+
+        userDetails.setDeleted(userEntity.getIsDeleted());
+
+        return userDetails;
     }
 
     private GrantedAuthority map(Role role) {

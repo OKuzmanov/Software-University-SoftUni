@@ -195,24 +195,29 @@ public class OrderServiceImpl implements OrderService {
     public int completeOrders() {
         List<Order> allOrders = this.orderRepo.findAll();
 
-        List<Order> ordersToComplete = new ArrayList<>();
-        List<OrderHistory> orderHistories = new ArrayList<>();
+        List<Order> listOrdersToDel = new ArrayList<>();
+        List<OrderHistory> listOrderHistory = new ArrayList<>();
 
         for (Order order : allOrders) {
             if (order.getQuantity() <= productService.findQuantityProducedOfType(order.getProdCategory())) {
-                ordersToComplete.add(order);
-                orderHistories.add(new OrderHistory(order.getName(), order.getTotalPrice(), order.getQuantity(), order.getProdCategory(),
-                        LocalDateTime.now(), order.getUser(), order.getCustomer()));
+
+                listOrdersToDel.add(order);
+
+                OrderHistory completedOrder = new OrderHistory(order.getName(), order.getTotalPrice(),
+                        order.getQuantity(), order.getProdCategory(),
+                        LocalDateTime.now(), order.getUser(), order.getCustomer());
+                completedOrder.setDescription("Order Completed");
+                listOrderHistory.add(completedOrder);
 
                 this.productService.reduceQuantityBy(order.getProdCategory(), order.getQuantity());
             }
         }
 
-        this.orderHistoryService.saveAll(orderHistories);
+        this.orderHistoryService.saveAll(listOrderHistory);
 
-        this.orderRepo.deleteAll(ordersToComplete);
+        this.orderRepo.deleteAll(listOrdersToDel);
 
-        return ordersToComplete.size();
+        return listOrdersToDel.size();
     }
 
     @Override

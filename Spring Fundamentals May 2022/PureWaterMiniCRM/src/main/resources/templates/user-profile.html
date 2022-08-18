@@ -3,95 +3,93 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head>
-    <title th:text="#{user_profile_title}">User Profile</title>
-    <th:block th:include="fragments/head::myHead"></th:block>
-</head>
+    <head>
+        <title th:text="#{user_profile_title}">User Profile</title>
+        <th:block th:include="fragments/head::myHead"></th:block>
+    </head>
 
-<body>
+    <body>
+    <div class="d-flex flex-column min-vh-100">
+        <header class="container-fluid p-0 bg-dark">
+            <nav th:replace="fragments/navigation::myNav"></nav>
+        </header>
 
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
+        <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+            <h2 class="text-center text-white" th:text="#{user_profile_title}">User Profile</h2>
 
-<div class="container">
-    <h2 class="text-center text-white" th:text="#{user_profile_title}">User Profile</h2>
+            <p th:if="${isNotUpdateSuccess}" class="errors alert alert-danger width-700" th:text="#{user_profile_notSuccessUpdate}">
+                Update was not successful!
+            </p>
 
-    <p th:if="${isNotUpdateSuccess}" class="errors alert alert-danger" th:text="#{user_profile_notSuccessUpdate}">
-        Update was not successful!
-    </p>
+            <p th:if="${isUpdateSuccess}" class="alert alert-success width-700" th:text="#{user_profile_SuccessUpdate}">
+                Successful update!
+            </p>
+            <p th:if="${isAuthPrincipal}" class="errors alert alert-danger width-700" th:text="#{user_profile_delete_auth_principal}">
+                Logged in User can not be deleted!
+            </p>
+            <div class="d-flex flex-column justify-content-center align-items-center gray-linear-gradient-background border-radius-20 p-4 width-700">
+                <form th:object="${userServiceModel}" th:action="@{/users/update/{id}(id=*{id})}" th:method="post"
+                      class="col-md-12 d-flex flex-column justify-content-center">
+                    <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="firstName" class="text-white font-weight-bold" th:text="#{register_first_name}">First Name</label>
+                            <input th:field="*{firstName}" id="firstName" name="firstName" type="text" min="2" max="20" class="form-control"
+                            />
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="lastName" class="text-white font-weight-bold" th:text="#{register_last_name}">Last Name</label>
+                            <input th:field="*{lastName}" id="lastName" name="lastName" type="text" min="2" max="20" class="form-control"
+                            />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="username" class="text-white font-weight-bold" th:text="#{register_username}">Username</label>
+                            <input th:field="*{username}" id="username" name="username" type="text" min="2" max="20" class="form-control"
+                            />
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                            <label class="text-center text-white font-weight-bold" for="email" th:text="#{register_email}">Email</label>
+                            <input th:field="*{email}" id="email" name="email" type="email" required class="form-control"
+                            />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="password" class="text-white font-weight-bold" th:text="#{register_password}">Password</label>
+                            <input th:field="*{password}" id="password" name="password" type="password" min="5" class="form-control"
+                            />
+                        </div>
+                    </div>
+                    <div class="row" sec:authorize="hasRole('ADMIN')">
+                        <div class="form-group p-3 text-white">
+                            <label class="p-2" for="roles">Roles:</label>
+                            <input th:each="r : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum).values()}" class="m-3" type="checkbox" name="roles" id="roles"
+                                   th:value="${r}" th:text="${r.name().substring(0,1) + r.name().substring(1).toLowerCase()}">
+                            <br>
+                        </div>
+                    </div>
 
-    <p th:if="${isUpdateSuccess}" class="errors alert alert-danger" th:text="#{user_profile_SuccessUpdate}">
-        Successful update!
-    </p>
-    <p th:if="${isAuthPrincipal}" class="errors alert alert-danger" th:text="#{user_profile_delete_auth_principal}">
-        Logged in User can not be deleted!
-    </p>
 
-    <form th:object="${userServiceModel}" th:action="@{/users/update/{id}(id=*{id})}" th:method="post"
-          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="firstName" class="text-white font-weight-bold" th:text="#{register_first_name}">First Name</label>
-                <input th:field="*{firstName}" id="firstName" name="firstName" type="text" min="2" max="20" class="form-control"
-                       />
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="button-holder d-flex">
+                                <input type="submit" class="btn btn-info btn-lg" th:value="#{user_profile_update}"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form th:object="${userServiceModel}" th:action="@{/users/delete/{id}(id=*{id})}" th:method="delete" class="col-md-12">
+                    <div class="row">
+                        <div class="button-holder d-flex">
+                            <input type="submit" class="btn btn-info btn-lg form-buttons-align" th:value="#{user_profile_delete}"/>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="lastName" class="text-white font-weight-bold" th:text="#{register_last_name}">Last Name</label>
-                <input th:field="*{lastName}" id="lastName" name="lastName" type="text" min="2" max="20" class="form-control"
-                       />
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="username" class="text-white font-weight-bold" th:text="#{register_username}">Username</label>
-                <input th:field="*{username}" id="username" name="username" type="text" min="2" max="20" class="form-control"
-                       />
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label class="text-center text-white font-weight-bold" for="email" th:text="#{register_email}">Email</label>
-                <input th:field="*{email}" id="email" name="email" type="email" required class="form-control"
-                       />
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="password" class="text-white font-weight-bold" th:text="#{register_password}">Password</label>
-                <input th:field="*{password}" id="password" name="password" type="password" min="5" class="form-control"
-                       />
-            </div>
-        </div>
-        <div class="row" sec:authorize="hasRole('ADMIN')">
-            <div class="form-group p-3">
-                <label class="p-2" for="roles">Roles:</label>
-                <input th:each="r : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.RoleEnum).values()}" class="m-3" type="checkbox" name="roles" id="roles"
-                       th:value="${r}" th:text="${r.name().substring(0,1) + r.name().substring(1).toLowerCase()}">
-                <br>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" th:value="#{user_profile_update}"/>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <form th:object="${userServiceModel}" th:action="@{/users/delete/{id}(id=*{id})}" th:method="delete">
-        <div class="col col-md-4">
-            <div class="button-holder d-flex">
-                <input type="submit" class="btn btn-info btn-lg" th:value="#{user_profile_delete}"/>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div>
-    <footer th:replace="fragments/footer::myFooter"> </footer>
-</div>
-
-</body>
+        </main>
+        <footer th:replace="fragments/footer::myFooter"> </footer>
+    </div>
+    </body>
 </html>

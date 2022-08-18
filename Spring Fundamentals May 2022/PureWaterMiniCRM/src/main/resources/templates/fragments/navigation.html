@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!--Nav Bar Fragment-->
-<nav th:fragment="myNav" class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
+<nav th:fragment="myNav" class="container py-2 navbar navbar-expand-lg bg-dark navbar-dark">
     <a class="navbar-brand" th:href="@{/}"><img alt="bottle picture" src="/images/bottle-favicon.png" class="logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,8 @@
                     <a class="nav-link" th:href="@{/products/add}" th:text="#{navbar_add_products}">Add Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/materials/add}" th:text="#{navbar_add_raw_materials}">Add Raw Materials</a>
+                    <a class="nav-link" th:href="@{/materials/add}" th:text="#{navbar_add_raw_materials}">Add Raw
+                        Materials</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/suppliers/add}" th:text="#{navbar_add_supplier}">Add Supplier</a>
@@ -34,31 +35,43 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownReports" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{navbar_all}">
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{navbar_all}">
                         All
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownReports">
-                        <a class="dropdown-item" th:href="@{/customers/all}" th:text="#{navbar_all_customers}">Customers</a>
-                        <a class="dropdown-item" th:href="@{/suppliers/all}" th:text="#{navbar_all_suppliers}">Suppliers</a>
-                        <a class="dropdown-item" th:href="@{/products/all}" th:text="#{navbar_all_products}">Products</a>
+                        <a class="dropdown-item" th:href="@{/customers/all}"
+                           th:text="#{navbar_all_customers}">Customers</a>
+                        <a class="dropdown-item" th:href="@{/suppliers/all}"
+                           th:text="#{navbar_all_suppliers}">Suppliers</a>
+                        <a class="dropdown-item" th:href="@{/products/all}"
+                           th:text="#{navbar_all_products}">Products</a>
                         <a class="dropdown-item" th:href="@{/materials/all}" th:text="#{navbar_all_raw_materials}">Raw Materials</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <div class="form-inline my-2 my-lg-0 border px-3">
-                        <div class="text-white" >
+                    <div class="d-flex form-inline my-2 my-lg-0 border px-3">
+                        <div>
+                            <a class="navbar-brand" th:href="@{/users/profile}">
+                                <img width="50" height="50" alt="profile picture" src="/images/employee.png">
+                            </a>
+                        </div>
+                        <div>
+                            <span class="text-white">
                             <th:block th:text="#{navbar_welcome}"></th:block>
                             <th:block th:text="${#authentication.principal.fullName}">full name</th:block>
                             !
+                            </span>
                         </div>
-                        <form th:action="@{/users/logout}" th:method="post">
-                            <input class="btn btn-link nav-link" type="submit" th:value="#{navbar_logout}">
-                        </form>
                     </div>
                 </li>
                 <li>
-                    <a class="navbar-brand" th:href="@{/users/profile}"><img alt="profile picture" src="/images/employee.png" class="logo"></a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    <form th:action="@{/users/logout}" th:method="post">
+                        <input class="btn btn-link nav-link" type="submit" th:value="#{navbar_logout}">
+                    </form>
+                </li>
+                <li>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
