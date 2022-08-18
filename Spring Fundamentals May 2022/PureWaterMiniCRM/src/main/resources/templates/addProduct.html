@@ -16,11 +16,12 @@
     <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
         <h2 class="text-center text-white" th:text="#{add_products_title}">Add Products</h2>
 
+        <p th:if="${insufficientResources}" class="errors alert alert-danger" th:text="#{add_products_err}">
+            Resources to create the requested amount of products are not enough!
+        </p>
+
         <form th:action="@{/products/add}" th:method="post" th:object="${productAddBindingModel}"
               class="main-form col-md-6 d-flex flex-column justify-content-center">
-            <p th:if="${insufficientResources}" class="errors alert alert-danger" th:text="#{add_products_err}">
-                Resources to create the requested amount of products are not enough!
-            </p>
             <!--        <div class="row">-->
             <div class="form-group col-md-12 mb-3">
                 <label for="type" class="text-white font-weight-bold" th:text="#{add_products_type}">Type</label>

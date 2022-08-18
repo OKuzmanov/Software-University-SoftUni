@@ -11,12 +11,12 @@
             <nav th:replace="fragments/navigation::myNav"></nav>
         </header>
 
-        <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 text-center bg-secondary">
+        <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 text-center">
             <div class="container text-light text-center">
                 <h1 class="display-3"><strong class="bg-blur rounded" th:text="#{home_head}">All Due Orders</strong></h1>
             </div>
             <div class="row mt-3 mb-3 ">
-                <div class="col-6 bg-blur rounded m-auto pb-3">
+                <div class="col-6 bg-blur rounded m-auto pb-3 table-padding">
                     <h3 class="mySticky bg-gray text-light rounded" th:inline="text"> <span th:text="#{home_total_revenue}"></span>[[${totalRevenue}]]</h3>
                     <p th:if="${isNotSuccessDel}" class="errors alert alert-danger" th:text="#{home_err}">
                         Not enough products in storage to complete the order!

@@ -8,84 +8,84 @@
 </head>
 
 <body>
+<div class="d-flex flex-column min-vh-100">
+    <header class="container-fluid p-0 bg-dark">
+        <nav th:replace="fragments/navigation::myNav"></nav>
+    </header>
 
-<div>
-    <nav th:replace="fragments/navigation::myNav"></nav>
-</div>
+    <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0">
+        <h2 class="text-center text-white" th:text="#{order_details_title}">Order Details</h2>
 
-<div class="container">
-    <h2 class="text-center text-white" th:text="#{order_details_title}">Order Details</h2>
+        <p th:if="${isNotSuccessUpdate}" class="errors alert alert-danger" th:text="#{order_details_notSuccessUpdate}">
+            Update was not successful!
+        </p>
 
-    <p th:if="${isNotSuccessUpdate}" class="errors alert alert-danger" th:text="#{order_details_notSuccessUpdate}">
-        Update was not successful!
-    </p>
-
-    <p th:if="${isSuccessUpdate}" class="errors alert alert-danger" th:text="#{order_details_SuccessUpdate}">
-        Successful update!
-    </p>
-    <form th:object="${orderDetails}" th:action="@{/orders/update/{id}(id=*{id})}" th:method="patch"
-          class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="name" class="text-white font-weight-bold" th:text="#{add_order_order_name}">Order Name</label>
-                <input th:field="*{name}" id="name" name="name" type="text" min="2" max="20" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label class="text-center text-white font-weight-bold" for="quantity" th:text="#{add_order_quantity}">Quantity</label>
-                <input th:field="*{quantity}" id="quantity" name="quantity" type="number" required min="0" class="form-control"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="prodCategory" class="text-white font-weight-bold" th:text="#{add_order_category}">Category</label>
-                <select th:field="*{prodCategory}" id="prodCategory" name="prodCategory" class="custom-select">
-                    <option value="" th:text="*{prodCategory}" selected>Category</option>
-                    <option th:each="categ : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum).values()}" th:value="${categ}" th:text="${categ.name().substring(0, 1) + categ.name().substring(1).toLowerCase()}">Select Category</option>
-                </select>
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="expiryDate" class="text-white font-weight-bold" th:inline="text"><span th:text="#{add_order_time}"></span> (<span th:text="#{order_details_expiry}"></span> : [[*{expiryDate}]])</label>
-                <input th:field="*{expiryDate}" type="datetime-local" class="form-control" id="expiryDate" name="expiryDate"
-                       aria-describedby="orderTimeHelpInline">
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 mb-3">
-                <label for="description" class="text-white font-weight-bold" th:text="#{add_order_description}">Description</label>
-                <input th:field="*{description}" id="description" name="description" type="text" min="2" max="20" class="form-control"/>
-            </div>
-            <div class="form-group col-md-6 mb-3">
-                <label for="customer" class="text-white font-weight-bold" th:text="#{add_order_customer}">Customer</label>
-                <select th:field="*{customer}" id="customer" name="customer" class="custom-select">
-                    <option value="*{customer.getCompanyName()}" th:text="*{customer.getCompanyName()}" selected>Customer</option>
-                    <option th:each="c : ${customers}" th:value="${c.getCompanyName()}" th:text="${c.getCompanyName()}">Select Customer</option>
-                </select>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            <div class="col col-md-4">
-                <div class="button-holder d-flex">
-                    <input type="submit" class="btn btn-info btn-lg" th:value="#{order_details_update}"/>
+        <p th:if="${isSuccessUpdate}" class="alert alert-success" th:text="#{order_details_SuccessUpdate}">
+            Successful update!
+        </p>
+        <div class="d-flex flex-column justify-content-center align-items-center gray-linear-gradient-background border-radius-20 p-4 width-700">
+            <form th:object="${orderDetails}" th:action="@{/orders/update/{id}(id=*{id})}" th:method="patch"
+                  class="col-md-12 d-flex flex-column justify-content-center">
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="name" class="text-white font-weight-bold" th:text="#{add_order_order_name}">Order Name</label>
+                        <input th:field="*{name}" id="name" name="name" type="text" min="2" max="20" class="form-control"/>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label class="text-center text-white font-weight-bold" for="quantity" th:text="#{add_order_quantity}">Quantity</label>
+                        <input th:field="*{quantity}" id="quantity" name="quantity" type="number" required min="0" class="form-control"/>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </form>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="prodCategory" class="text-white font-weight-bold" th:text="#{add_order_category}">Category</label>
+                        <select th:field="*{prodCategory}" id="prodCategory" name="prodCategory" class="form-select">
+                            <option value="" th:text="*{prodCategory}" selected>Category</option>
+                            <option th:each="categ : ${T(bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum).values()}" th:value="${categ}" th:text="${categ.name().substring(0, 1) + categ.name().substring(1).toLowerCase()}">Select Category</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="expiryDate" class="text-white font-weight-bold" th:inline="text"><span th:text="#{add_order_time}"></span> (<span th:text="#{order_details_expiry}"></span> : [[*{expiryDate}]])</label>
+                        <input th:field="*{expiryDate}" type="datetime-local" class="form-control" id="expiryDate" name="expiryDate"
+                               aria-describedby="orderTimeHelpInline">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="description" class="text-white font-weight-bold" th:text="#{add_order_description}">Description</label>
+                        <input th:field="*{description}" id="description" name="description" type="text" min="2" max="20" class="form-control"/>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="customer" class="text-white font-weight-bold" th:text="#{add_order_customer}">Customer</label>
+                        <select th:field="*{customer}" id="customer" name="customer" class="form-select">
+                            <option value="*{customer.getCompanyName()}" th:text="*{customer.getCompanyName()}" selected>Customer</option>
+                            <option th:each="c : ${customers}" th:value="${c.getCompanyName()}" th:text="${c.getCompanyName()}">Select Customer</option>
+                        </select>
+                    </div>
+                </div>
 
-    <form th:object="${orderDetails}" th:action="@{/orders/delete/{id}(id=*{id})}" th:method="delete">
-        <div class="col col-md-4">
-            <div class="button-holder d-flex">
-                <input type="submit" class="btn btn-info btn-lg" th:value="#{order_details_delete}"/>
-            </div>
-        </div>
-    </form>
-</div>
 
-<div>
+
+                <div class="row">
+                    <div class="col col-md-4">
+                        <div class="button-holder d-flex">
+                            <input type="submit" class="btn btn-info btn-lg" th:value="#{order_details_update}"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form th:object="${orderDetails}" th:action="@{/orders/delete/{id}(id=*{id})}" th:method="delete" class="col-md-12">
+                <div class="row">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg form-buttons-align" th:value="#{user_profile_delete}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
     <footer th:replace="fragments/footer::myFooter"> </footer>
 </div>
-
 </body>
+
 </html>

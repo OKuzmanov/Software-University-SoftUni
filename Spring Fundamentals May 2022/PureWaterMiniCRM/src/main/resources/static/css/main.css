@@ -77,3 +77,7 @@ form.main-form {
      color: white;
      font-weight: bold;
 }
+
+.table-padding {
+     padding-right: 100px;
+}

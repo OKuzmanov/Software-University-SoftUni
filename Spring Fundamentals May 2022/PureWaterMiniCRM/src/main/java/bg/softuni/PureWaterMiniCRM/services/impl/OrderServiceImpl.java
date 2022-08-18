@@ -111,6 +111,12 @@ public class OrderServiceImpl implements OrderService {
             throw new ObjectNotFoundException(id, "Order");
         }
 
+        OrderHistory newOrderHistory = new OrderHistory(orderOpt.get().getName(), orderOpt.get().getTotalPrice(), orderOpt.get().getQuantity(),
+                orderOpt.get().getProdCategory(), LocalDateTime.now(), orderOpt.get().getUser(), orderOpt.get().getCustomer());
+        newOrderHistory.setDescription("Order Completed.");
+
+        this.orderHistoryService.saveAll(List.of(newOrderHistory));
+
         return isDeleteSuccess(id, orderOpt);
     }
 
