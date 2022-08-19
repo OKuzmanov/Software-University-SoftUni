@@ -14,12 +14,12 @@
 
         <main class="d-flex flex-column container justify-content-center align-items-center flex-grow-1 py-0 login-form">
             <h2 class="text-center text-white" th:text="#{login_head}">Login</h2>
+
+            <p th:if="${wrongCredentials} == true" class="errors alert alert-danger" th:text="#{login_credentials_error_message}">
+                No such username and password combination exists.
+            </p>
             <form th:action="@{/users/login}" th:method="post"
                   class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
-
-                <p th:if="${wrongCredentials} == true" class="errors alert alert-danger" th:text="#{login_credentials_error_message}">
-                    No such username and password combination exists.
-                </p>
 
                 <div class="form-group">
                     <label for="username" class="text-white font-weight-bold" th:text="#{login_username}">Username</label>

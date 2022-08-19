@@ -4,6 +4,7 @@ import bg.softuni.PureWaterMiniCRM.models.entities.enums.ProductCategoryEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OrderHistoryServiceModel extends BaseServiceModel{
     private String name;
@@ -79,6 +80,10 @@ public class OrderHistoryServiceModel extends BaseServiceModel{
 
     public LocalDateTime getCompletionDate() {
         return completionDate;
+    }
+
+    public String getFormattedCompletionDate() {
+        return completionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public void setCompletionDate(LocalDateTime completionDate) {

@@ -68,8 +68,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> findAll() {
-        return this.customerRepo
-                .findAll()
+        List<Customer> all = this.customerRepo
+                .findAll();
+        return all
                 .stream()
                 .filter(c -> !c.isDeleted())
                 .toList();

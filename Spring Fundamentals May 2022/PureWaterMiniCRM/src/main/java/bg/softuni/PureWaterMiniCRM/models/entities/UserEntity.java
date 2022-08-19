@@ -26,7 +26,7 @@ public class UserEntity extends BaseEntity{
     private String email;
 
     @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -47,6 +47,7 @@ public class UserEntity extends BaseEntity{
     private Set<Customer> customers;
 
     public UserEntity() {
+        this.isDeleted = false;
     }
 
     public UserEntity(String username, String firstName, String lastName, String password, String email) {

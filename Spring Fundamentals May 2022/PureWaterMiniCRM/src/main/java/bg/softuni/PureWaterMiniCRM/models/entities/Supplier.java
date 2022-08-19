@@ -23,7 +23,7 @@ public class Supplier extends BaseEntity{
     private String description;
 
     @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -33,6 +33,7 @@ public class Supplier extends BaseEntity{
     private List<RawMaterial> rawMaterials;
 
     public Supplier() {
+        this.isDeleted = false;
     }
 
     public Supplier(String companyName, String email, String phoneNumber, String address, String description, UserEntity userEntity) {

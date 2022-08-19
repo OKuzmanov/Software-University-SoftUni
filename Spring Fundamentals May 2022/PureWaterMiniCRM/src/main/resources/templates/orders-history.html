@@ -29,7 +29,7 @@
                         <td th:text="*{prodCategory.name()}">Type</td>
                         <td th:text="*{quantity}">Quantity</td>
                         <td th:text="*{totalPrice}">Price</td>
-                        <td th:text="*{completionDate}">Completion Date</td>
+                        <td th:text="${order.getFormattedCompletionDate()}">Completion Date</td>
                     </tr>
                     </tbody>
                 </table>

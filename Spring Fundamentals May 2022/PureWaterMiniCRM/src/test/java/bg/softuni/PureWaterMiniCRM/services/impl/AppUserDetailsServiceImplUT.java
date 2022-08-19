@@ -37,7 +37,6 @@ public class AppUserDetailsServiceImplUT {
         UserEntity userEntity = new UserEntity("peshec", "Pesho", "Peshev", "topSecret", "pp@abv.bg");
         LinkedHashSet<Role> roles = new LinkedHashSet<>();
         roles.add(new Role(RoleEnum.USER));
-        roles.add(new Role(RoleEnum.MODERATOR));
         userEntity.setRole(roles);
 
         when(mockUserRepo.findByUsername(userEntity.getUsername()))
@@ -52,11 +51,10 @@ public class AppUserDetailsServiceImplUT {
         Assertions.assertEquals(userEntity.getFirstName() + " " + userEntity.getLastName(), userDetails.getFullName());
 
         Collection<GrantedAuthority> authorities = userDetails.getAuthorities();
-        Assertions.assertEquals(2, authorities.size());
+        Assertions.assertEquals(1, authorities.size());
 
         Iterator<GrantedAuthority> iterator = authorities.iterator();
         Assertions.assertEquals("ROLE_" + RoleEnum.USER, iterator.next().getAuthority());
-        Assertions.assertEquals("ROLE_" + RoleEnum.MODERATOR, iterator.next().getAuthority());
     }
 
     @Test
@@ -64,7 +62,6 @@ public class AppUserDetailsServiceImplUT {
         UserEntity userEntity = new UserEntity("peshec", "Pesho", "Peshev", "topSecret", "pp@abv.bg");
         LinkedHashSet<Role> roles = new LinkedHashSet<>();
         roles.add(new Role(RoleEnum.USER));
-        roles.add(new Role(RoleEnum.MODERATOR));
         userEntity.setRole(roles);
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> serviceToTest.loadUserByUsername(userEntity.getUsername()));

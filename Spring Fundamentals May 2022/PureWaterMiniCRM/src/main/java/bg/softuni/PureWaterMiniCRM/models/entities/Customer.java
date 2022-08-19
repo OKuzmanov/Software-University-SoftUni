@@ -23,7 +23,7 @@ public class Customer extends BaseEntity{
     private String description;
 
     @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -33,6 +33,7 @@ public class Customer extends BaseEntity{
     private List<Order> orders;
 
     public Customer() {
+        this.isDeleted = false;
     }
 
     public Customer(String companyName, String email, String phoneNumber, String address, String description, UserEntity userEntity) {

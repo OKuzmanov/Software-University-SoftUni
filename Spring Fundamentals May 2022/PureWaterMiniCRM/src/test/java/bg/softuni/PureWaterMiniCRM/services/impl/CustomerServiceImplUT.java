@@ -56,6 +56,8 @@ public class CustomerServiceImplUT {
         customerEntity = new Customer("testName", "mail@gmail.com",
                 "12345678", "testAddress", "Test Description", null);
 
+        customerEntity.setDeleted(false);
+
         customerServiceModel = new CustomerServiceModel("testName", "mail@gmail.com",
                 "12345678", "testAddress", "Test Description", null);
 
@@ -290,7 +292,7 @@ public class CustomerServiceImplUT {
     @Test
     public void testCustomerService_findAll() {
         when(mockCustomerRepo.findAll())
-                .thenReturn(List.of(new Customer()));
+                .thenReturn(List.of(customerEntity));
 
         List<Customer> resultAllCustomers = serviceToTest.findAll();
 
