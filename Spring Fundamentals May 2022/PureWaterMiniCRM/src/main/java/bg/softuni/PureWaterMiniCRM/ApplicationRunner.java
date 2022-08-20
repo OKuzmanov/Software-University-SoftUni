@@ -132,26 +132,26 @@ public class ApplicationRunner implements CommandLineRunner {
         }
 
         if (orderService.isRepoEmpty()) {
-            Order o1 = new Order("Litre and a Half", random.nextInt(1, 16), ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            Order o1 = new Order("Order Litre And Half", random.nextInt(1, 16), ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o1.setTotalPrice(ProductCategoryEnum.LITRE_AND_HALF.getPrice().multiply(new BigDecimal(o1.getQuantity())));
-            Order o2 = new Order("Half Litre", random.nextInt(1, 39), ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            Order o2 = new Order("Order Half Litre", random.nextInt(1, 39), ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o2.setTotalPrice(ProductCategoryEnum.HALF_LITRE.getPrice().multiply(new BigDecimal(o2.getQuantity())));
-            Order o3 = new Order("Nineteen Litres", random.nextInt(1, 115), ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            Order o3 = new Order("Order Nineteen Litres", random.nextInt(1, 115), ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o3.setTotalPrice(ProductCategoryEnum.NINETEEN_LITRES.getPrice().multiply(new BigDecimal(o3.getQuantity())));
-            Order o4 = new Order("Ten Litres", random.nextInt(1, 10), ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            Order o4 = new Order("Order Ten Litres", random.nextInt(1, 10), ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.of(2022, Month.AUGUST, 30, 23, 59), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(o4.getQuantity())));
 
             this.orderService.saveAll(List.of(o1, o2, o3, o4));
         }
 
         if (orderHistoryService.isRepoEmpty()) {
-            OrderHistory o1 = new OrderHistory("Litre and a Half", random.nextInt(1, 11), ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o1 = new OrderHistory("Order Litre And Half", random.nextInt(1, 11), ProductCategoryEnum.LITRE_AND_HALF, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o1.setTotalPrice(ProductCategoryEnum.LITRE_AND_HALF.getPrice().multiply(BigDecimal.valueOf(o1.getQuantity())));
-            OrderHistory o2 = new OrderHistory("Half Litre", random.nextInt(1, 102), ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o2 = new OrderHistory("Order Half Litre", random.nextInt(1, 102), ProductCategoryEnum.HALF_LITRE, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o2.setTotalPrice(ProductCategoryEnum.HALF_LITRE.getPrice().multiply(new BigDecimal(o2.getQuantity())));
-            OrderHistory o3 = new OrderHistory("Nineteen Litres", random.nextInt(1, 75), ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o3 = new OrderHistory("Order Nineteen Litres", random.nextInt(1, 75), ProductCategoryEnum.NINETEEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o3.setTotalPrice(ProductCategoryEnum.NINETEEN_LITRES.getPrice().multiply(new BigDecimal(o3.getQuantity())));
-            OrderHistory o4 = new OrderHistory("Ten Litres", random.nextInt(1, 10), ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
+            OrderHistory o4 = new OrderHistory("Order Ten Litres", random.nextInt(1, 10), ProductCategoryEnum.TEN_LITRES, "Test description", LocalDateTime.now(), this.getRandomUserEntity(), this.getRandomCustomerEntity());
             o4.setTotalPrice(ProductCategoryEnum.TEN_LITRES.getPrice().multiply(new BigDecimal(o4.getQuantity())));
 
             this.orderHistoryService.saveAll(List.of(o1, o2, o3, o4));

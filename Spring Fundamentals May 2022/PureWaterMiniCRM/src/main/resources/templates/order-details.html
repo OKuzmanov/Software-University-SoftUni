@@ -58,7 +58,7 @@
                     <div class="form-group col-md-6 mb-3">
                         <label for="customer" class="text-white font-weight-bold" th:text="#{add_order_customer}">Customer</label>
                         <select th:field="*{customer}" id="customer" name="customer" class="form-select">
-                            <option value="*{customer.getCompanyName()}" th:text="*{customer.getCompanyName()}" selected>Customer</option>
+                            <option th:value="*{customer.getCompanyName()}" th:text="*{customer.getCompanyName()}" selected>Customer</option>
                             <option th:each="c : ${customers}" th:value="${c.getCompanyName()}" th:text="${c.getCompanyName()}">Select Customer</option>
                         </select>
                     </div>
