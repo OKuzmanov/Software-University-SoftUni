@@ -15,14 +15,14 @@ public class JobsScheduler {
         this.orderService = orderService;
     }
 
-    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedDelay = 30, initialDelay = 30)
+    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedDelay = 30, initialDelay = 60)
     public void checkExpiryDateOfOrdersAndDelete() {
 
         this.orderService.deleteOverDueOrders();
 
     }
 
-    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedDelay = 30, initialDelay = 30)
+    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedDelay = 30, initialDelay = 60)
     public void checkOrdersAndComplete() {
 
         this.orderService.completeOrders();

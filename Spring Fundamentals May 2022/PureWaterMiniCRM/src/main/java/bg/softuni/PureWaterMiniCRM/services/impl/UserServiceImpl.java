@@ -74,13 +74,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel register(UserServiceModel userServiceModel) {
 
-        this.modelMapper.addMappings(new PropertyMap<UserServiceModel, UserEntity>() {
-            @Override
-            protected void configure() {
-                skip().setPassword(null);
-            }
-        });
-
         UserEntity entityToPersist = this.modelMapper.map(userServiceModel, UserEntity.class);
 
         entityToPersist.setPassword(passwordEncoder.encode(userServiceModel.getPassword()));

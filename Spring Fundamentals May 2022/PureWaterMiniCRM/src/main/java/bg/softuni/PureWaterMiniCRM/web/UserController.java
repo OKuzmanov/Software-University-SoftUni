@@ -103,7 +103,6 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Long id,
                              @AuthenticationPrincipal PureWaterUserDetails userDetails,
-                             RedirectAttributes redirectAttributes,
                              HttpServletRequest request) throws ServletException {
 
         this.userService.deleteUser(id);
